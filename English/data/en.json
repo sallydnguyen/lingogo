@@ -13367,32 +13367,32 @@
           },
           "lines": [
             {
-              "s": "B",
+              "s": "A",
               "t": "Jake, let’s review your knee pain before Sunday’s ten-kilometer charity run. When did the ache right below your kneecap start?",
               "m": "Jake, cùng kiểm tra cơn đau gối trước giải chạy từ thiện 10km Chủ nhật này nhé. Cảm giác đau ngay dưới xương bánh chè bắt đầu khi nào?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "About ten days ago after I jumped straight from five kilometers to twelve kilometers on concrete sidewalks.",
               "m": "Khoảng mười ngày trước, sau khi em tăng vọt quãng đường từ 5km lên 12km trên vỉa hè bê tông."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Doubling distance on hard concrete explains the tendon irritation. Does it hurt while walking up stairs today, or only after twenty minutes of jogging?",
               "m": "Tăng gấp đôi quãng đường trên nền bê tông cứng lý giải đúng tình trạng kích ứng gân đấy. Hôm nay đi cầu thang có đau không, hay chỉ đau sau 20 phút chạy?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Stairs feel completely fine now, and yesterday I tested twenty minutes on a soft park track with barely a twinge—just mild stiffness afterward.",
               "m": "Đi cầu thang giờ hết hẳn rồi, hôm qua em chạy thử 20 phút trên đường chạy mềm ở công viên gần như không nhói, chỉ hơi căng nhẹ sau đó thôi."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Good news: you don’t have to pull out, provided you drop your pace by thirty seconds per kilometer and stick to flat gravel paths in training next week.",
               "m": "Tin vui là em chưa cần bỏ giải, miễn là giảm tốc độ xuống chậm hơn 30 giây mỗi km và tuần sau tập trên đường sỏi phẳng."
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Should I ice it for forty minutes tonight and skip Friday’s warm-up jog completely?",
               "m": "Tối nay em có nên chườm đá 40 phút và bỏ hẳn buổi chạy làm nóng thứ Sáu không ạ?"
             },
@@ -14492,32 +14492,32 @@
           },
           "lines": [
             {
-              "s": "B",
+              "s": "A",
               "t": "Daniel, be honest—why did you spend three hundred dollars on one leather jacket instead of updating four outfits for fall trends?",
               "m": "Daniel, nói thật đi—sao bạn chi hẳn 300 đô cho mỗi chiếc áo da thay vì sắm bốn bộ đồ mới theo mốt thu năm nay?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Easy math: last autumn I bought two cheap sixty-dollar trend coats online. By January one zipper broke and the faux suede started peeling, so I wore each maybe five times—that’s twelve dollars per wear!",
               "m": "Tính toán đơn giản thôi: thu năm ngoái tôi mua hai áo trend giá rẻ 60 đô trên mạng. Tới tháng Giêng một cái hỏng khóa, cái giả da lộn bong tróc, mặc được mỗi cái độ năm lần—tính ra tận 12 đô mỗi lần mặc!"
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Ouch, cost-per-wear puts a different spin on “cheap.” Still, what if bold runway colors feel stale after two seasons? Keeping timeless basics can look boring.",
               "m": "Ái chà, tính giá theo số lần mặc nhìn đồ “rẻ” khác hẳn. Nhưng lỡ mấy gam màu sàn diễn nổi bật lỗi mốt sau hai mùa thì sao? Mặc mãi đồ cơ bản dễ bị nhàm."
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "True—that’s why my rule is spend eighty percent of my budget on classic neutral tailoring—jeans, coats, solid knitwear—and limit seasonal trends to affordable twenty-dollar scarves or accessories.",
               "m": "Đúng—nên quy tắc của tôi là dồn 80% ngân sách cho đồ may đo trung tính kinh điển—quần jeans, áo khoác, áo len trơn—và chỉ thử trend theo mùa qua khăn quàng hay phụ kiện tầm 20 đô thôi."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Hold on, that’s clever. You keep your silhouette sharp without throwing away cracked boots every March.",
               "m": "Khoan, chiêu đó hay đấy. Giữ được phom dáng chỉn chu mà không phải vứt đống giày nứt đế mỗi tháng Ba."
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Exactly—plus checking stitching density and natural fibers takes thirty seconds in the shop and saves endless closet clutter.",
               "m": "Chuẩn—với lại xem mật độ đường chỉ và sợi tự nhiên tốn có 30 giây ngoài tiệm nhưng đỡ chất đống rác trong tủ."
             }
@@ -15447,32 +15447,32 @@
           },
           "lines": [
             {
-              "s": "B",
+              "s": "A",
               "t": "Arthur, our book club is split down the middle over “The Glass Harbor.” Why did half the room feel tricked by chapter twelve?",
               "m": "Arthur, câu lạc bộ sách chia hai phe về cuốn “Bến Cảng Thủy Tinh” đấy. Sao nửa phòng thấy như bị lừa ở chương 12 vậy?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Haha, that’s the beauty of an unreliable narrator! For eleven chapters we trust Clara’s diary entries about her missing brother, until the lawyer’s letters reveal she edited key pages to protect her inheritance.",
               "m": "Haha, đó mới là cái hay của người kể chuyện thiếu tin cậy! Suốt 11 chương ta tin sái cổ nhật ký của Clara về người anh mất tích, tới lúc thư luật sư lộ ra cô ta tự sửa mấy trang để giữ thừa kế."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "See, I loved that twist on reread, yet on the first read two minor subplots—the neighbor’s café and the lighthouse—felt abandoned with zero payoff.",
               "m": "Đấy, tôi thích cú lật đó khi đọc lại, nhưng lần đọc đầu hai tuyến truyện phụ—quán cà phê hàng xóm với ngọn hải đăng—bị bỏ lửng chẳng giải quyết gì cả."
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Fair critique—the author seemed so eager to guard the ending secret that she cut forty pages from the café subplot during final editing. Still, have you noticed her clean short sentences in winter scenes compared to long breathless ones during storms?",
               "m": "Góp ý xác đáng—tác giả quá chăm chăm giữ bí mật cái kết nên cắt mất 40 trang tuyến quán cà phê lúc biên tập. Dù vậy bạn có để ý câu văn ngắn gọn sắc lẹm trong cảnh mùa đông đối lập câu dài dồn dập khi bão tới không?"
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Yes! Her rhythm really carries you through chapters four to nine. Just maybe read it alongside a simpler plot rather than stacking three mystery novels back-to-back.",
               "m": "Có chứ! Nhịp văn lôi cuốn từ chương bốn tới chín. Chỉ là nên đọc xen kẽ sách nhẹ đầu hơn chứ đừng xếp ba tiểu thuyết trinh thám liên tiếp."
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Agreed! For next month’s club pick, let’s recommend a warm contemporary travel memoir so everyone’s palate resets nicely after all these twists.",
               "m": "Nhất trí! Tháng tới câu lạc bộ chọn một cuốn hồi ký du lịch hiện đại nhẹ nhàng để mọi người đổi vị sau loạt cú lật trinh thám nhé."
             }
@@ -17517,32 +17517,32 @@
           },
           "lines": [
             {
-              "s": "B",
+              "s": "A",
               "t": "Kevin, you currently keep eighteen thousand dollars sitting in a checking account earning near zero. Why not move part into a twelve-month fixed certificate at five point two percent?",
               "m": "Kevin, hiện bạn đang để 18.000 đô nằm yên trong tài khoản thanh toán gần như không sinh lãi. Sao không chuyển bớt vào sổ tiết kiệm 12 tháng lãi suất 5,2%?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Because my car has a hundred sixty thousand kilometers on it and I might need emergency cash in four months! If I break a twelve-month deposit early, don’t I lose all the interest?",
               "m": "Vì xe tôi chạy 16 vạn cây số rồi và có thể bốn tháng nữa cần tiền gấp! Nếu rút trước hạn sổ 12 tháng, chẳng phải mất sạch toàn bộ tiền lãi sao?"
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "True if you put everything in a single twelve-month certificate—most banks cut early withdrawals down to a half-percent demand rate. Instead, have you tried “laddering” three smaller chunks?",
               "m": "Đúng nếu bạn dồn hết vào một sổ 12 tháng—đa số ngân hàng đưa lãi rút sớm về mức không kỳ hạn 0,5%. Thay vào đó bạn thử “chia bậc thang” làm ba khoản nhỏ chưa?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "How does laddering work with eighteen thousand?",
               "m": "Chia bậc thang với 18.000 đô chạy thế nào?"
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Leave three thousand untouched in instant savings as your quick car repair buffer, put five thousand in a three-month deposit, five thousand at six months, and five thousand at twelve months. Every quarter, fresh cash frees up penalty-free!",
               "m": "Giữ 3.000 đô trong tài khoản rút ngay làm quỹ dự phòng sửa xe, 5.000 gửi kỳ hạn 3 tháng, 5.000 gửi 6 tháng, và 5.000 gửi 12 tháng. Cứ mỗi quý lại có tiền đáo hạn không bị phạt!"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Oh! So even if the car breaks down in month four, the first five-thousand certificate already matured a month earlier—I keep full interest and stay protected.",
               "m": "Ồ! Vậy dù tháng thứ tư xe có hỏng thì khoản 5.000 đầu tiên đã đáo hạn từ tháng trước rồi—vừa giữ trọn lãi vừa an toàn vốn."
             }
@@ -18077,32 +18077,32 @@
           },
           "lines": [
             {
-              "s": "B",
+              "s": "A",
               "t": "Dr. Lin, many building owners think rooftop gardens are purely decorative—nice for photos, yet too expensive structurally. What changed cities’ minds over the past five years?",
               "m": "Tiến sĩ Lin, nhiều chủ tòa nhà tưởng vườn trên mái chỉ để trang trí cho đẹp ảnh chứ tốn gia cố kết cấu. Điều gì làm các thành phố đổi suy nghĩ năm năm qua vậy?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Two hard economic numbers, actually: cooling bills and stormwater runoff. A bare black tar roof reaches seventy degrees Celsius on August afternoons, pushing top-floor air conditioners at full blast. A twenty-centimeter planted soil layer drops that surface thirty degrees.",
               "m": "Hai con số kinh tế rất thực tế anh ạ: tiền điện làm mát và thoát nước mưa. Mái nhựa đường đen trần lên tới 70°C chiều tháng Tám khiến điều hòa tầng áp mái chạy hết công suất. Chỉ một lớp đất trồng cây dày 20cm hạ nhiệt bề mặt tới 30 độ."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Thirty degrees lower! Wait—doesn’t heavy wet soil still require expensive steel roof beams?",
               "m": "Hạ tận 30 độ! Khoan—nhưng đất ướt nặng chẳng phải vẫn bắt buộc gia cố dầm thép đắt đỏ sao?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Good question: older warehouses often can’t hold deep tree soil, which is why modern modular trays use lightweight expanded clay mixed with hardy sedum plants that weigh less per square meter than three adults standing together.",
               "m": "Câu hỏi hay đấy: nhiều kho cũ không gánh nổi đất sâu trồng cây lớn, nên khay mô-đun hiện đại dùng hạt đất sét nung siêu nhẹ trồng cây chịu hạn chỉ nặng chưa bằng ba người lớn đứng trên một mét vuông."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "And during monsoon downpours?",
               "m": "Thế còn khi mưa bão lớn thì sao ạ?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Those trays soak up nearly sixty percent of sudden rainfall like a sponge and release drops slowly hours later, keeping neighborhood street drains from overflowing during rush hour.",
               "m": "Các khay đó hút giữ gần 60% lượng mưa dồn dập như bọt biển rồi xả chậm nhiều giờ sau, giúp cống phố không bị tràn ngập vào giờ tan tầm."
             }
@@ -18637,32 +18637,32 @@
           },
           "lines": [
             {
-              "s": "B",
+              "s": "A",
               "t": "Kira, people assume national defense only means jets and naval patrols. Why is our ministry investing heavily in protecting civilian container ports this year?",
               "m": "Kira này, nhiều người nghĩ an ninh quốc phòng chỉ là tiêm kích với tàu hải quân. Sao năm nay bộ lại dồn ngân sách bảo vệ mấy cảng container dân sự?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Because eighty percent of imported fuel, grain, and medical supplies passes through just four automated ports, Director. Last spring, a phishing email knocked out crane scheduling at one European port for four days—no missiles needed.",
               "m": "Vì 80% nhiên liệu, lương thực và vật tư y tế nhập khẩu đi qua đúng 4 cảng tự động hóa thưa Giám đốc. Mùa xuân trước một email giả mạo đã làm tê liệt hệ thống điều phối cần cẩu tại một cảng châu Âu suốt 4 ngày—chẳng cần tới tên lửa nào."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "Four days of frozen cranes slows supply chains nationwide. What weakness makes port software easiest to breach?",
               "m": "Ngưng cẩu 4 ngày là tắc chuỗi cung ứng toàn quốc rồi. Điểm yếu nào dễ khiến phần mềm cảng bị chọc thủng nhất?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Two places: external contractors plugging unverified USB diagnostic drives into crane controllers, and outdated billing databases sharing the exact same network cable as vessel operations.",
               "m": "Hai chỗ ạ: nhà thầu ngoài cắm USB chẩn đoán chưa quét mã vào bộ điều khiển cần cẩu, và cơ sở dữ liệu hóa đơn cũ dùng chung đường mạng với hệ thống điều hành tàu."
             },
             {
-              "s": "B",
+              "s": "A",
               "t": "So separating operational crane controls onto an air-gapped network and testing backup manual dispatch drills monthly will be our rule from Q2?",
               "m": "Vậy tách hẳn hệ thống điều khiển cẩu sang mạng cách ly vật lý và diễn tập điều phối thủ công dự phòng hằng tháng sẽ thành quy định từ quý 2 nhé?"
             },
             {
-              "s": "A",
+              "s": "B",
               "t": "Exactly right—plus mandatory two-factor hardware keys for every remote logistics login.",
               "m": "Chính xác—cộng thêm bắt buộc dùng khóa xác thực hai lớp phần cứng cho mọi lượt đăng nhập từ xa nữa ạ."
             }
@@ -30932,8 +30932,8 @@
           "level": "C1",
           "audio": "audio/listen/en-152-0.mp3",
           "speakers": {
-            "A": "Marcus (Central Bank Analyst)",
-            "B": "Elena (Chief Economist)"
+            "A": "Elena (Chief Economist)",
+            "B": "Marcus (Central Bank Analyst)"
           },
           "lines": [
             {
@@ -36028,8 +36028,8 @@
           "level": "C2",
           "audio": "audio/listen/en-160-1.mp3",
           "speakers": {
-            "A": "Claire (Crisis Counsel)",
-            "B": "Marcus (CEO)"
+            "A": "Marcus (CEO)",
+            "B": "Claire (Crisis Counsel)"
           },
           "lines": [
             {

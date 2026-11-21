@@ -1,5 +1,5 @@
 {
-  "version": "3.99",
-  "build": "20261119-0125",
-  "message": "Thêm nút Thi vượt cấp cho cả chuyên đề lớn (đạt >= 80% pass 100% toàn bộ chuyên đề)"
+  "version": "4.00",
+  "build": "20261121-1510",
+  "message": "Sửa lỗi hiển thị reading trắc nghiệm tiếng Nhật/Trung, sửa đáp án ngữ pháp zh g16, sửa lượt nói và âm thanh bài nghe L131-1"
 }
