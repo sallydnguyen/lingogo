@@ -1098,6 +1098,21 @@ details.acc-group > .acc-body { background: var(--bg); padding: 10px 12px; gap: 
   background: var(--sunk); border: 1px solid var(--line); color: var(--teal);
 }
 .acc-toggle-btn:hover { background: var(--teal-soft); }
+/* IELTS 30-Day interactive exercise styling */
+.ielts-tf-lbl {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 40px; width: 100%; cursor: pointer; margin: 0; padding: 4px 2px;
+  border-radius: 8px; transition: all .15s ease; user-select: none; -webkit-user-select: none;
+  border: 1px solid transparent;
+}
+.ielts-tf-lbl:hover { background: var(--teal-soft); border-color: var(--teal); }
+.ielts-tf-lbl:has(input:checked) { background: var(--teal-soft); border-color: var(--teal); color: var(--teal); font-weight: 700; }
+.ielts-q-row { transition: background .2s ease, border-color .2s ease; }
+.ielts-text-input {
+  width: 100%; min-height: 38px; padding: 6px 10px; font-size: .88rem;
+  border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.ielts-text-input:focus { border-color: var(--teal); outline: none; }
 .ielts-vocab-btn {
   display: inline-flex; align-items: flex-start; justify-content: flex-start;
   text-align: left; white-space: normal; word-break: break-word; overflow-wrap: anywhere;
@@ -2941,8 +2956,9 @@ function lvChipClass(lv) {
   return lv ? 'chip level ' + String(lv).toLowerCase().replace('+', '').replace(/\s+/g, '') : 'chip small';
 }
 // Khối Accordion chuẩn danh mục tiêu đề gọn (Icon + Tiêu đề + Subtitle 1 câu + Chip + ▾)
-function accordionItem({ iconEl, title, titleLang, subtitle, chips = [], body = [], defaultOpen = false, cls = 'acc-card', border, bg, onToggle }) {
+function accordionItem({ iconEl, title, titleLang, subtitle, chips = [], body = [], defaultOpen = false, cls = 'acc-card', border, bg, onToggle, id }) {
   const attrs = { class: cls };
+  if (id) attrs.id = id;
   if (defaultOpen) attrs.open = 'open';
   const st = {};
   if (border) st.border = border;
@@ -3626,6 +3642,362 @@ function renderScheduleTabContent(t, sch) {
 }
 
 // ===== Lộ trình bổ trợ Tiếng Anh: 30 ngày IELTS Listening · Đề IELTS 2022–2026 · Ngữ pháp CEFR =====
+function cleanIeltsText(s) {
+  return (s || '')
+    .toString()
+    .toLowerCase()
+    .replace(/[\.,\'"/#!$%^&*;:{}=\-_`~()]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getIeltsAnswerVariations(text) {
+  text = (text || '').toString().trim();
+  const results = new Set([text]);
+  const baseOptions = text.split(/\bor\b/i).map((s) => s.trim()).filter(Boolean);
+  baseOptions.forEach((opt) => {
+    results.add(opt);
+    const slashParts = opt.split('/').map((s) => s.trim()).filter(Boolean);
+    slashParts.forEach((sp) => results.add(sp));
+    const m = opt.match(/^(.*?)(\b\w+)\/(\w+\b)(.*?)$/);
+    if (m) {
+      results.add((m[1] + m[2] + m[4]).trim());
+      results.add((m[1] + m[3] + m[4]).trim());
+    }
+  });
+  const expanded = new Set();
+  results.forEach((r) => {
+    expanded.add(r);
+    expanded.add(r.replace(/\([^)]*\)/g, '').trim());
+    expanded.add(r.replace(/[()]/g, '').trim());
+  });
+  const finalSet = new Set();
+  expanded.forEach((x) => {
+    const c = cleanIeltsText(x);
+    if (c) finalSet.add(c);
+  });
+  return finalSet;
+}
+
+function matchIeltsAnswer(userVal, correctVal) {
+  if (!userVal) return false;
+  const u = cleanIeltsText(userVal);
+  if (!u) return false;
+  const vars = getIeltsAnswerVariations(correctVal);
+  return vars.has(u);
+}
+
+function renderIeltsDayDe(d) {
+  if (!d || !d.de) return null;
+  const dayNum = d.day;
+  const answersMap = d.answersMap || {};
+  const qKeys = Object.keys(answersMap);
+  const hasAnswers = qKeys.length > 0;
+  const savedAttempt = (S.l30_attempts && S.l30_attempts[dayNum]) || null;
+
+  let html = (d.de || '').replace(/^\s*ĐỀ<\/h2>/i, '').replace(/<h2\s*$/i, '');
+
+  // Biến bảng dạng True/False (như Ngày 1) thành các nút tick tương tác trực tiếp
+  html = html.replace(/<tr[^>]*>\s*<td[^>]*>(\d+)\.\s*([\s\S]*?)<\/td>\s*<td[^>]*><\/td>\s*<td[^>]*><\/td>\s*<\/tr>/gi, (match, qNum, qText) => {
+    const qKey = qNum.toString();
+    const userVal = savedAttempt && savedAttempt.answers ? savedAttempt.answers[qKey] : '';
+    const isTrueChecked = userVal === 'TRUE' ? 'checked' : '';
+    const isFalseChecked = userVal === 'FALSE' ? 'checked' : '';
+    const correctAns = answersMap[qKey] || '';
+    let rowBg = '';
+    let rowBorder = '';
+    let fbHtml = '';
+    if (savedAttempt && userVal) {
+      const isCorrect = matchIeltsAnswer(userVal, correctAns);
+      rowBg = isCorrect ? 'background: rgba(16, 185, 129, 0.12);' : 'background: rgba(239, 68, 68, 0.12);';
+      rowBorder = isCorrect ? 'border-left: 4px solid #10b981;' : 'border-left: 4px solid #ef4444;';
+      fbHtml = isCorrect
+        ? '<span class="chip good small" style="font-size: .72rem; padding: 2px 6px;">✓ Đúng: TRUE</span>'
+        : ('<span class="chip warn small" style="font-size: .72rem; padding: 2px 6px;">✗ Sai (' + userVal + ') · Đáp án: <b>' + correctAns + '</b></span>');
+    }
+    return `<tr class="ielts-q-row" data-day="${dayNum}" data-q="${qKey}" style="${rowBg} ${rowBorder} transition: background .2s ease;">
+      <td style="padding: 10px 8px; vertical-align: middle;">
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <div style="font-size: .88rem; line-height: 1.45;"><strong>${qNum}.</strong> ${qText.trim()}</div>
+          <div class="ielts-q-fb" id="ielts_fb_${dayNum}_${qKey}">${fbHtml}</div>
+        </div>
+      </td>
+      <td style="text-align: center; vertical-align: middle; padding: 6px 4px; min-width: 56px;">
+        <label class="ielts-tf-lbl" title="Chọn TRUE">
+          <input type="radio" name="ielts_d${dayNum}_q_${qKey}" value="TRUE" ${isTrueChecked} style="width: 20px; height: 20px; accent-color: var(--teal, #0d9488); cursor: pointer;">
+          <span style="font-size: .7rem; font-weight: 700; color: var(--muted); margin-top: 2px;">TRUE</span>
+        </label>
+      </td>
+      <td style="text-align: center; vertical-align: middle; padding: 6px 4px; min-width: 56px;">
+        <label class="ielts-tf-lbl" title="Chọn FALSE">
+          <input type="radio" name="ielts_d${dayNum}_q_${qKey}" value="FALSE" ${isFalseChecked} style="width: 20px; height: 20px; accent-color: var(--teal, #0d9488); cursor: pointer;">
+          <span style="font-size: .7rem; font-weight: 700; color: var(--muted); margin-top: 2px;">FALSE</span>
+        </label>
+      </td>
+    </tr>`;
+  });
+
+  // Phiếu điền/chọn đáp án bổ trợ cho các ngày trắc nghiệm hoặc điền từ (khác Ngày 1)
+  let extraWorksheet = '';
+  if (dayNum !== 1 && hasAnswers) {
+    const vals = Object.values(answersMap);
+    const isMCQ = vals.every((v) => /^[A-H]$/i.test(v.trim()));
+    if (isMCQ) {
+      extraWorksheet = `
+        <div class="panel stack" style="margin-top: 14px; padding: 12px; background: var(--sunk); border-radius: 10px; gap: 8px;">
+          <div style="font-weight: 700; font-size: .85rem; color: var(--teal);">✍️ Phiếu chọn đáp án trắc nghiệm:</div>
+          <div class="stack" style="gap: 8px;">
+            ${qKeys.map((k) => {
+              const userVal = savedAttempt && savedAttempt.answers ? savedAttempt.answers[k] : '';
+              const correctAns = answersMap[k] || '';
+              let fbHtml = '';
+              if (savedAttempt && userVal) {
+                const isCorrect = matchIeltsAnswer(userVal, correctAns);
+                fbHtml = isCorrect
+                  ? '<span class="chip good small" style="font-size: .72rem; padding: 2px 6px;">✓ Đúng: ' + userVal + '</span>'
+                  : ('<span class="chip warn small" style="font-size: .72rem; padding: 2px 6px;">✗ Sai (' + userVal + ') · Đáp án: <b>' + correctAns + '</b></span>');
+              }
+              return `
+                <div class="row between wrap ielts-q-row" data-day="${dayNum}" data-q="${k}" style="padding: 6px 8px; border-radius: 8px; background: var(--surface);">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <b style="min-width: 45px; font-size: .85rem;">Câu ${k}:</b>
+                    <div class="ielts-q-fb" id="ielts_fb_${dayNum}_${k}">${fbHtml}</div>
+                  </div>
+                  <div class="row" style="gap: 6px;">
+                    ${['A', 'B', 'C', 'D'].map((opt) => {
+                      const chk = userVal === opt ? 'checked' : '';
+                      return `
+                        <label class="ielts-tf-lbl" style="min-width: 38px; min-height: 34px; padding: 2px 6px;">
+                          <input type="radio" name="ielts_d${dayNum}_q_${k}" value="${opt}" ${chk} style="width: 18px; height: 18px; accent-color: var(--teal, #0d9488); cursor: pointer;">
+                          <span style="font-size: .72rem; font-weight: 700;">${opt}</span>
+                        </label>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    } else {
+      extraWorksheet = `
+        <div class="panel stack" style="margin-top: 14px; padding: 12px; background: var(--sunk); border-radius: 10px; gap: 8px;">
+          <div style="font-weight: 700; font-size: .85rem; color: var(--teal);">✍️ Phiếu điền đáp án trực tiếp:</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px;">
+            ${qKeys.map((k) => {
+              const userVal = (savedAttempt && savedAttempt.answers && savedAttempt.answers[k]) || '';
+              const correctAns = answersMap[k] || '';
+              let fbHtml = '';
+              if (savedAttempt && userVal) {
+                const isCorrect = matchIeltsAnswer(userVal, correctAns);
+                fbHtml = isCorrect
+                  ? '<span class="chip good small" style="font-size: .72rem; padding: 2px 6px;">✓ Đúng</span>'
+                  : ('<span class="chip warn small" style="font-size: .72rem; padding: 2px 6px;">✗ Sai · Đáp án: <b>' + correctAns + '</b></span>');
+              }
+              return `
+                <div class="panel stack ielts-q-row" data-day="${dayNum}" data-q="${k}" style="padding: 8px; border-radius: 8px; background: var(--surface); gap: 4px;">
+                  <div class="row between">
+                    <b style="font-size: .82rem;">Câu ${k}:</b>
+                    <div class="ielts-q-fb" id="ielts_fb_${dayNum}_${k}">${fbHtml}</div>
+                  </div>
+                  <input type="text" class="ielts-text-input" name="ielts_d${dayNum}_q_${k}" value="${userVal.replace(/"/g, '&quot;')}" placeholder="Điền đáp án...">
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  const actionsHtml = hasAnswers ? `
+    <div class="row wrap" style="gap: 8px; margin-top: 14px; align-items: center;">
+      <button type="button" class="accent" style="flex: 1; min-width: 140px; font-weight: 700; padding: 10px 14px;" onclick="ieltsGradeDay(${dayNum})">
+        📝 Chấm điểm trực tiếp
+      </button>
+      <button type="button" class="ghost" style="padding: 10px 14px; font-weight: 600;" onclick="ieltsResetDay(${dayNum})">
+        🔄 Làm lại
+      </button>
+    </div>
+    <div id="ielts_res_${dayNum}" style="display: ${savedAttempt ? 'block' : 'none'}; margin-top: 12px; border-radius: 10px; padding: 12px; font-size: .88rem; line-height: 1.5; ${savedAttempt ? (savedAttempt.passed ? 'background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981;' : 'background: rgba(239, 68, 68, 0.12); border: 1px solid #ef4444;') : ''}">
+      ${savedAttempt ? `
+        <div style="font-weight: 700; font-size: .95rem; color: ${savedAttempt.passed ? '#10b981' : '#ef4444'}; margin-bottom: 4px;">
+          ${savedAttempt.passed ? '🎉 XUẤT SẮC! ĐẠT CHUẨN (' + savedAttempt.score + '/' + savedAttempt.total + ' câu · ' + savedAttempt.pct + '%)' : '🎯 KẾT QUẢ: ' + savedAttempt.score + '/' + savedAttempt.total + ' câu đúng (' + savedAttempt.pct + '%)'}
+        </div>
+        <div>${savedAttempt.passed ? 'Bạn đã đạt trên 80%! Hệ thống đã tự động đánh dấu hoàn thành bài nghe Ngày ' + dayNum + '.' : 'Cần đạt từ 80% trở lên để tự động tính hoàn thành bài nghe. Bấm "Làm lại" để làm lại nhé!'}</div>
+      ` : ''}
+    </div>
+  ` : '';
+
+  const fullContent = `
+    <div class="small" style="line-height: 1.6; overflow-x: auto; margin-top: 6px;">
+      ${dayNum === 1 ? '<div class="note" style="margin-bottom: 10px; font-size: .82rem;">💡 <b>Cách làm bài:</b> Bấm chọn <b>TRUE</b> hoặc <b>FALSE</b> trực tiếp ở các dòng câu hỏi trong bảng dưới đây, sau đó bấm nút <b>📝 Chấm điểm trực tiếp</b> ở cuối bài. Khi đạt từ <b>80%</b> trở lên, bài nghe sẽ được tự động đánh dấu hoàn thành 100%!</div>' : ''}
+      ${html}
+      ${extraWorksheet}
+      ${actionsHtml}
+    </div>
+  `;
+
+  return h('details', { class: 'panel', style: { padding: '8px 10px', borderRadius: '10px' } },
+    h('summary', { style: { cursor: 'pointer', fontWeight: 700, fontSize: '.84rem', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' } },
+      h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', pointerEvents: 'none' } },
+        h('span', {}, '📝 Đề & Làm bài tập trực tiếp'),
+        h('span', { class: 'guide-arrow' }, '▾')
+      )
+    ),
+    (() => {
+      const container = h('div');
+      container.innerHTML = fullContent;
+      return container;
+    })()
+  );
+}
+
+window.ieltsGradeDay = function(dayNum) {
+  const days = window.IELTS_30DAY_CHALLENGE || [];
+  const d = days.find((x) => x.day === dayNum);
+  if (!d || !d.answersMap) return;
+  const answersMap = d.answersMap;
+  const qKeys = Object.keys(answersMap);
+  let correctCount = 0;
+  const totalCount = qKeys.length;
+  if (!totalCount) return;
+
+  const userAnswers = {};
+
+  qKeys.forEach((k) => {
+    const correctAns = answersMap[k];
+    const checkedRadio = document.querySelector('input[type="radio"][name="ielts_d' + dayNum + '_q_' + k + '"]:checked');
+    let val = '';
+    if (checkedRadio) {
+      val = checkedRadio.value;
+    } else {
+      const textInput = document.querySelector('input[type="text"][name="ielts_d' + dayNum + '_q_' + k + '"]');
+      if (textInput) val = textInput.value.trim();
+    }
+    userAnswers[k] = val;
+
+    const isCorrect = matchIeltsAnswer(val, correctAns);
+    if (isCorrect) correctCount++;
+
+    const fbEl = document.getElementById('ielts_fb_' + dayNum + '_' + k);
+    const rowEl = document.querySelector('.ielts-q-row[data-day="' + dayNum + '"][data-q="' + k + '"]');
+
+    if (rowEl) {
+      if (isCorrect) {
+        rowEl.style.background = 'rgba(16, 185, 129, 0.12)';
+        rowEl.style.borderLeft = '4px solid #10b981';
+      } else {
+        rowEl.style.background = 'rgba(239, 68, 68, 0.12)';
+        rowEl.style.borderLeft = '4px solid #ef4444';
+      }
+    }
+
+    if (fbEl) {
+      if (!val) {
+        fbEl.innerHTML = '<span class="chip warn small" style="font-size: .72rem; padding: 2px 6px;">Chưa chọn · Đáp án: <b>' + correctAns + '</b></span>';
+      } else if (isCorrect) {
+        fbEl.innerHTML = '<span class="chip good small" style="font-size: .72rem; padding: 2px 6px;">✓ Đúng: <b>' + val + '</b></span>';
+      } else {
+        fbEl.innerHTML = '<span class="chip warn small" style="font-size: .72rem; padding: 2px 6px;">✗ Sai (' + val + ') · Đáp án: <b>' + correctAns + '</b></span>';
+      }
+    }
+  });
+
+  const pct = Math.round((correctCount / totalCount) * 100);
+  const passed = pct >= 80;
+
+  S.l30_attempts = S.l30_attempts || {};
+  S.l30_attempts[dayNum] = { answers: userAnswers, score: correctCount, total: totalCount, pct, passed };
+
+  if (passed && !S.l30[dayNum]) {
+    S.l30[dayNum] = true;
+    save();
+  }
+
+  const resEl = document.getElementById('ielts_res_' + dayNum);
+  if (resEl) {
+    resEl.style.display = 'block';
+    if (passed) {
+      resEl.className = 'panel';
+      resEl.style.background = 'rgba(16, 185, 129, 0.15)';
+      resEl.style.border = '1px solid #10b981';
+      resEl.innerHTML = '<div style="font-weight: 700; font-size: .95rem; color: #10b981; margin-bottom: 4px;">🎉 XUẤT SẮC! ĐẠT CHUẨN (' + correctCount + '/' + totalCount + ' câu · ' + pct + '%)</div><div>Bạn đã đạt trên 80%! Hệ thống đã <b>tự động đánh dấu hoàn thành</b> bài nghe Ngày ' + dayNum + '.</div>';
+    } else {
+      resEl.className = 'panel';
+      resEl.style.background = 'rgba(239, 68, 68, 0.12)';
+      resEl.style.border = '1px solid #ef4444';
+      resEl.innerHTML = '<div style="font-weight: 700; font-size: .95rem; color: #ef4444; margin-bottom: 4px;">🎯 KẾT QUẢ: ' + correctCount + '/' + totalCount + ' câu đúng (' + pct + '%)</div><div>Cần đạt từ <b>80%</b> trở lên để tự động tính hoàn thành bài nghe. Bạn hãy nghe kỹ lại đoạn audio và bấm <b>Làm lại</b> để thử lại nhé!</div>';
+    }
+  }
+
+  if (passed) {
+    const dayCard = document.getElementById('ielts_day_card_' + dayNum);
+    if (dayCard) {
+      const chip = dayCard.querySelector('.acc-summary .chip');
+      if (chip) {
+        chip.className = 'chip good';
+        chip.textContent = 'Đã xong';
+      }
+      const icon = dayCard.querySelector('.acc-main > span');
+      if (icon) icon.textContent = '✅';
+      const markBtn = document.querySelector('.ielts-mark-btn-' + dayNum);
+      if (markBtn) {
+        markBtn.className = 'ghost block ielts-mark-btn-' + dayNum;
+        markBtn.textContent = 'Bỏ đánh dấu hoàn thành';
+      }
+    }
+    updateIeltsTotalProgress();
+    if (typeof toast === 'function') toast('🎉 Chúc mừng! Bạn đạt ' + pct + '% và đã hoàn thành bài nghe Ngày ' + dayNum + '!');
+  }
+};
+
+window.ieltsResetDay = function(dayNum) {
+  const radios = document.querySelectorAll('input[type="radio"][name^="ielts_d' + dayNum + '_"]');
+  radios.forEach((r) => { r.checked = false; });
+
+  const texts = document.querySelectorAll('input[type="text"][name^="ielts_d' + dayNum + '_"]');
+  texts.forEach((t) => { t.value = ''; });
+
+  const rows = document.querySelectorAll('.ielts-q-row[data-day="' + dayNum + '"]');
+  rows.forEach((r) => {
+    r.style.background = '';
+    r.style.borderLeft = '';
+  });
+
+  const fbs = document.querySelectorAll('[id^="ielts_fb_' + dayNum + '_"]');
+  fbs.forEach((fb) => { fb.innerHTML = ''; });
+
+  const resEl = document.getElementById('ielts_res_' + dayNum);
+  if (resEl) {
+    resEl.style.display = 'none';
+    resEl.innerHTML = '';
+  }
+
+  if (S.l30_attempts && S.l30_attempts[dayNum]) {
+    delete S.l30_attempts[dayNum];
+    save();
+  }
+};
+
+window.updateIeltsTotalProgress = function() {
+  const days = window.IELTS_30DAY_CHALLENGE || [];
+  S.l30 = S.l30 || {};
+  const doneDays = days.filter((d) => S.l30[d.day]).length;
+  const c2Card = document.getElementById('ielts_chang_2_card');
+  if (c2Card) {
+    const sub = c2Card.querySelector('.acc-sub');
+    if (sub) sub.textContent = doneDays + '/' + days.length + ' ngày · mỗi ngày 1 bài nghe bản xứ ~20 phút';
+    const chip = c2Card.querySelector('.acc-summary .acc-right .chip');
+    if (chip) {
+      chip.textContent = doneDays + '/' + days.length;
+      if (doneDays === days.length && days.length > 0) chip.className = 'chip good';
+      else chip.className = 'chip';
+    }
+  }
+};
+
 function renderEnExtraRoadmap() {
   const out = [];
   const days = (window.IELTS_30DAY_CHALLENGE || []);
@@ -3646,6 +4018,7 @@ function renderEnExtraRoadmap() {
     };
     const audioSrc = typeof langPath === 'function' ? langPath('en', 'audio/ielts_30day/day' + d.day + '.mp3') : 'English/audio/ielts_30day/day' + d.day + '.mp3';
     return accordionItem({
+      id: 'ielts_day_card_' + d.day,
       cls: 'acc-group', iconEl: S.l30[d.day] ? '✅' : '🎧',
       title: 'Ngày ' + d.day + ': ' + d.title,
       subtitle: 'Nghe audio bản xứ kèm đề, dịch đề và transcript',
@@ -3670,11 +4043,12 @@ function renderEnExtraRoadmap() {
           rel: 'noopener',
           style: { textAlign: 'center', padding: '8px', borderRadius: '10px', textDecoration: 'none', fontSize: '.8rem', fontWeight: 600 }
         }, '🌐 Mở bài học & video gốc (IELTS Nguyễn Huyền) ↗'),
-        show('📝 Đề', d.de), show('✅ Đáp án', d.ans), show('🇻🇳 Dịch đề', d.dich), show('📄 Transcript', d.transcript), show('📚 Từ vựng', d.vocab),
-        h('button', { class: S.l30[d.day] ? 'ghost block' : 'accent block', onclick: () => { S.l30[d.day] = !S.l30[d.day]; save(); pickView(); } }, S.l30[d.day] ? 'Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu đã học ngày ' + d.day))]
+        renderIeltsDayDe(d), show('✅ Đáp án', d.ans), show('🇻🇳 Dịch đề', d.dich), show('📄 Transcript', d.transcript), show('📚 Từ vựng', d.vocab),
+        h('button', { class: (S.l30[d.day] ? 'ghost block' : 'accent block') + ' ielts-mark-btn-' + d.day, onclick: () => { S.l30[d.day] = !S.l30[d.day]; save(); pickView(); } }, S.l30[d.day] ? 'Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu đã học ngày ' + d.day))]
     });
   });
   out.push(accordionItem({
+    id: 'ielts_chang_2_card',
     cls: 'acc-card', iconEl: '🎧', title: 'Chặng 2 · 30 ngày IELTS Listening',
     subtitle: doneDays + '/' + days.length + ' ngày · mỗi ngày 1 bài nghe bản xứ ~20 phút',
     chips: [h('span', { class: 'chip' + (doneDays === days.length && days.length ? ' good' : '') }, doneDays + '/' + days.length)],
