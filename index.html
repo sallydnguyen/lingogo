@@ -1179,6 +1179,31 @@ details.acc-group > .acc-body { background: var(--bg); padding: 10px 12px; gap: 
 <script src="English/data/ielts_30day_listening.js"></script>
 <script>
 'use strict';
+// Polyfills tương thích iOS Safari cũ (iOS 12–13)
+(function () {
+  var rp = function () {
+    while (this.firstChild) this.removeChild(this.firstChild);
+    for (var i = 0; i < arguments.length; i++) {
+      var n = arguments[i];
+      this.appendChild(typeof n === 'string' ? document.createTextNode(n) : n);
+    }
+  };
+  if (typeof Element !== 'undefined' && !Element.prototype.replaceChildren) Element.prototype.replaceChildren = rp;
+  if (typeof DocumentFragment !== 'undefined' && !DocumentFragment.prototype.replaceChildren) DocumentFragment.prototype.replaceChildren = rp;
+  if (!Array.prototype.flat) {
+    Array.prototype.flat = function (d) {
+      var depth = d === undefined ? 1 : Number(d);
+      return depth < 1 ? this.slice() : this.reduce(function (a, v) {
+        return a.concat(Array.isArray(v) ? v.flat(depth - 1) : v);
+      }, []);
+    };
+  }
+  if (!Array.prototype.flatMap) {
+    Array.prototype.flatMap = function (fn, thisArg) {
+      return this.map(fn, thisArg).flat(1);
+    };
+  }
+})();
 /* =====================================================================
    Lingogo — học Anh, Trung, Nhật trong một app.
    Dữ liệu bài học nằm trong data/<ngôn ngữ>.json (tải khi cần), âm thanh thu sẵn
@@ -11233,7 +11258,7 @@ function getTopicDialogues(arg1, arg2) {
   // 3. Nếu tiếng Anh / Trung có t.fill (đoạn văn / email thực hành)
   if (t.fill && t.fill.text && !out.length) {
     const cleanText = t.fill.text.replace(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g, '$1');
-    const sentences = cleanText.split(/(?<=[.!?])\s+/).filter(Boolean);
+    const sentences = cleanText.replace(/([.!?])\s+/g, '$1\n').split('\n').filter(Boolean);
     const fLines = sentences.map((st, idx) => ({
       speaker: idx % 2 === 0 ? 'A' : 'B',
       name: idx % 2 === 0 ? 'A' : 'B',
@@ -12548,7 +12573,7 @@ function lessonView(t, i, opts = null) {
       });
     }
     // XP: mỗi từ / kanji / câu / tình huống làm đúng ngay lần đầu = 5 XP; điền từ: 5 XP mỗi chỗ đúng
-    const keyOf = (e) => e.v ? 'v' + e.v.id : e.k ? 'k' + e.k.id : e.type === 'gquiz' ? ('gq' + (e.q && e.q.p ? e.q.p.gid : '') + ':' + (e.q ? (e.q.type || '') + ':' + (e.n ?? '') : '')) : (e.type === 'read' || e.type === 'read301') ? ('rd:' + ((e.sc && (e.sc.id || e.sc.title)) || e.n)) : e.type === 'listen_dlg' ? ('ld:' + ((e.q && (e.q.id || e.q.q)) || e.n)) : e.type === 'quiz' ? ('qz' + (e.q ? (e.q.id || e.q.q) : '')) : e.type === 'write' ? 'w' + e.ch : 's' + (e.text || '');
+    const keyOf = (e) => e.v ? 'v' + e.v.id : e.k ? 'k' + e.k.id : e.type === 'gquiz' ? ('gq' + (e.q && e.q.p ? e.q.p.gid : '') + ':' + (e.q ? (e.q.type || '') + ':' + (e.n != null ? e.n : '') : '')) : (e.type === 'read' || e.type === 'read301') ? ('rd:' + ((e.sc && (e.sc.id || e.sc.title)) || e.n)) : e.type === 'listen_dlg' ? ('ld:' + ((e.q && (e.q.id || e.q.q)) || e.n)) : e.type === 'quiz' ? ('qz' + (e.q ? (e.q.id || e.q.q) : '')) : e.type === 'write' ? 'w' + e.ch : 's' + (e.text || '');
     const won = new Set(); let fillXp = 0;
     all.forEach((r) => { if (r.ex.type === 'fill') fillXp += XP_ITEM * (r.ok || 0); else if (r.correct && !(r.ex.type === 'write' && r.self)) won.add(keyOf(r.ex)); });
     let xp = XP_ITEM * won.size + fillXp; if (repeat) xp = Math.ceil(xp / 2);

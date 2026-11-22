@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261121-1732",
-  "message": "Tự động xáo trộn câu hỏi & đáp án đề thi vượt cấp JLPT mỗi lần vào thi"
+  "build": "20261121-2208",
+  "message": "Sửa tương thích iOS thấp (iOS 12+): bỏ regex lookbehind, bỏ toán tử ??, thêm polyfill replaceChildren"
 }
