@@ -18180,23 +18180,53 @@ function examTabView() {
     }, lv))
   );
 
-  const prevAttempt = S.jlpt_attempts && S.jlpt_attempts[curLv];
+  const examsCache = JLPT_EXAMS_CACHE;
+  const lvExams = examsCache ? getJlptExamList(examsCache, curLv) : null;
+  if (!examsCache) {
+    loadJlptExams().then(() => { if (VIEW === 'exam' && S.lang === 'ja' && EXAM_LV.ja === curLv) examTabView(); }).catch(() => {});
+  }
+
+  const renderExamRow = (ex, idx) => {
+    const eid = ex.examId || (curLv + '_' + (idx + 1));
+    const att = getJlptAttempt(curLv, eid);
+    const qTotal = (ex.sections || []).reduce((s, sec) => s + (sec.mondais || []).reduce((mSum, m) => mSum + (m.questions || []).length + (m.passages || []).reduce((pSum, p) => pSum + (p.questions || []).length, 0), 0), 0);
+    return h('div', {
+      class: 'panel stack',
+      style: { padding: '12px', borderRadius: '12px', background: 'var(--bg)', gap: '8px', border: att && att.passed ? '1px solid var(--good)' : '1px solid var(--line)' }
+    },
+      h('div', { class: 'row between wrap', style: { gap: '8px', alignItems: 'center' } },
+        h('div', { style: { flex: '1 1 200px', minWidth: 0 } },
+          h('div', { style: { fontWeight: 700, fontSize: '.95rem' } }, ex.title),
+          h('div', { class: 'small muted', style: { fontSize: '.78rem', marginTop: '2px' } }, ex.subtitle)
+        ),
+        h('span', { class: 'chip ' + (att && att.passed ? 'good' : (att && att.submitted ? 'warn' : 'accent')), style: { fontSize: '.74rem', flexShrink: 0 } },
+          att && att.submitted
+            ? (att.passed ? ('🏆 Đạt ' + att.pct + '%') : ('Gần nhất: ' + att.pct + '%'))
+            : (qTotal + ' câu · ' + (ex.timeHint || '25 phút'))
+        )
+      ),
+      h('button', {
+        class: (att && att.passed ? 'ghost' : 'primary') + ' block',
+        style: { fontWeight: 700, padding: '9px 12px', border: att && att.passed ? '1px solid var(--teal)' : undefined },
+        onclick: () => startJlptLevelExam(curLv, { examId: eid, returnView: 'exam' })
+      }, (att && att.submitted ? '🔄 Làm lại ' : '▶ Làm ') + (ex.title.split('·')[0].trim()) + ' (' + qTotal + ' câu)')
+    );
+  };
+
   const mockTestCard = h('div', { class: 'panel card stack', style: { gap: '10px', background: 'var(--surface)', borderRadius: '12px' } },
     h('div', { class: 'row between', style: { alignItems: 'center' } },
-      h('h2', { style: { margin: 0, fontSize: '1.1rem' } }, '🎯 Đề thi vượt cấp chuẩn JLPT ' + curLv),
-      h('span', { class: 'chip ' + (prevAttempt && prevAttempt.passed ? 'good' : 'accent'), style: { fontSize: '.75rem' } },
-        prevAttempt && prevAttempt.submitted
-          ? (prevAttempt.passed ? ('🏆 Đạt ' + prevAttempt.pct + '%') : ('Gần nhất: ' + prevAttempt.pct + '%'))
-          : '20 câu · 3 phần'
-      )
+      h('h2', { style: { margin: 0, fontSize: '1.1rem' } }, '🎯 Bộ đề thi vượt cấp JLPT ' + curLv),
+      h('span', { class: 'chip accent', style: { fontSize: '.75rem' } }, lvExams ? (lvExams.length + ' đề độc lập') : 'Đang tải…')
     ),
-    h('button', {
-      class: 'primary block',
-      style: { fontWeight: 700, padding: '12px' },
-      onclick: () => startJlptLevelExam(curLv, { returnView: 'exam' })
-    }, (prevAttempt && prevAttempt.submitted ? '🔄 Làm lại đề thi chuẩn JLPT ' : '▶ Làm đề thi chuẩn JLPT ') + curLv + ' (20 câu)'),
+    lvExams
+      ? h('div', { class: 'stack', style: { gap: '8px' } }, ...lvExams.map(renderExamRow))
+      : h('button', {
+          class: 'primary block',
+          style: { fontWeight: 700, padding: '12px' },
+          onclick: () => startJlptLevelExam(curLv, { returnView: 'exam' })
+        }, '▶ Mở bộ đề thi chuẩn JLPT ' + curLv),
     h('p', { class: 'small muted', style: { margin: 0 } },
-      'Đề thi độc lập bám sát bài học ' + curLv + ': Chữ Hán & Từ vựng (問題1–3), Ngữ pháp ★ & Đọc hiểu (問題4–6), Nghe hiểu bản xứ (問題7–8). Đạt ≥ 80% tự động hoàn thành chuyên đề ' + curLv + '.'
+      'Mỗi đề gồm 20 câu độc lập bám sát bài học ' + curLv + ' (Kanji · Từ vựng · Ngữ pháp ★ · Đọc hiểu · Nghe hiểu bản xứ). Đạt ≥ 80% tự động hoàn thành chuyên đề ' + curLv + '.'
     )
   );
 
@@ -18248,6 +18278,19 @@ function examTabView() {
   mount(h('div', { class: 'stack-lg' }, header, lvSelector, mockTestCard, structureCard, tipsCard));
 }
 
+function getJlptExamList(allExams, level) {
+  if (!allExams || !allExams[level]) return [];
+  const raw = allExams[level];
+  return Array.isArray(raw) ? raw : [raw];
+}
+
+function getJlptAttempt(level, examId) {
+  S.jlpt_attempts = S.jlpt_attempts || {};
+  if (S.jlpt_attempts[examId]) return S.jlpt_attempts[examId];
+  if (examId === level + '_1' && S.jlpt_attempts[level]) return S.jlpt_attempts[level];
+  return null;
+}
+
 // Đề thi vượt cấp chuẩn JLPT N5–N1 (độc lập, nội dung bám sát bài học)
 async function startJlptLevelExam(lv, opts = {}) {
   const level = String(lv || 'N5').toUpperCase();
@@ -18256,18 +18299,18 @@ async function startJlptLevelExam(lv, opts = {}) {
   setTabs(false);
   mount(h('p', { class: 'loading' }, 'Đang tải đề thi chuẩn JLPT ' + level + '…'));
 
-  let exam = null;
+  let examList = [];
   try {
     await loadLang('ja');
     const allExams = await loadJlptExams();
-    exam = allExams && allExams[level];
+    examList = getJlptExamList(allExams, level);
     const fld = langFolder('ja');
     loadBundle((fld ? fld + '/' : '') + 'audio/ja-jlpt-' + level.toLowerCase() + '.json');
   } catch (e) {
-    exam = null;
+    examList = [];
   }
 
-  if (!exam) {
+  if (!examList.length) {
     setTabs(true);
     mount(h('div', { class: 'panel stack', style: { marginTop: '20px' } },
       h('p', {}, 'Không tải được dữ liệu đề thi JLPT ' + level + '.'),
@@ -18275,6 +18318,61 @@ async function startJlptLevelExam(lv, opts = {}) {
     ));
     return;
   }
+
+  const exit = () => {
+    stopSay();
+    setTabs(true);
+    if (returnView === 'exam') { VIEW = 'exam'; examTabView(); }
+    else go('home');
+  };
+
+  // Nếu cấp độ có nhiều đề và chưa chọn examId cụ thể, hiện danh sách đề gọn gàng
+  if (!opts.examId && examList.length > 1) {
+    const passedCount = examList.filter((ex, idx) => {
+      const att = getJlptAttempt(level, ex.examId || (level + '_' + (idx + 1)));
+      return att && att.passed;
+    }).length;
+    mount(h('div', { class: 'stack-lg' },
+      h('div', { class: 'topbar' },
+        h('button', { class: 'ghost mini', onclick: exit }, '← Quay lại'),
+        h('div', { class: 'grow' },
+          h('div', { style: { fontWeight: 700, fontSize: '1rem' } }, '🇯🇵 Bộ đề thi vượt cấp JLPT ' + level),
+          h('div', { class: 'small muted', style: { fontSize: '.76rem' } }, examList.length + ' đề độc lập · Đạt ≥ 80% bất kỳ đề nào để hoàn thành chuyên đề ' + level)
+        ),
+        h('span', { class: 'chip ' + (passedCount ? 'good' : 'accent') }, passedCount + '/' + examList.length + ' đạt')
+      ),
+      h('div', { class: 'stack', style: { gap: '10px' } },
+        ...examList.map((ex, idx) => {
+          const eid = ex.examId || (level + '_' + (idx + 1));
+          const att = getJlptAttempt(level, eid);
+          const qTot = (ex.sections || []).reduce((s, sec) => s + (sec.mondais || []).reduce((ms, m) => ms + (m.questions || []).length + (m.passages || []).reduce((ps, p) => ps + (p.questions || []).length, 0), 0), 0);
+          return h('div', {
+            class: 'panel stack',
+            style: { padding: '14px', borderRadius: '14px', gap: '10px', border: att && att.passed ? '1.5px solid var(--good)' : '1px solid var(--line)' }
+          },
+            h('div', { class: 'row between wrap', style: { gap: '8px', alignItems: 'center' } },
+              h('div', { style: { flex: '1 1 200px', minWidth: 0 } },
+                h('div', { style: { fontWeight: 700, fontSize: '1rem' } }, ex.title),
+                h('div', { class: 'small muted', style: { fontSize: '.8rem', marginTop: '2px' } }, ex.subtitle)
+              ),
+              h('span', { class: 'chip ' + (att && att.passed ? 'good' : (att && att.submitted ? 'warn' : 'accent')), style: { fontSize: '.76rem' } },
+                att && att.submitted ? (att.passed ? ('🏆 Đạt ' + att.pct + '%') : ('Gần nhất: ' + att.pct + '%')) : (qTot + ' câu · ' + (ex.timeHint || '25 phút'))
+              )
+            ),
+            h('button', {
+              class: (att && att.passed ? 'ghost' : 'primary') + ' block',
+              style: { fontWeight: 700, padding: '10px 14px', border: att && att.passed ? '1px solid var(--teal)' : undefined },
+              onclick: () => startJlptLevelExam(level, { ...opts, examId: eid })
+            }, (att && att.submitted ? '🔄 Làm lại ' : '▶ Vào thi ') + ex.title.split('·')[0].trim() + ' (' + qTot + ' câu)')
+          );
+        })
+      )
+    ));
+    return;
+  }
+
+  const exam = examList.find((ex, idx) => (ex.examId || (level + '_' + (idx + 1))) === opts.examId) || examList[0];
+  const examId = exam.examId || (level + '_1');
 
   const catId = level.toLowerCase();
   const catObj = opts.catObj || ((CATEGORIES.ja || []).find((c) => c.id === catId) || { id: catId, level, short: level, name: level });
@@ -18285,7 +18383,7 @@ async function startJlptLevelExam(lv, opts = {}) {
   }) : []);
 
   S.jlpt_attempts = S.jlpt_attempts || {};
-  const saved = S.jlpt_attempts[level];
+  const saved = getJlptAttempt(level, examId);
   let userAns = (saved && saved.answers) ? { ...saved.answers } : {};
   let submitted = !!(saved && saved.submitted);
   let newlyUnlockedInfo = null;
@@ -18301,15 +18399,8 @@ async function startJlptLevelExam(lv, opts = {}) {
   const allQuestions = (exam.sections || []).flatMap(allSectionQuestions);
   const totalQs = allQuestions.length;
 
-  const exit = () => {
-    stopSay();
-    setTabs(true);
-    if (returnView === 'exam') { VIEW = 'exam'; examTabView(); }
-    else go('home');
-  };
-
   function renderExamPage() {
-    const curAtt = S.jlpt_attempts && S.jlpt_attempts[level];
+    const curAtt = getJlptAttempt(level, examId);
     const answeredCount = allQuestions.filter((q) => userAns[q.id] !== undefined).length;
     const headerChip = h('span', { class: 'chip ' + (submitted ? (curAtt && curAtt.passed ? 'good' : 'warn') : ''), id: 'jlpt_top_count' },
       submitted && curAtt ? (curAtt.score + '/' + totalQs + ' (' + curAtt.pct + '%)') : ('Đã chọn: ' + answeredCount + '/' + totalQs)
@@ -18325,8 +18416,8 @@ async function startJlptLevelExam(lv, opts = {}) {
     );
 
     let resultBanner = null;
-    if (submitted && S.jlpt_attempts[level]) {
-      const att = S.jlpt_attempts[level];
+    if (submitted && curAtt) {
+      const att = curAtt;
       const scaled = Math.round((att.score / att.total) * 180);
       const secBadges = (att.secScores || []).map((sc) =>
         h('span', { class: 'chip ' + (sc.ok === sc.tot ? 'good' : ''), style: { fontSize: '.76rem' } }, sc.short + ': ' + sc.ok + '/' + sc.tot)
@@ -18366,7 +18457,8 @@ async function startJlptLevelExam(lv, opts = {}) {
             class: 'primary',
             style: { flex: 1, minWidth: '140px' },
             onclick: () => {
-              delete S.jlpt_attempts[level];
+              delete S.jlpt_attempts[examId];
+              if (examId === level + '_1') delete S.jlpt_attempts[level];
               save();
               userAns = {};
               submitted = false;
@@ -18610,7 +18702,7 @@ async function startJlptLevelExam(lv, opts = {}) {
           });
           const pct = Math.round((score / totalQs) * 100);
           const passed = pct >= (exam.passPct || 80);
-          S.jlpt_attempts[level] = {
+          S.jlpt_attempts[examId] = {
             answers: { ...userAns },
             score,
             total: totalQs,
