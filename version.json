@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261121-2337",
-  "message": "Không chặn khởi động bởi script CDN ngoài (async) và hiển thị chẩn đoán lỗi trên iOS cũ"
+  "build": "20261122-0136",
+  "message": "Sửa lỗi SyntaxError 'shadows a global property: app' trên iPhone 5c / Safari iOS 10.3.3"
 }

@@ -3090,8 +3090,8 @@ function speakHeadline(code, text, raw, readingLine) {
   const hideRuby = code === 'ja' && !!(readingLine && readingLine !== txt);
   return (raw && !hideRuby) ? ruby(raw) : txt;
 }
-const app = document.getElementById('app');
-function mount(...nodes) { app.replaceChildren(...nodes.flat(9).filter((n) => n != null && n !== false)); window.scrollTo(0, 0); }
+const appRoot = document.getElementById('app');
+function mount(...nodes) { appRoot.replaceChildren(...nodes.flat(9).filter((n) => n != null && n !== false)); window.scrollTo(0, 0); }
 let tt;
 function toast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2600); }
 const ICON = {
