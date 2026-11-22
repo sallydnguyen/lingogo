@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261121-2218",
-  "message": "Hỗ trợ iPhone 5c / iOS 10.3.3+: thay toàn bộ object spread sang Object.assign"
+  "build": "20261121-2230",
+  "message": "Sửa lỗi kẹt 'Đang tải...' trên iPhone 5c / iOS 10.3.3 (bỏ regex /s, bỏ \\p{P}, bỏ 4 spread searchInputHandlers)"
 }

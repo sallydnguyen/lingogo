@@ -9999,7 +9999,7 @@ function renderIeltsReading(t, data) {
 
   const passageBox = h('div', { class: 'ielts-passage' },
     ...rd.paragraphs.map((p, idx) => {
-      const m = String(p || '').match(/^(\[[A-Z0-9]+\])\s*(.*)$/s);
+      const m = String(p || '').match(/^(\[[A-Z0-9]+\])\s*([\s\S]*)$/);
       const badge = m ? m[1] : ('[' + String.fromCharCode(65 + idx) + ']');
       const txt = m ? m[2] : p;
       return h('p', {}, h('b', { style: { color: 'var(--teal)', marginRight: '6px' } }, badge), txt);
@@ -16374,14 +16374,13 @@ function renderKnowledgeGrammar(code) {
 
   return h('div', { class: 'stack-lg', style: { gap: '12px' } },
     h('div', { class: 'row', style: { gap: '8px', alignItems: 'center' } },
-      h('input', {
+      h('input', Object.assign({
         type: 'search',
         class: 'gram-search-input',
         style: { flex: 1, minHeight: '44px', padding: '10px 14px' },
         placeholder: code === 'en' ? '🔍 Tìm kiếm ngữ pháp A1–C1, công thức, ví dụ...' : (isJa ? '🔍 Tìm kiếm ngữ pháp N5–N1, từ khóa, ví dụ...' : '🔍 Tìm ngữ pháp HSK 1–9, Quyển 1–4, từ khóa...'),
-        value: GQ_SEARCH[code] || '',
-        ...searchInputHandlers('gram-search-input', (v) => { GQ_SEARCH[code] = v; }, knowledgeTabView)
-      }),
+        value: GQ_SEARCH[code] || ''
+      }, searchInputHandlers('gram-search-input', (v) => { GQ_SEARCH[code] = v; }, knowledgeTabView))),
       GQ_SEARCH[code] ? h('button', { class: 'ghost mini', onclick: () => { GQ_SEARCH[code] = ''; knowledgeTabView(); } }, 'Xóa tìm') : null
     ),
     h('div', { class: 'row', style: { flexWrap: 'wrap', gap: '6px' } },
@@ -16472,14 +16471,13 @@ function renderKnowledgeChietTu(code) {
   });
 
   const searchBox = h('div', { class: 'row wrap', style: { gap: '8px', alignItems: 'center' } },
-    h('input', {
+    h('input', Object.assign({
       type: 'search',
       placeholder: '🔍 Tìm theo chữ Hán, Pinyin, Hán Việt, cấu tạo bộ phận hoặc câu chuyện chiết tự...',
       value: CHIET_TU_SEARCH,
       class: 'chiet-search-input',
-      style: { flex: '1 1 260px', minHeight: '40px', padding: '8px 12px' },
-      ...searchInputHandlers('chiet-search-input', (v) => { CHIET_TU_SEARCH = v; }, knowledgeTabView)
-    }),
+      style: { flex: '1 1 260px', minHeight: '40px', padding: '8px 12px' }
+    }, searchInputHandlers('chiet-search-input', (v) => { CHIET_TU_SEARCH = v; }, knowledgeTabView))),
     CHIET_TU_SEARCH ? h('button', { class: 'ghost mini', onclick: () => { CHIET_TU_SEARCH = ''; knowledgeTabView(); } }, 'Xóa tìm') : null
   );
 
@@ -16716,14 +16714,13 @@ function renderKnowledgeChars(code) {
           h('span', { class: 'chip good', style: { fontSize: '.75rem' } }, filteredRad.length + ' bộ thủ')
         ),
         h('div', { class: 'row', style: { gap: '8px', alignItems: 'center' } },
-          h('input', {
+          h('input', Object.assign({
             type: 'search',
             placeholder: '🔍 Tìm bộ thủ (nhập chữ Hán, Pinyin hoặc nghĩa tiếng Việt)...',
             value: CHARS_SEARCH,
             class: 'chars-search-input',
-            style: { flex: 1, minHeight: '40px', padding: '8px 12px' },
-            ...searchInputHandlers('chars-search-input', (v) => { CHARS_SEARCH = v; }, knowledgeTabView)
-          }),
+            style: { flex: 1, minHeight: '40px', padding: '8px 12px' }
+          }, searchInputHandlers('chars-search-input', (v) => { CHARS_SEARCH = v; }, knowledgeTabView))),
           CHARS_SEARCH ? h('button', { class: 'ghost mini', onclick: () => { CHARS_SEARCH = ''; knowledgeTabView(); } }, 'Xóa tìm') : null
         ),
         !q ? h('div', { class: 'acc-toolbar' },
@@ -16838,14 +16835,13 @@ function renderKnowledgeChars(code) {
       h('span', { class: 'chip good', style: { fontSize: '.75rem' } }, filtered.length + '/' + allKanji.length + ' chữ')
     ),
     h('div', { class: 'row', style: { gap: '8px', alignItems: 'center' } },
-      h('input', {
+      h('input', Object.assign({
         type: 'search',
         placeholder: '🔍 Tìm Kanji theo chữ, âm Hán Việt, On, Kun...',
         value: CHARS_SEARCH,
         class: 'chars-search-input',
-        style: { flex: 1, minHeight: '40px', padding: '8px 12px' },
-        ...searchInputHandlers('chars-search-input', (v) => { CHARS_SEARCH = v; }, knowledgeTabView)
-      }),
+        style: { flex: 1, minHeight: '40px', padding: '8px 12px' }
+      }, searchInputHandlers('chars-search-input', (v) => { CHARS_SEARCH = v; }, knowledgeTabView))),
       CHARS_SEARCH ? h('button', { class: 'ghost mini', onclick: () => { CHARS_SEARCH = ''; knowledgeTabView(); } }, 'Xóa tìm') : null
     ),
     lvs.length > 1 ? h('div', { class: 'row wrap', style: { gap: '6px' } },
@@ -17732,7 +17728,7 @@ function createHskkRecorder(item) {
     }).then((said) => {
       if (said) {
         recognizedText = said;
-        const charCount = said.replace(/[\s\p{P}]/gu, '').length;
+        const charCount = said.replace(/[\s.,!?;:'"()\[\]{}\-—…、。！？「」『』・，]/g, '').length;
         transcriptEl.replaceChildren(
           h('p', { style: { margin: 0, fontWeight: 600 } }, '🗣️ Máy nghe được: “' + said + '”'),
           h('div', { class: 'row between wrap', style: { marginTop: '4px', alignItems: 'center', gap: '4px' } },
