@@ -1113,6 +1113,7 @@ details.acc-group > .acc-body { background: var(--bg); padding: 10px 12px; gap: 
   border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
 }
 .ielts-text-input:focus { border-color: var(--teal); outline: none; }
+.jlpt-q-prompt u { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; color: var(--teal); font-weight: 700; }
 .ielts-vocab-btn {
   display: inline-flex; align-items: flex-start; justify-content: flex-start;
   text-align: left; white-space: normal; word-break: break-word; overflow-wrap: anywhere;
@@ -1803,6 +1804,14 @@ async function loadStrokes(code) {
     try { STROKES[code] = await getJSON(fld + '/data/strokes-' + code + '.json'); } catch (e) { STROKES[code] = {}; }
   }
   return STROKES[code];
+}
+let JLPT_EXAMS_CACHE = null;
+async function loadJlptExams() {
+  if (!JLPT_EXAMS_CACHE) {
+    const fld = langFolder('ja');
+    JLPT_EXAMS_CACHE = await getJSON((fld ? fld + '/' : '') + 'data/jlpt_exams.json');
+  }
+  return JLPT_EXAMS_CACHE;
 }
 async function loadCharStrokeData(code, ch) {
   if (!ch) return null;
@@ -4654,13 +4663,16 @@ function homeView() {
     (() => {
       if (curCat === 'all' || !filteredTopics.length) return null;
       const catDoneTopics = filteredTopics.filter((t) => topicDone(t)).length;
-      if (catDoneTopics >= filteredTopics.length) return null;
+      const isJa = S.lang === 'ja';
+      const lvLabel = curCatObj.level || curCatObj.short;
+      if (!isJa && catDoneTopics >= filteredTopics.length) return null;
+      const allDone = catDoneTopics >= filteredTopics.length;
       return h('div', {
         class: 'panel row between',
         style: {
           padding: '10px 14px',
-          background: 'rgba(180,83,9,.06)',
-          border: '1px solid rgba(180,83,9,.28)',
+          background: allDone ? 'rgba(35,120,74,.08)' : 'rgba(180,83,9,.06)',
+          border: allDone ? '1px solid rgba(35,120,74,.32)' : '1px solid rgba(180,83,9,.28)',
           borderRadius: '12px',
           alignItems: 'center',
           gap: '10px',
@@ -4668,18 +4680,24 @@ function homeView() {
         }
       },
         h('div', { style: { flex: '1 1 200px', minWidth: 0 } },
-          h('div', { style: { fontSize: '.88rem', fontWeight: 700, color: 'var(--amber)' } },
-            '🚀 Kiểm tra vượt cấp ' + (curCatObj.level || curCatObj.short) + ' (' + catDoneTopics + '/' + filteredTopics.length + ' chủ đề)'
+          h('div', { style: { fontSize: '.88rem', fontWeight: 700, color: allDone ? 'var(--good)' : 'var(--amber)' } },
+            isJa
+              ? (allDone ? '🏆 Đã vượt cấp JLPT ' : '🚀 Đề thi vượt cấp JLPT ') + lvLabel + ' (' + catDoneTopics + '/' + filteredTopics.length + ' chủ đề)'
+              : '🚀 Kiểm tra vượt cấp ' + lvLabel + ' (' + catDoneTopics + '/' + filteredTopics.length + ' chủ đề)'
           ),
           h('div', { class: 'small muted', style: { fontSize: '.76rem', marginTop: '2px' } },
-            'Làm bài tổng hợp đạt ≥ 80% để pass & hoàn thành 100% cả chuyên đề ' + curCatObj.name
+            isJa
+              ? (allDone
+                ? 'Bạn đã hoàn thành 100% chuyên đề ' + lvLabel + '. Có thể làm lại đề thi chuẩn JLPT ' + lvLabel + ' bất cứ lúc nào.'
+                : 'Làm đề thi chuẩn JLPT ' + lvLabel + ' độc lập (Kanji · Từ vựng · Ngữ pháp ★ · Đọc hiểu · Nghe hiểu). Đạt ≥ 80% để hoàn thành 100% cả chuyên đề!')
+              : 'Làm bài tổng hợp đạt ≥ 80% để pass & hoàn thành 100% cả chuyên đề ' + curCatObj.name
           )
         ),
         h('button', {
-          class: 'accent mini',
+          class: (allDone ? 'primary' : 'accent') + ' mini',
           style: { whiteSpace: 'nowrap', padding: '7px 12px', fontSize: '.82rem', fontWeight: 700, flexShrink: 0 },
           onclick: () => startCategoryExam(S.lang, curCatObj, filteredTopics)
-        }, 'Thi vượt cấp →')
+        }, isJa ? (allDone ? 'Làm lại đề JLPT ' + lvLabel : 'Thi vượt cấp JLPT ' + lvLabel + ' →') : 'Thi vượt cấp →')
       );
     })(),
     (() => {
@@ -11907,7 +11925,40 @@ function buildCategoryExamSteps(code, topics) {
   return steps;
 }
 
+function unlockCategoryTopics(code, topics, pct) {
+  let filledCount = 0;
+  let filledTopicCount = 0;
+  (topics || []).forEach((subT) => {
+    if (!topicDone(subT)) filledTopicCount++;
+    (subT.lessons || []).forEach((_, j) => {
+      const lk = lkey(subT, j);
+      if (S.del && S.del[lk]) delete S.del[lk];
+      if (S.del && S.del['spk:' + lk]) delete S.del['spk:' + lk];
+      if (S.del && S.del['wrt:' + lk]) delete S.del['wrt:' + lk];
+      if (S.lessons[lk] == null) filledCount++;
+      S.lessons[lk] = Math.max(pct, typeof S.lessons[lk] === 'number' ? S.lessons[lk] : 0);
+    });
+    (subT.vocab || []).forEach((w) => {
+      const sKey = sid(code, w.id);
+      if (!S.srs[sKey]) srsRate(sKey, true);
+    });
+    (subT.kanji || []).forEach((kj) => {
+      const sKey = sid(code, kj.id);
+      if (!S.srs[sKey]) srsRate(sKey, true);
+    });
+    (subT.gram || []).forEach((gid) => {
+      const gKey = code + ':gram:' + gid;
+      if (!S.srs[gKey]) srsRate(gKey, true);
+    });
+  });
+  return { filledCount, filledTopicCount };
+}
+
 function startCategoryExam(code, catObj, topics) {
+  if (code === 'ja') {
+    const lv = String((catObj && (catObj.level || catObj.short)) || 'N5').toUpperCase();
+    return startJlptLevelExam(lv, { catObj, topics, returnView: 'home' });
+  }
   const steps = buildCategoryExamSteps(code, topics);
   const synthTopic = {
     id: 'cat-' + catObj.id,
@@ -18129,18 +18180,23 @@ function examTabView() {
     }, lv))
   );
 
+  const prevAttempt = S.jlpt_attempts && S.jlpt_attempts[curLv];
   const mockTestCard = h('div', { class: 'panel card stack', style: { gap: '10px', background: 'var(--surface)', borderRadius: '12px' } },
     h('div', { class: 'row between', style: { alignItems: 'center' } },
-      h('h2', { style: { margin: 0, fontSize: '1.1rem' } }, '🎯 Đề thi thử mô phỏng ' + curLv),
-      h('span', { class: 'chip accent', style: { fontSize: '.75rem' } }, 'Demo Test')
+      h('h2', { style: { margin: 0, fontSize: '1.1rem' } }, '🎯 Đề thi vượt cấp chuẩn JLPT ' + curLv),
+      h('span', { class: 'chip ' + (prevAttempt && prevAttempt.passed ? 'good' : 'accent'), style: { fontSize: '.75rem' } },
+        prevAttempt && prevAttempt.submitted
+          ? (prevAttempt.passed ? ('🏆 Đạt ' + prevAttempt.pct + '%') : ('Gần nhất: ' + prevAttempt.pct + '%'))
+          : '20 câu · 3 phần'
+      )
     ),
     h('button', {
       class: 'primary block',
       style: { fontWeight: 700, padding: '12px' },
-      onclick: () => startExamDemo(code, curLv)
-    }, '▶ Làm bài thi thử mẫu (' + curLv + ')'),
+      onclick: () => startJlptLevelExam(curLv, { returnView: 'exam' })
+    }, (prevAttempt && prevAttempt.submitted ? '🔄 Làm lại đề thi chuẩn JLPT ' : '▶ Làm đề thi chuẩn JLPT ') + curLv + ' (20 câu)'),
     h('p', { class: 'small muted', style: { margin: 0 } },
-      'Làm bài kiểm tra mô phỏng câu hỏi trắc nghiệm đúng format thi thật với tính năng chấm điểm tự động.'
+      'Đề thi độc lập bám sát bài học ' + curLv + ': Chữ Hán & Từ vựng (問題1–3), Ngữ pháp ★ & Đọc hiểu (問題4–6), Nghe hiểu bản xứ (問題7–8). Đạt ≥ 80% tự động hoàn thành chuyên đề ' + curLv + '.'
     )
   );
 
@@ -18190,6 +18246,397 @@ function examTabView() {
   });
 
   mount(h('div', { class: 'stack-lg' }, header, lvSelector, mockTestCard, structureCard, tipsCard));
+}
+
+// Đề thi vượt cấp chuẩn JLPT N5–N1 (độc lập, nội dung bám sát bài học)
+async function startJlptLevelExam(lv, opts = {}) {
+  const level = String(lv || 'N5').toUpperCase();
+  const returnView = opts.returnView || 'home';
+  VIEW = 'exam';
+  setTabs(false);
+  mount(h('p', { class: 'loading' }, 'Đang tải đề thi chuẩn JLPT ' + level + '…'));
+
+  let exam = null;
+  try {
+    await loadLang('ja');
+    const allExams = await loadJlptExams();
+    exam = allExams && allExams[level];
+    const fld = langFolder('ja');
+    loadBundle((fld ? fld + '/' : '') + 'audio/ja-jlpt-' + level.toLowerCase() + '.json');
+  } catch (e) {
+    exam = null;
+  }
+
+  if (!exam) {
+    setTabs(true);
+    mount(h('div', { class: 'panel stack', style: { marginTop: '20px' } },
+      h('p', {}, 'Không tải được dữ liệu đề thi JLPT ' + level + '.'),
+      h('button', { class: 'primary', onclick: () => returnView === 'exam' ? examTabView() : go('home') }, 'Quay lại')
+    ));
+    return;
+  }
+
+  const catId = level.toLowerCase();
+  const catObj = opts.catObj || ((CATEGORIES.ja || []).find((c) => c.id === catId) || { id: catId, level, short: level, name: level });
+  const jaMeta = (TOPIC_META && TOPIC_META.ja) || {};
+  const topics = opts.topics || ((DATA.ja && DATA.ja.topics) ? DATA.ja.topics.filter((t) => {
+    const m = jaMeta[String(t.id)];
+    return m && m[0] === catId;
+  }) : []);
+
+  S.jlpt_attempts = S.jlpt_attempts || {};
+  const saved = S.jlpt_attempts[level];
+  let userAns = (saved && saved.answers) ? { ...saved.answers } : {};
+  let submitted = !!(saved && saved.submitted);
+  let newlyUnlockedInfo = null;
+
+  const allSectionQuestions = (sec) => {
+    const list = [];
+    (sec.mondais || []).forEach((m) => {
+      (m.questions || []).forEach((q) => list.push(q));
+      (m.passages || []).forEach((p) => (p.questions || []).forEach((q) => list.push(q)));
+    });
+    return list;
+  };
+  const allQuestions = (exam.sections || []).flatMap(allSectionQuestions);
+  const totalQs = allQuestions.length;
+
+  const exit = () => {
+    stopSay();
+    setTabs(true);
+    if (returnView === 'exam') { VIEW = 'exam'; examTabView(); }
+    else go('home');
+  };
+
+  function renderExamPage() {
+    const curAtt = S.jlpt_attempts && S.jlpt_attempts[level];
+    const answeredCount = allQuestions.filter((q) => userAns[q.id] !== undefined).length;
+    const headerChip = h('span', { class: 'chip ' + (submitted ? (curAtt && curAtt.passed ? 'good' : 'warn') : ''), id: 'jlpt_top_count' },
+      submitted && curAtt ? (curAtt.score + '/' + totalQs + ' (' + curAtt.pct + '%)') : ('Đã chọn: ' + answeredCount + '/' + totalQs)
+    );
+
+    const topbar = h('div', { class: 'topbar', style: { position: 'sticky', top: 0, zIndex: 10, background: 'var(--bg)', paddingBlock: '6px', borderBottom: '1px solid var(--line)' } },
+      h('button', { class: 'ghost mini', onclick: exit }, '← Thoát'),
+      h('div', { class: 'grow', style: { minWidth: 0 } },
+        h('div', { style: { fontWeight: 700, fontSize: '.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' } }, '🇯🇵 ' + exam.title),
+        h('div', { class: 'small muted', style: { fontSize: '.72rem' } }, exam.timeHint + ' · Chuẩn đạt ≥ ' + (exam.passPct || 80) + '%')
+      ),
+      headerChip
+    );
+
+    let resultBanner = null;
+    if (submitted && S.jlpt_attempts[level]) {
+      const att = S.jlpt_attempts[level];
+      const scaled = Math.round((att.score / att.total) * 180);
+      const secBadges = (att.secScores || []).map((sc) =>
+        h('span', { class: 'chip ' + (sc.ok === sc.tot ? 'good' : ''), style: { fontSize: '.76rem' } }, sc.short + ': ' + sc.ok + '/' + sc.tot)
+      );
+      resultBanner = h('div', {
+        id: 'jlpt_result_card',
+        class: 'panel stack',
+        style: {
+          padding: '16px',
+          borderRadius: '14px',
+          background: att.passed ? 'var(--good-bg)' : 'rgba(180,83,9,.08)',
+          border: '1.5px solid ' + (att.passed ? 'var(--good)' : 'rgba(180,83,9,.4)'),
+          gap: '10px'
+        }
+      },
+        h('div', { class: 'row between wrap', style: { gap: '8px', alignItems: 'center' } },
+          h('h2', { style: { color: att.passed ? 'var(--good)' : 'var(--bad)', margin: 0, fontSize: '1.15rem' } },
+            att.passed ? '🏆 ĐẠT CHUẨN VƯỢT CẤP JLPT ' + level + '!' : '💡 CHƯA ĐẠT CHUẨN VƯỢT CẤP ' + level
+          ),
+          h('span', { class: 'chip ' + (att.passed ? 'good' : 'warn'), style: { fontWeight: 700 } }, '~' + scaled + ' / 180 điểm JLPT')
+        ),
+        h('div', { style: { fontSize: '1.05rem', fontWeight: 700 } },
+          'Kết quả: ' + att.score + ' / ' + att.total + ' câu đúng (' + att.pct + '%)'
+        ),
+        h('div', { class: 'row wrap', style: { gap: '6px' } }, ...secBadges),
+        att.passed && newlyUnlockedInfo
+          ? h('p', { class: 'small', style: { margin: 0, color: 'var(--good)', fontWeight: 600 } },
+              '🎉 Đã tự động mở khóa & đánh dấu hoàn thành toàn bộ ' + topics.length + '/' + topics.length + ' chủ đề chuyên đề ' + level + (newlyUnlockedInfo.filledTopicCount ? (' (' + newlyUnlockedInfo.filledTopicCount + ' chủ đề mới · ' + newlyUnlockedInfo.filledCount + ' bài học).') : '.')
+            )
+          : h('p', { class: 'small muted', style: { margin: 0 } },
+              att.passed
+                ? 'Bạn đã hoàn thành xuất sắc đề thi JLPT ' + level + '. Xem lại chi tiết giải thích từng câu bên dưới.'
+                : 'Cần đạt từ 80% trở lên (từ ' + Math.ceil(totalQs * 0.8) + '/' + totalQs + ' câu) để vượt cấp ' + level + '. Hãy xem giải thích và thử làm lại nhé!'
+            ),
+        h('div', { class: 'row wrap', style: { gap: '8px', marginTop: '4px' } },
+          h('button', {
+            class: 'primary',
+            style: { flex: 1, minWidth: '140px' },
+            onclick: () => {
+              delete S.jlpt_attempts[level];
+              save();
+              userAns = {};
+              submitted = false;
+              newlyUnlockedInfo = null;
+              renderExamPage();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }, '🔄 Làm lại đề thi JLPT ' + level),
+          h('button', { class: 'ghost', onclick: exit }, returnView === 'exam' ? '← Về Luyện JLPT' : '← Về trang Học')
+        )
+      );
+    }
+
+    const introNote = !submitted ? h('div', { class: 'note', style: { fontSize: '.82rem', lineHeight: 1.5 } },
+      h('b', {}, '📌 Hướng dẫn thi vượt cấp JLPT ' + level + ': '),
+      exam.subtitle + '. Chọn đáp án (1–4) cho từng câu hỏi ở 3 phần bên dưới rồi bấm ',
+      h('b', {}, '“📝 Nộp bài & Chấm điểm”'),
+      '. Đạt ≥ 80% sẽ tự động hoàn thành 100% chuyên đề ',
+      h('b', {}, level), '.'
+    ) : null;
+
+    const sectionsWrap = h('div', { class: 'stack jlpt-sections-wrap', style: { gap: '12px' } });
+    const sectionDetailsEls = [];
+
+    const renderQuestionBlock = (q, qIndex) => {
+      const chosen = userAns[q.id];
+      const isCorrect = chosen === q.ans;
+      const pEl = h('div', {
+        lang: 'ja',
+        class: 'jlpt-q-prompt',
+        style: { fontSize: '1.02rem', lineHeight: 1.65, fontWeight: 500 }
+      });
+      pEl.innerHTML = '<span style="font-weight:700;color:var(--teal);margin-right:6px;">Câu ' + qIndex + '.</span>' + (q.promptHtml || '');
+
+      let audioBar = null;
+      if (q.audioText) {
+        const playBtn = h('button', {
+          type: 'button',
+          class: 'primary mini',
+          style: { fontWeight: 700, flex: '1 1 auto' },
+          onclick: () => say('ja', q.audioText, false)
+        }, '🔊 Nghe đề (' + (q.script && q.script.length > 1 ? 'Hội thoại' : 'Câu hỏi') + ')');
+        const slowBtn = h('button', {
+          type: 'button',
+          class: 'ghost mini',
+          style: { border: '1px solid var(--line)' },
+          onclick: () => say('ja', q.audioText, true)
+        }, '🐢 Nghe chậm');
+        audioBar = h('div', { class: 'row wrap', style: { gap: '8px', marginTop: '4px' } }, playBtn, slowBtn);
+      }
+
+      const optsWrap = h('div', { class: 'options', style: { marginTop: '6px' } });
+      const optBtns = q.opts.map((optText, oIdx) => {
+        const clsList = [];
+        if (submitted) {
+          if (oIdx === q.ans) clsList.push('right');
+          else if (chosen === oIdx) clsList.push('wrong');
+        }
+        const btn = h('button', {
+          type: 'button',
+          class: clsList.join(' '),
+          'aria-pressed': String(chosen === oIdx),
+          disabled: submitted,
+          style: { minHeight: '44px', padding: '10px 12px', fontSize: '.95rem' },
+          onclick: () => {
+            if (submitted) return;
+            userAns[q.id] = oIdx;
+            optBtns.forEach((b, j) => b.setAttribute('aria-pressed', String(j === oIdx)));
+            const nowAnswered = allQuestions.filter((qq) => userAns[qq.id] !== undefined).length;
+            headerChip.textContent = 'Đã chọn: ' + nowAnswered + '/' + totalQs;
+            const bSubmitHint = document.getElementById('jlpt_submit_hint');
+            if (bSubmitHint) bSubmitHint.textContent = 'Đã làm ' + nowAnswered + '/' + totalQs + ' câu' + (nowAnswered < totalQs ? ' (còn ' + (totalQs - nowAnswered) + ' câu chưa chọn)' : ' · Sẵn sàng nộp bài!');
+            sectionDetailsEls.forEach((sd) => sd.syncChip());
+          }
+        },
+          h('span', { class: 'kbd' }, String(oIdx + 1)),
+          h('span', { class: 'grow', lang: 'ja' }, optText)
+        );
+        return btn;
+      });
+      optsWrap.replaceChildren(...optBtns);
+
+      let fbBox = null;
+      if (submitted) {
+        const scriptBox = q.script ? h('div', {
+          class: 'stack',
+          style: { background: 'var(--surface)', padding: '8px 10px', borderRadius: '8px', gap: '4px', marginTop: '6px', border: '1px solid var(--line)' }
+        },
+          h('div', { class: 'small', style: { fontWeight: 700, color: 'var(--teal)' } }, '📄 Transcript (Nội dung băng nghe):'),
+          ...q.script.map((ln) => h('div', { class: 'small', lang: 'ja', style: { lineHeight: 1.5 } },
+            h('b', { style: { color: ln.sp === '女' ? '#db2777' : (ln.sp === '男' ? '#0284c7' : 'var(--amber)') } },
+              (ln.sp === '女' ? '👩 女' : (ln.sp === '男' ? '👨 男' : '🗣️ 質問')) + ': '
+            ),
+            ln.t
+          ))
+        ) : null;
+
+        let starLine = null;
+        if (q.starComplete) {
+          starLine = h('div', { class: 'small', lang: 'ja', style: { marginTop: '4px' } });
+          starLine.innerHTML = '🧩 Thứ tự đúng: ' + q.starComplete;
+        }
+
+        fbBox = h('div', {
+          class: 'panel stack',
+          style: {
+            marginTop: '8px',
+            padding: '10px 12px',
+            borderRadius: '10px',
+            background: isCorrect ? 'var(--good-bg)' : 'var(--bad-bg)',
+            border: '1px solid ' + (isCorrect ? 'var(--good)' : 'var(--bad)'),
+            gap: '4px'
+          }
+        },
+          h('div', { style: { fontWeight: 700, fontSize: '.86rem', color: isCorrect ? 'var(--good)' : 'var(--bad)' } },
+            isCorrect
+              ? '✓ Chính xác! (Đáp án ' + (q.ans + 1) + ': ' + q.opts[q.ans] + ')'
+              : (chosen === undefined ? '⚠️ Chưa chọn · Đáp án đúng: ' : '✗ Chưa đúng · Đáp án đúng: ') + (q.ans + 1) + '. ' + q.opts[q.ans]
+          ),
+          starLine,
+          q.vi ? h('div', { class: 'small' }, h('b', {}, 'Dịch: '), q.vi) : null,
+          q.exp ? h('div', { class: 'small muted' }, h('b', {}, 'Giải thích: '), q.exp) : null,
+          scriptBox
+        );
+      }
+
+      return h('div', {
+        class: 'panel stack',
+        style: {
+          padding: '12px',
+          borderRadius: '12px',
+          background: 'var(--bg)',
+          gap: '6px',
+          borderLeft: submitted ? ('4px solid ' + (isCorrect ? 'var(--good)' : 'var(--bad)')) : '1px solid var(--line)'
+        }
+      }, pEl, audioBar, optsWrap, fbBox);
+    };
+
+    let runningQNum = 1;
+    (exam.sections || []).forEach((sec, secIdx) => {
+      const secQs = allSectionQuestions(sec);
+      const secChip = h('span', { class: 'chip', style: { fontSize: '.72rem' } }, '');
+      const syncChip = () => {
+        if (submitted) {
+          const okCount = secQs.filter((q) => userAns[q.id] === q.ans).length;
+          secChip.textContent = okCount + '/' + secQs.length + ' đúng';
+          secChip.className = 'chip ' + (okCount >= Math.ceil(secQs.length * 0.8) ? 'good' : 'warn');
+          secChip.style.fontSize = '.72rem';
+        } else {
+          const ansCount = secQs.filter((q) => userAns[q.id] !== undefined).length;
+          secChip.textContent = ansCount + '/' + secQs.length + ' câu';
+          secChip.className = 'chip ' + (ansCount === secQs.length ? 'good' : '');
+          secChip.style.fontSize = '.72rem';
+        }
+      };
+      syncChip();
+
+      const secBody = [];
+      if (sec.desc) secBody.push(h('p', { class: 'small muted', style: { margin: 0 } }, sec.desc));
+
+      (sec.mondais || []).forEach((mon) => {
+        const monEl = h('div', { class: 'stack', style: { gap: '8px', marginTop: '4px' } },
+          h('div', { style: { fontWeight: 700, fontSize: '.88rem', color: 'var(--teal)', padding: '6px 10px', background: 'var(--teal-soft)', borderRadius: '8px' } }, mon.title)
+        );
+        (mon.questions || []).forEach((q) => {
+          monEl.append(renderQuestionBlock(q, runningQNum++));
+        });
+        (mon.passages || []).forEach((p) => {
+          const pBox = h('div', {
+            class: 'panel stack',
+            style: { background: 'var(--sunk)', padding: '12px 14px', borderRadius: '10px', borderLeft: '3px solid var(--teal)', gap: '6px' }
+          },
+            h('div', { style: { fontWeight: 700, fontSize: '.86rem', color: 'var(--teal)' } }, '📖 ' + p.title),
+            h('div', { lang: 'ja', style: { whiteSpace: 'pre-line', lineHeight: 1.85, fontSize: '.96rem', color: 'var(--ink)' } }, p.text),
+            submitted && p.vi ? h('div', { class: 'small muted', style: { borderTop: '1px dashed var(--line)', paddingTop: '6px', whiteSpace: 'pre-line' } },
+              h('b', {}, '🇻🇳 Dịch bài đọc:\n'), p.vi
+            ) : null
+          );
+          monEl.append(pBox);
+          (p.questions || []).forEach((q) => {
+            monEl.append(renderQuestionBlock(q, runningQNum++));
+          });
+        });
+        secBody.push(monEl);
+      });
+
+      const accEl = accordionItem({
+        id: 'jlpt_sec_' + sec.id,
+        cls: 'acc-card',
+        iconEl: secIdx === 0 ? '漢' : (secIdx === 1 ? '文' : '🎧'),
+        title: sec.title,
+        subtitle: secQs.length + ' câu hỏi chuẩn JLPT ' + level,
+        chips: [secChip],
+        defaultOpen: submitted || secIdx === 0,
+        body: secBody
+      });
+
+      if (!submitted && secIdx < exam.sections.length - 1) {
+        const nextBtn = h('button', {
+          type: 'button',
+          class: 'ghost block',
+          style: { fontWeight: 700, marginTop: '4px', border: '1px solid var(--line)' },
+          onclick: () => {
+            accEl.open = false;
+            const nextSec = sectionDetailsEls[secIdx + 1];
+            if (nextSec && nextSec.accEl) {
+              nextSec.accEl.open = true;
+              setTimeout(() => nextSec.accEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+            }
+          }
+        }, 'Chuyển sang Phần ' + (secIdx + 2) + ' →');
+        accEl.querySelector('.acc-body').append(nextBtn);
+      }
+
+      sectionDetailsEls.push({ accEl, syncChip });
+      sectionsWrap.append(accEl);
+    });
+
+    const toolbar = h('div', { class: 'acc-toolbar' },
+      h('span', { class: 'small muted', style: { fontWeight: 600 } }, '📋 3 Phần thi JLPT ' + level + ' (' + totalQs + ' câu)'),
+      makeToggleAllBtn(() => sectionsWrap, 'details.acc-card', { labelOpen: '📖 Mở tất cả phần', labelClose: '📁 Thu gọn' })
+    );
+
+    const submitPanel = !submitted ? h('div', { class: 'panel stack', style: { padding: '14px', borderRadius: '14px', gap: '8px', background: 'var(--surface)' } },
+      h('div', { id: 'jlpt_submit_hint', class: 'small muted center' },
+        'Đã làm ' + answeredCount + '/' + totalQs + ' câu' + (answeredCount < totalQs ? ' (còn ' + (totalQs - answeredCount) + ' câu chưa chọn)' : ' · Sẵn sàng nộp bài!')
+      ),
+      h('button', {
+        type: 'button',
+        class: 'accent block',
+        style: { fontWeight: 800, fontSize: '1rem', padding: '14px' },
+        onclick: () => {
+          stopSay();
+          let score = 0;
+          const secScores = (exam.sections || []).map((sec) => {
+            const qs = allSectionQuestions(sec);
+            const ok = qs.filter((q) => userAns[q.id] === q.ans).length;
+            score += ok;
+            const shortName = sec.id === 'vocab' ? '文字・語彙' : (sec.id === 'grammar_reading' ? '文法・読解' : '聴解');
+            return { id: sec.id, short: shortName, ok, tot: qs.length };
+          });
+          const pct = Math.round((score / totalQs) * 100);
+          const passed = pct >= (exam.passPct || 80);
+          S.jlpt_attempts[level] = {
+            answers: { ...userAns },
+            score,
+            total: totalQs,
+            pct,
+            passed,
+            submitted: true,
+            secScores
+          };
+          if (passed && topics.length) {
+            newlyUnlockedInfo = unlockCategoryTopics('ja', topics, pct);
+          }
+          addXp(score * XP_ITEM, 'ja');
+          checkAch();
+          save();
+          submitted = true;
+          renderExamPage();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (passed) toast('🏆 Chúc mừng! Đạt ' + pct + '% — Vượt cấp JLPT ' + level + ' thành công!');
+        }
+      }, '📝 Nộp bài & Chấm điểm JLPT ' + level)
+    ) : null;
+
+    mount(h('div', { class: 'stack-lg' }, topbar, resultBanner, introNote, toolbar, sectionsWrap, submitPanel));
+  }
+
+  renderExamPage();
 }
 
 // Chế độ thi thử Demo cho HSK / JLPT
