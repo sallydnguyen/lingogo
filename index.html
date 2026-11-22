@@ -1203,6 +1203,12 @@ details.acc-group > .acc-body { background: var(--bg); padding: 10px 12px; gap: 
       return this.map(fn, thisArg).flat(1);
     };
   }
+  if (!Object.values) {
+    Object.values = function (o) { return Object.keys(o).map(function (k) { return o[k]; }); };
+  }
+  if (!Object.entries) {
+    Object.entries = function (o) { return Object.keys(o).map(function (k) { return [k, o[k]]; }); };
+  }
 })();
 /* =====================================================================
    Lingogo — học Anh, Trung, Nhật trong một app.
@@ -3339,8 +3345,7 @@ function getUnifiedDaySlots(dayIdx) {
   ];
   const items = baseItems.map((s) => {
     const isMain = !isSun && sch.focus === s.code;
-    return {
-      ...s,
+    return Object.assign({}, s, {
       isMain,
       isSun,
       roleBadge: isSun
@@ -3349,7 +3354,7 @@ function getUnifiedDaySlots(dayIdx) {
       taskDesc: isSun
         ? 'Không học bài mới · Ôn gói 15 từ dễ quên trong tuần hoặc giải trí nhẹ.'
         : (isMain ? s.focusTask : s.lightTask)
-    };
+    });
   });
   // Đưa ngôn ngữ trọng tâm của ngày đó lên đầu để nhìn rõ ngay hôm đó học gì
   return items.sort((a, b) => (b.isMain ? 1 : 0) - (a.isMain ? 1 : 0));
@@ -11297,7 +11302,7 @@ function buildSteps(t, i) {
       batch.forEach((v, n0) => steps.push({ type: 'intro', v, tip: bStart === 0 && n0 === 0 }));
       shuffle(batch).forEach((v) => steps.push({ type: 'meaning', v, opts: opt(v, 'm') }));
       if (code !== 'en' && hvwAdded < 2) {
-        const chars = [...new Map(batch.flatMap((v) => hvParts(code, v.w).filter((x) => x.hv).map((x) => [x.c, { ...x, v }]))).values()];
+        const chars = [...new Map(batch.flatMap((v) => hvParts(code, v.w).filter((x) => x.hv).map((x) => [x.c, Object.assign({}, x, { v })]))).values()];
         for (const x of sample(chars, 1)) {
           const meanLower = (x.m || '').toLowerCase().normalize('NFC');
           const meanWords = meanLower.split(/[\s,;/()]+/).filter(Boolean);
@@ -12000,7 +12005,7 @@ function lessonView(t, i, opts = null) {
   VIEW = 'lesson'; setTabs(false);
   const catExam = opts && opts.catExam;
   setFeedbackContext({ mode: 'lesson', topicId: t.id, topicTitle: t.sub || t.title, lessonIndex: i, lessonKind: t.lessons[i].kind, lessonTitle: lessonTitle(t, i) });
-  const code = t.lang || S.lang || 'en', steps = catExam ? catExam.steps : buildSteps(t, i), first = new Map(), retried = new Set(), queue = steps.map((s, n) => ({ ...s, n }));
+  const code = t.lang || S.lang || 'en', steps = catExam ? catExam.steps : buildSteps(t, i), first = new Map(), retried = new Set(), queue = steps.map((s, n) => Object.assign({}, s, { n }));
   let done = 0;
   if (LANGS[code] && LANGS[code].cjk) loadStrokes(code);
   if (catExam) catExam.topics.slice(0, 6).forEach((subT) => preloadTopicAudio(code, subT));
@@ -13028,7 +13033,7 @@ function reviewView(forceExtra = false) {
     if (item.skill === 'speak') {
       const it = (item.it && item.it.it) || item.it || {};
       const targetText = it.text || item.id;
-      const readingLine = code === 'ja' ? resolveJaReading(null, { ...it, text: targetText }) : (it.r || '');
+      const readingLine = code === 'ja' ? resolveJaReading(null, Object.assign({}, it, { text: targetText })) : (it.r || '');
       const wordsBox = h('div', { class: 'words', lang: L().lang, style: { fontSize: code === 'en' ? '1.4rem' : '1.8rem', justifyContent: 'center' } }, speakHeadline(code, targetText, it.raw, readingLine));
       const resultBox = h('div', { class: 'stack center', style: { gap: '4px', minHeight: '40px' } });
       const verdict = h('div', { 'aria-live': 'assertive' });
@@ -13583,7 +13588,7 @@ function renderWriteSkills(code, d) {
     )
   );
 
-  const fillEl = fillData ? fillBlock({ ...t, fill: fillData }) : null;
+  const fillEl = fillData ? fillBlock(Object.assign({}, t, { fill: fillData })) : null;
 
   if (code === 'en') {
     return [...writeHead, fillEl, writeFoot].filter(Boolean);
@@ -16757,7 +16762,7 @@ function renderKnowledgeChars(code) {
   topics.forEach((t) => {
     (t.kanji || []).forEach((k) => {
       if (!allKanji.some((x) => x.k === k.k)) {
-        allKanji.push({ ...k, topicTitle: t.sub || t.title, lv: t.level || 'N5' });
+        allKanji.push(Object.assign({}, k, { topicTitle: t.sub || t.title, lv: t.level || 'N5' }));
       }
     });
   });
@@ -18296,7 +18301,7 @@ function getJlptAttempt(level, examId) {
 }
 
 function shuffleJlptQuestion(q) {
-  const clone = { ...q };
+  const clone = Object.assign({}, q);
   const n = (q.opts || []).length;
   if (n > 1) {
     const idxs = shuffle(Array.from({ length: n }, (_, i) => i));
@@ -18335,22 +18340,20 @@ function buildShuffledJlptExam(examList, level) {
     });
   });
 
-  const sections = (base.sections || []).map((sec) => ({
-    ...sec,
+  const sections = (base.sections || []).map((sec) => Object.assign({}, sec, {
     mondais: (sec.mondais || []).map((mon) => {
       const mKey = (mon.title || '').split('·')[0].trim();
       if (mon.passages && mon.passages.length) {
         const pool = pPools[mKey] || mon.passages;
-        const pickedPassages = shuffle(pool).slice(0, mon.passages.length).map((p) => ({
-          ...p,
+        const pickedPassages = shuffle(pool).slice(0, mon.passages.length).map((p) => Object.assign({}, p, {
           questions: (p.questions || []).map(shuffleJlptQuestion)
         }));
-        return { ...mon, passages: pickedPassages };
+        return Object.assign({}, mon, { passages: pickedPassages });
       }
       const pool = qPools[mKey] || mon.questions || [];
       const needCount = (mon.questions || []).length;
       const pickedQs = shuffle(pool).slice(0, needCount).map(shuffleJlptQuestion);
-      return { ...mon, questions: pickedQs };
+      return Object.assign({}, mon, { questions: pickedQs });
     })
   }));
 
@@ -19240,7 +19243,7 @@ function showFeedbackModal(customCtx) {
   const close = () => { window.removeEventListener('keydown', onKey); overlay.remove(); };
   window.addEventListener('keydown', onKey);
 
-  const cur = { ...getFeedbackContext(), ...(customCtx || {}) };
+  const cur = Object.assign({}, getFeedbackContext(), customCtx || {});
   const langName = { en: 'Tiếng Anh', zh: 'Tiếng Trung', ja: 'Tiếng Nhật' }[S.lang] || S.lang;
   
   let locText = 'Trang chính';
