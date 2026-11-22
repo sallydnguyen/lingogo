@@ -1061,24 +1061,30 @@ summary.acc-summary {
   cursor: pointer;
   padding: 12px 14px;
   user-select: none;
+  -webkit-user-select: none;
   list-style: none;
   outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  display: block;
   transition: background .15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 summary.acc-summary:hover { background: var(--sunk); }
 summary.acc-summary::-webkit-details-marker { display: none; }
-summary.acc-summary .acc-main { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-summary.acc-summary .acc-title { font-size: .96rem; font-weight: 700; color: var(--ink); display: block; line-height: 1.3; }
-summary.acc-summary .acc-sub {
+.acc-summary-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  pointer-events: none;
+}
+.acc-summary-inner .acc-main, summary.acc-summary .acc-main { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.acc-summary-inner .acc-title, summary.acc-summary .acc-title { font-size: .96rem; font-weight: 700; color: var(--ink); display: block; line-height: 1.3; }
+.acc-summary-inner .acc-sub, summary.acc-summary .acc-sub {
   font-size: .8rem; color: var(--muted); margin: 2px 0 0; line-height: 1.35;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-summary.acc-summary .acc-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.acc-summary-inner .acc-right, summary.acc-summary .acc-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 details.acc-card[open] > summary .acc-arrow,
 details.acc-group[open] > summary .acc-arrow { transform: rotate(180deg); }
 .acc-arrow { display: inline-block; color: var(--teal); font-weight: 700; font-size: .92rem; transition: transform .2s ease; }
@@ -1162,7 +1168,7 @@ details.acc-group > .acc-body { background: var(--bg); padding: 10px 12px; gap: 
    Dữ liệu bài học nằm trong data/<ngôn ngữ>.json (tải khi cần), âm thanh thu sẵn
    trong audio/, nét chữ trong data/strokes-<zh|ja>.json.
    ===================================================================== */
-const APP_BUILD_ID = '20261121-1528';
+const APP_BUILD_ID = '20261121-1615';
 const LANGS = {
   en: { label: 'English', vi: 'Tiếng Anh', short: 'Anh', folder: 'English', tts: 'en-US', rec: 'en-US', lang: 'en', cjk: false },
   zh: { label: '中文', vi: 'Tiếng Trung', short: 'Trung', folder: 'Chinese', tts: 'zh-CN', rec: 'zh-CN', lang: 'zh-Hans', cjk: true },
@@ -2944,16 +2950,18 @@ function accordionItem({ iconEl, title, titleLang, subtitle, chips = [], body = 
   if (Object.keys(st).length) attrs.style = st;
   if (onToggle) attrs.ontoggle = (e) => { if (e.target === e.currentTarget) onToggle(e.currentTarget.open); };
   const sum = h('summary', { class: 'acc-summary' },
-    h('div', { class: 'acc-main' },
-      iconEl ? (iconEl instanceof Node ? iconEl : h('span', { style: { fontSize: '1.25rem', flexShrink: 0, lineHeight: 1 } }, iconEl)) : null,
-      h('div', { style: { minWidth: 0, flex: 1 } },
-        h('span', { class: 'acc-title', lang: titleLang || null }, title),
-        subtitle ? h('p', { class: 'acc-sub' }, subtitle) : null
+    h('div', { class: 'acc-summary-inner' },
+      h('div', { class: 'acc-main' },
+        iconEl ? (iconEl instanceof Node ? iconEl : h('span', { style: { fontSize: '1.25rem', flexShrink: 0, lineHeight: 1 } }, iconEl)) : null,
+        h('div', { style: { minWidth: 0, flex: 1 } },
+          h('span', { class: 'acc-title', lang: titleLang || null }, title),
+          subtitle ? h('span', { class: 'acc-sub', style: { display: 'block' } }, subtitle) : null
+        )
+      ),
+      h('div', { class: 'acc-right' },
+        ...chips.filter(Boolean),
+        h('span', { class: 'acc-arrow', 'aria-hidden': 'true' }, '▾')
       )
-    ),
-    h('div', { class: 'acc-right' },
-      ...chips.filter(Boolean),
-      h('span', { class: 'acc-arrow', 'aria-hidden': 'true' }, '▾')
     )
   );
   const bodyEl = h('div', { class: 'acc-body' }, ...(Array.isArray(body) ? body : [body]));
@@ -3624,15 +3632,44 @@ function renderEnExtraRoadmap() {
   S.l30 = S.l30 || {};
   const doneDays = days.filter((d) => S.l30[d.day]).length;
   const dayItems = days.map((d) => {
-    const body = h('div', { class: 'stack', style: { gap: '8px' } });
-    const show = (label, html) => { if (!html) return null; return h('details', { class: 'panel', style: { padding: '8px 10px', borderRadius: '10px' } }, h('summary', { style: { cursor: 'pointer', fontWeight: 700, fontSize: '.84rem' } }, label), (() => { const x = h('div', { class: 'small', style: { lineHeight: 1.6, overflowX: 'auto' } }); x.innerHTML = html; return x; })()); };
+    const show = (label, html) => {
+      if (!html) return null;
+      return h('details', { class: 'panel', style: { padding: '8px 10px', borderRadius: '10px' } },
+        h('summary', { style: { cursor: 'pointer', fontWeight: 700, fontSize: '.84rem', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' } },
+          h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', pointerEvents: 'none' } },
+            h('span', {}, label),
+            h('span', { class: 'guide-arrow' }, '▾')
+          )
+        ),
+        (() => { const x = h('div', { class: 'small', style: { lineHeight: 1.6, overflowX: 'auto', marginTop: '6px' } }); x.innerHTML = html; return x; })()
+      );
+    };
+    const audioSrc = typeof langPath === 'function' ? langPath('en', 'audio/ielts_30day/day' + d.day + '.mp3') : 'English/audio/ielts_30day/day' + d.day + '.mp3';
     return accordionItem({
       cls: 'acc-group', iconEl: S.l30[d.day] ? '✅' : '🎧',
       title: 'Ngày ' + d.day + ': ' + d.title,
-      subtitle: 'Nghe video bản xứ rồi làm đề, đối chiếu đáp án',
+      subtitle: 'Nghe audio bản xứ kèm đề, dịch đề và transcript',
       chips: [h('span', { class: 'chip' + (S.l30[d.day] ? ' good' : ''), style: { fontSize: '.72rem' } }, S.l30[d.day] ? 'Đã xong' : 'Chưa học')],
       body: [h('div', { class: 'stack', style: { gap: '8px' } },
-        d.vimeoUrl ? h('a', { class: 'primary block', href: d.vimeoUrl, target: '_blank', rel: 'noopener', style: { textAlign: 'center', padding: '9px', borderRadius: '10px', textDecoration: 'none' } }, '▶ Mở video nghe ngày ' + d.day) : null,
+        h('div', { class: 'panel stack', style: { background: 'var(--sunk)', padding: '10px', borderRadius: '10px', gap: '6px' } },
+          h('div', { class: 'row between', style: { alignItems: 'center' } },
+            h('b', { style: { fontSize: '.84rem', color: 'var(--teal)' } }, '🎧 Bài nghe bản xứ (phát trực tiếp):'),
+            h('span', { class: 'chip small' }, 'Ngày ' + d.day)
+          ),
+          h('audio', {
+            controls: true,
+            preload: 'none',
+            style: { width: '100%', height: '36px', borderRadius: '8px' },
+            src: audioSrc
+          })
+        ),
+        h('a', {
+          class: 'ghost block',
+          href: 'https://ielts-nguyenhuyen.com/30-day-ielts-listening-challenge-day-' + d.day + '/',
+          target: '_blank',
+          rel: 'noopener',
+          style: { textAlign: 'center', padding: '8px', borderRadius: '10px', textDecoration: 'none', fontSize: '.8rem', fontWeight: 600 }
+        }, '🌐 Mở bài học & video gốc (IELTS Nguyễn Huyền) ↗'),
         show('📝 Đề', d.de), show('✅ Đáp án', d.ans), show('🇻🇳 Dịch đề', d.dich), show('📄 Transcript', d.transcript), show('📚 Từ vựng', d.vocab),
         h('button', { class: S.l30[d.day] ? 'ghost block' : 'accent block', onclick: () => { S.l30[d.day] = !S.l30[d.day]; save(); pickView(); } }, S.l30[d.day] ? 'Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu đã học ngày ' + d.day))]
     });
@@ -3641,7 +3678,13 @@ function renderEnExtraRoadmap() {
     cls: 'acc-card', iconEl: '🎧', title: 'Chặng 2 · 30 ngày IELTS Listening',
     subtitle: doneDays + '/' + days.length + ' ngày · mỗi ngày 1 bài nghe bản xứ ~20 phút',
     chips: [h('span', { class: 'chip' + (doneDays === days.length && days.length ? ' good' : '') }, doneDays + '/' + days.length)],
-    body: days.length ? dayItems : [h('p', { class: 'small muted' }, 'Chưa tải được dữ liệu 30 ngày.')]
+    body: days.length ? [
+      h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '8px', marginBottom: '4px' } },
+        h('span', { class: 'small muted', style: { flex: 1, minWidth: '180px' } }, '🎧 30 bài nghe bản xứ có sẵn audio MP3 nghe trực tiếp:'),
+        makeToggleAllBtn(() => document.querySelector('.ielts-30day-wrap'), '.acc-group')
+      ),
+      h('div', { class: 'ielts-30day-wrap stack', style: { gap: '8px' } }, dayItems)
+    ] : [h('p', { class: 'small muted' }, 'Chưa tải được dữ liệu 30 ngày.')]
   }));
   const vols = (typeof IELTS_IOT_VOLUMES !== 'undefined' ? IELTS_IOT_VOLUMES : []);
   const volDone = vols.filter((v) => ieltsDoneCount({ lang: 'en', id: 'vol_' + v.vol }) === 4).length;
@@ -3780,9 +3823,11 @@ function renderRoadmapTabContent(t) {
         // Level Stepper (Thu gọn khi có nhiều cấp độ)
         h(cats.length > 4 ? 'details' : 'div', cats.length > 4 ? { class: 'panel', style: { padding: '9px 11px', borderRadius: '10px', background: 'var(--sunk)', border: '1px solid var(--line)' } } : { class: 'stack', style: { gap: '6px' } },
           cats.length > 4
-            ? h('summary', { style: { cursor: 'pointer', fontSize: '.82rem', fontWeight: 600, color: 'var(--teal)', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
-                h('span', {}, '📍 Chi tiết tiến độ ' + cats.length + ' cấp độ (' + cats.filter(cat => (p.catTopicDone[cat.id] || 0) >= (p.catTopicTotal[cat.id] || 0) && (p.catTopicTotal[cat.id] || 0) > 0).length + '/' + cats.length + ' xong)'),
-                h('span', { class: 'guide-arrow' }, '▾')
+            ? h('summary', { style: { cursor: 'pointer', fontSize: '.82rem', fontWeight: 600, color: 'var(--teal)', listStyle: 'none', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' } },
+                h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', pointerEvents: 'none' } },
+                  h('span', {}, '📍 Chi tiết tiến độ ' + cats.length + ' cấp độ (' + cats.filter(cat => (p.catTopicDone[cat.id] || 0) >= (p.catTopicTotal[cat.id] || 0) && (p.catTopicTotal[cat.id] || 0) > 0).length + '/' + cats.length + ' xong)'),
+                  h('span', { class: 'guide-arrow' }, '▾')
+                )
               )
             : h('span', { class: 'small muted', style: { fontWeight: 600 } }, 'Lộ trình các cấp độ:'),
           h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: cats.length > 4 ? '8px' : 0 } },
@@ -15309,16 +15354,18 @@ function guideAccordionItem({ id, icon, title, subtitle, tag, content, defaultOp
   const summaryEl = h('summary', {
     class: 'guide-summary acc-summary'
   },
-    h('div', { class: 'acc-main' },
-      h('span', { style: { fontSize: '1.35rem', flexShrink: 0, lineHeight: 1 } }, icon),
-      h('div', { style: { minWidth: 0, flex: 1 } },
-        h('span', { class: 'acc-title' }, title),
-        subtitle ? h('p', { class: 'acc-sub' }, subtitle) : null,
-        tag ? h('span', { class: 'chip small', style: { fontWeight: 600, fontSize: '.7rem', marginTop: '5px', display: 'inline-block' } }, tag) : null
+    h('div', { class: 'acc-summary-inner' },
+      h('div', { class: 'acc-main' },
+        h('span', { style: { fontSize: '1.35rem', flexShrink: 0, lineHeight: 1 } }, icon),
+        h('div', { style: { minWidth: 0, flex: 1 } },
+          h('span', { class: 'acc-title' }, title),
+          subtitle ? h('span', { class: 'acc-sub', style: { display: 'block' } }, subtitle) : null,
+          tag ? h('span', { class: 'chip small', style: { fontWeight: 600, fontSize: '.7rem', marginTop: '5px', display: 'inline-block' } }, tag) : null
+        )
+      ),
+      h('div', { class: 'acc-right' },
+        h('span', { class: 'guide-arrow', style: { color: 'var(--teal)', fontWeight: 700, fontSize: '.92rem' } }, '▾')
       )
-    ),
-    h('div', { class: 'acc-right' },
-      h('span', { class: 'guide-arrow', style: { color: 'var(--teal)', fontWeight: 700, fontSize: '.92rem' } }, '▾')
     )
   );
 

@@ -11,6 +11,7 @@ index-inline.html
 !English/audio/listen/*.mp3
 !Chinese/audio/hskk/*.mp3
 !English/audio/ielts/*.mp3
+!English/audio/ielts_30day/*.mp3
 *.wav
 *.m4a
 source/audio-nghe-N5/
