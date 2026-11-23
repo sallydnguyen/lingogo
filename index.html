@@ -1315,6 +1315,7 @@ let PICK_TAB = 'progress'; // 'progress' | 'schedule' | 'roadmap'
 let STUDY_PACE = 'schedule'; // 'schedule' | 'daily1' | 'daily2'
 let ROADMAP_LANG = ''; // '' (mặc định dùng S.lang) | 'all' | 'en' | 'zh' | 'ja'
 let PICK_HUB_OPEN = false; // false: chỉ hiện chọn 3 ngôn ngữ + nút Lộ trình; true: mở hub Tiến độ / Lịch / Lộ trình
+let IELTS_ACTIVE_DAY = 0; // 0: danh sách 30 ngày; 1..30: mở giao diện học toàn màn hình theo ngày
 
 function getLangProgress(code) {
   const metaObj = (TOPIC_META && TOPIC_META[code]) || {};
@@ -3796,7 +3797,7 @@ function buildIeltsInlineInputHtml(dayNum, qKey, savedAttempt, answersMap) {
     '</span>';
 }
 
-function renderIeltsDayDe(d) {
+function renderIeltsDayDe(d, flat) {
   if (!d || !d.de) return null;
   const dayNum = d.day;
   const answersMap = d.answersMap || {};
@@ -3995,6 +3996,16 @@ function renderIeltsDayDe(d) {
     </div>
   `;
 
+  if (flat) {
+    return h('div', { class: 'stack', style: { gap: '8px' } },
+      h('div', { class: 'row between', style: { alignItems: 'center', borderBottom: '1px solid var(--line)', paddingBottom: '6px' } },
+        h('b', { style: { fontSize: '.9rem', color: 'var(--teal)' } }, '📝 Đề & Làm bài tập trực tiếp'),
+        hasAnswers ? h('span', { class: 'chip small', style: { fontSize: '.72rem' } }, qKeys.length + ' câu') : null
+      ),
+      (() => { const container = h('div'); container.innerHTML = fullContent; return container; })()
+    );
+  }
+
   return h('div', { class: 'panel stack', style: { padding: '12px', borderRadius: '12px', gap: '8px' } },
     h('div', { class: 'row between', style: { alignItems: 'center', borderBottom: '1px solid var(--line)', paddingBottom: '6px' } },
       h('b', { style: { fontSize: '.88rem', color: 'var(--teal)' } }, '📝 Đề & Làm bài tập trực tiếp'),
@@ -4030,7 +4041,7 @@ window.ieltsAudioRate = function(dayNum, rate, btn) {
 window.ieltsFilterDays = function(mode, btn) {
   const wrap = document.querySelector('.ielts-30day-wrap');
   if (!wrap) return;
-  const cards = wrap.querySelectorAll('details.acc-group');
+  const cards = wrap.querySelectorAll('.ielts-day-row, details.acc-group');
   for (let i = 0; i < cards.length; i++) {
     const c = cards[i];
     const isDone = c.getAttribute('data-done') === '1';
@@ -4213,6 +4224,114 @@ window.updateIeltsTotalProgress = function() {
   }
 };
 
+function renderIeltsFullDayView(dayNum) {
+  const days = (window.IELTS_30DAY_CHALLENGE || []);
+  const idx = days.findIndex((x) => x.day === dayNum);
+  const d = idx >= 0 ? days[idx] : days[0];
+  if (!d) {
+    IELTS_ACTIVE_DAY = 0;
+    return h('div', { class: 'panel' }, 'Không tìm thấy bài học.');
+  }
+  S.l30 = S.l30 || {};
+  const show = (label, html) => {
+    if (!html) return null;
+    return h('details', { class: 'panel', style: { padding: '10px 12px', borderRadius: '10px' } },
+      h('summary', { style: { cursor: 'pointer', fontWeight: 700, fontSize: '.86rem', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' } },
+        h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', pointerEvents: 'none' } },
+          h('span', {}, label),
+          h('span', { class: 'guide-arrow' }, '▾')
+        )
+      ),
+      (() => { const x = h('div', { class: 'small ielts-de-body', style: { marginTop: '8px' } }); x.innerHTML = html; return x; })()
+    );
+  };
+  const audioSrc = typeof langPath === 'function' ? langPath('en', 'audio/ielts_30day/day' + d.day + '.mp3') : 'English/audio/ielts_30day/day' + d.day + '.mp3';
+  const att = S.l30_attempts && S.l30_attempts[d.day];
+  const prevDay = idx > 0 ? days[idx - 1].day : 0;
+  const nextDay = idx >= 0 && idx < days.length - 1 ? days[idx + 1].day : 0;
+  const scoreChip = h('span', {
+    class: 'chip ielts-score-chip-' + d.day + (att ? (att.passed ? ' good' : ' warn') : ''),
+    style: { fontSize: '.72rem', display: att ? '' : 'none' }
+  }, att ? (att.score + '/' + att.total + ' (' + att.pct + '%)') : '');
+  const statusChip = h('span', {
+    class: 'chip ielts-status-chip-' + d.day + (S.l30[d.day] ? ' good' : ''),
+    style: { fontSize: '.72rem' }
+  }, S.l30[d.day] ? 'Đã xong' : 'Chưa học');
+
+  return h('div', { id: 'ielts_day_card_' + d.day, class: 'stack', style: { gap: '12px' } },
+    // Top navigation bar
+    h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '8px' } },
+      h('button', {
+        type: 'button',
+        class: 'ghost',
+        style: { padding: '6px 12px', fontSize: '.82rem', fontWeight: 700 },
+        onclick: () => { IELTS_ACTIVE_DAY = 0; pickView(); try { window.scrollTo(0, 0); } catch (e) {} }
+      }, '← Danh sách 30 ngày'),
+      h('div', { class: 'row', style: { gap: '6px' } },
+        h('button', {
+          type: 'button', class: 'ghost', disabled: !prevDay,
+          style: { padding: '6px 10px', fontSize: '.8rem', opacity: prevDay ? 1 : .45 },
+          onclick: () => { if (prevDay) { IELTS_ACTIVE_DAY = prevDay; pickView(); try { window.scrollTo(0, 0); } catch (e) {} } }
+        }, '‹ Ngày trước'),
+        h('button', {
+          type: 'button', class: 'ghost', disabled: !nextDay,
+          style: { padding: '6px 10px', fontSize: '.8rem', opacity: nextDay ? 1 : .45 },
+          onclick: () => { if (nextDay) { IELTS_ACTIVE_DAY = nextDay; pickView(); try { window.scrollTo(0, 0); } catch (e) {} } }
+        }, 'Ngày sau ›')
+      )
+    ),
+    // Day header
+    h('div', { class: 'stack', style: { gap: '6px' } },
+      h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '8px' } },
+        h('h2', { style: { margin: 0, fontSize: '1.12rem', lineHeight: 1.3 } }, (S.l30[d.day] ? '✅ ' : '🎧 ') + 'Ngày ' + d.day + ': ' + d.title),
+        h('div', { class: 'row', style: { gap: '6px', flexShrink: 0 } }, scoreChip, statusChip)
+      )
+    ),
+    // Sticky Audio Player
+    h('div', { class: 'ielts-sticky-player stack', style: { gap: '6px' } },
+      h('div', { class: 'ielts-audio-ctrl-row' },
+        h('b', { style: { fontSize: '.84rem', color: 'var(--teal)' } }, '🎧 Audio Ngày ' + d.day),
+        h('div', { class: 'row', style: { gap: '4px', alignItems: 'center' } },
+          h('button', { type: 'button', class: 'ielts-spd-btn', onclick: () => ieltsAudioSeek(d.day, -5) }, '-5s'),
+          h('button', { type: 'button', class: 'ielts-spd-btn', onclick: () => ieltsAudioSeek(d.day, 5) }, '+5s'),
+          h('button', { type: 'button', class: 'ielts-spd-btn', onclick: (e) => ieltsAudioRate(d.day, 0.85, e.currentTarget) }, '0.85x'),
+          h('button', { type: 'button', class: 'ielts-spd-btn active', onclick: (e) => ieltsAudioRate(d.day, 1, e.currentTarget) }, '1x'),
+          h('button', { type: 'button', class: 'ielts-spd-btn', onclick: (e) => ieltsAudioRate(d.day, 1.25, e.currentTarget) }, '1.25x')
+        )
+      ),
+      h('audio', {
+        id: 'ielts_audio_' + d.day,
+        controls: true,
+        preload: 'none',
+        style: { width: '100%', height: '36px', borderRadius: '8px' },
+        src: audioSrc
+      })
+    ),
+    // Full-width flat exercise
+    renderIeltsDayDe(d, true),
+    // Reference sections
+    show('✅ Đáp án & Giải thích', d.ans),
+    show('🇻🇳 Dịch đề', d.dich),
+    show('📄 Transcript', d.transcript),
+    show('📚 Từ vựng', d.vocab),
+    // Bottom actions
+    h('div', { class: 'row wrap', style: { gap: '8px', marginTop: '4px' } },
+      h('button', {
+        class: (S.l30[d.day] ? 'ghost' : 'accent') + ' ielts-mark-btn-' + d.day,
+        style: { flex: 1, minWidth: '160px' },
+        onclick: () => { S.l30[d.day] = !S.l30[d.day]; save(); pickView(); }
+      }, S.l30[d.day] ? 'Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu đã học ngày ' + d.day),
+      h('a', {
+        class: 'ghost',
+        href: 'https://ielts-nguyenhuyen.com/30-day-ielts-listening-challenge-day-' + d.day + '/',
+        target: '_blank',
+        rel: 'noopener',
+        style: { textAlign: 'center', padding: '8px 12px', borderRadius: '10px', textDecoration: 'none', fontSize: '.8rem', fontWeight: 600 }
+      }, '🌐 Bài gốc ↗')
+    )
+  );
+}
+
 function renderEnExtraRoadmap() {
   const out = [];
   const days = (window.IELTS_30DAY_CHALLENGE || []);
@@ -4220,85 +4339,53 @@ function renderEnExtraRoadmap() {
   const doneDays = days.filter((d) => S.l30[d.day]).length;
   const totalPct = days.length ? Math.round((doneDays / days.length) * 100) : 0;
   const dayItems = days.map((d) => {
-    const show = (label, html) => {
-      if (!html) return null;
-      return h('details', { class: 'panel', style: { padding: '8px 10px', borderRadius: '10px' } },
-        h('summary', { style: { cursor: 'pointer', fontWeight: 700, fontSize: '.84rem', display: 'block', userSelect: 'none', WebkitUserSelect: 'none' } },
-          h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', pointerEvents: 'none' } },
-            h('span', {}, label),
-            h('span', { class: 'guide-arrow' }, '▾')
-          )
-        ),
-        (() => { const x = h('div', { class: 'small ielts-de-body', style: { marginTop: '6px' } }); x.innerHTML = html; return x; })()
-      );
-    };
-    const audioSrc = typeof langPath === 'function' ? langPath('en', 'audio/ielts_30day/day' + d.day + '.mp3') : 'English/audio/ielts_30day/day' + d.day + '.mp3';
     const att = S.l30_attempts && S.l30_attempts[d.day];
     const qCount = d.answersMap ? Object.keys(d.answersMap).length : 0;
-    const scoreChip = h('span', {
-      class: 'chip ielts-score-chip-' + d.day + (att ? (att.passed ? ' good' : ' warn') : ''),
-      style: { fontSize: '.7rem', display: att ? '' : 'none' }
-    }, att ? (att.score + '/' + att.total + ' (' + att.pct + '%)') : '');
+    const scoreChip = att ? h('span', {
+      class: 'chip ' + (att.passed ? 'good' : 'warn'),
+      style: { fontSize: '.7rem' }
+    }, att.score + '/' + att.total + ' (' + att.pct + '%)') : null;
     const statusChip = h('span', {
-      class: 'chip ielts-status-chip-' + d.day + (S.l30[d.day] ? ' good' : ''),
+      class: 'chip' + (S.l30[d.day] ? ' good' : ''),
       style: { fontSize: '.72rem' }
     }, S.l30[d.day] ? 'Đã xong' : 'Chưa học');
-    const card = accordionItem({
+    const row = h('button', {
+      type: 'button',
       id: 'ielts_day_card_' + d.day,
-      cls: 'acc-group', iconEl: S.l30[d.day] ? '✅' : '🎧',
-      title: 'Ngày ' + d.day + ': ' + d.title,
-      subtitle: (qCount ? qCount + ' câu · ' : '') + 'Audio bản xứ + Đề & Đáp án',
-      chips: [scoreChip, statusChip],
-      body: [h('div', { class: 'stack', style: { gap: '10px' } },
-        h('div', { class: 'ielts-sticky-player stack', style: { gap: '6px' } },
-          h('div', { class: 'ielts-audio-ctrl-row' },
-            h('b', { style: { fontSize: '.82rem', color: 'var(--teal)' } }, '🎧 Audio Ngày ' + d.day),
-            h('div', { class: 'row', style: { gap: '4px', alignItems: 'center' } },
-              h('button', { type: 'button', class: 'ielts-spd-btn', onclick: () => ieltsAudioSeek(d.day, -5) }, '-5s'),
-              h('button', { type: 'button', class: 'ielts-spd-btn', onclick: () => ieltsAudioSeek(d.day, 5) }, '+5s'),
-              h('button', { type: 'button', class: 'ielts-spd-btn', onclick: (e) => ieltsAudioRate(d.day, 0.85, e.currentTarget) }, '0.85x'),
-              h('button', { type: 'button', class: 'ielts-spd-btn active', onclick: (e) => ieltsAudioRate(d.day, 1, e.currentTarget) }, '1x'),
-              h('button', { type: 'button', class: 'ielts-spd-btn', onclick: (e) => ieltsAudioRate(d.day, 1.25, e.currentTarget) }, '1.25x')
-            )
-          ),
-          h('audio', {
-            id: 'ielts_audio_' + d.day,
-            controls: true,
-            preload: 'none',
-            style: { width: '100%', height: '36px', borderRadius: '8px' },
-            src: audioSrc
-          })
-        ),
-        renderIeltsDayDe(d),
-        show('✅ Đáp án & Giải thích', d.ans),
-        show('🇻🇳 Dịch đề', d.dich),
-        show('📄 Transcript', d.transcript),
-        show('📚 Từ vựng', d.vocab),
-        h('div', { class: 'row wrap', style: { gap: '8px' } },
-          h('button', { class: (S.l30[d.day] ? 'ghost' : 'accent') + ' ielts-mark-btn-' + d.day, style: { flex: 1, minWidth: '160px' }, onclick: () => { S.l30[d.day] = !S.l30[d.day]; save(); pickView(); } }, S.l30[d.day] ? 'Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu đã học ngày ' + d.day),
-          h('a', {
-            class: 'ghost',
-            href: 'https://ielts-nguyenhuyen.com/30-day-ielts-listening-challenge-day-' + d.day + '/',
-            target: '_blank',
-            rel: 'noopener',
-            style: { textAlign: 'center', padding: '8px 12px', borderRadius: '10px', textDecoration: 'none', fontSize: '.78rem', fontWeight: 600 }
-          }, '🌐 Bài gốc ↗')
+      class: 'ielts-day-row panel row between',
+      style: {
+        width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: '12px',
+        background: 'var(--surface)', border: '1px solid var(--line)', cursor: 'pointer',
+        alignItems: 'center', gap: '10px', color: 'var(--ink)'
+      },
+      onclick: () => { IELTS_ACTIVE_DAY = d.day; pickView(); try { window.scrollTo(0, 0); } catch (e) {} }
+    },
+      h('div', { class: 'row', style: { gap: '10px', alignItems: 'center', minWidth: 0, flex: 1 } },
+        h('span', { style: { fontSize: '1.15rem', flexShrink: 0 } }, S.l30[d.day] ? '✅' : '🎧'),
+        h('div', { class: 'stack', style: { gap: '2px', minWidth: 0 } },
+          h('b', { style: { fontSize: '.88rem', lineHeight: 1.3 } }, 'Ngày ' + d.day + ': ' + d.title),
+          h('span', { class: 'small muted', style: { fontSize: '.76rem' } }, (qCount ? qCount + ' câu · ' : '') + 'Audio + Đề & Đáp án')
         )
-      )]
-    });
-    card.setAttribute('data-done', S.l30[d.day] ? '1' : '0');
-    return card;
+      ),
+      h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', flexShrink: 0 } },
+        scoreChip,
+        statusChip,
+        h('span', { style: { fontSize: '1rem', color: 'var(--muted)', fontWeight: 700 } }, '›')
+      )
+    );
+    row.setAttribute('data-done', S.l30[d.day] ? '1' : '0');
+    return row;
   });
   out.push(accordionItem({
     id: 'ielts_chang_2_card',
     cls: 'acc-card', iconEl: '🎧', title: 'Chặng 2 · 30 ngày IELTS Listening',
-    subtitle: doneDays + '/' + days.length + ' ngày · mỗi ngày 1 bài nghe bản xứ ~20 phút',
+    subtitle: doneDays + '/' + days.length + ' ngày · bấm từng ngày để học toàn màn hình',
     chips: [h('span', { class: 'chip' + (doneDays === days.length && days.length ? ' good' : '') }, doneDays + '/' + days.length)],
     body: days.length ? [
       h('div', { class: 'panel stack', style: { padding: '10px 12px', borderRadius: '10px', background: 'var(--sunk)', gap: '8px' } },
         h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '8px' } },
           h('b', { class: 'small ielts-progress-txt', style: { color: 'var(--teal)' } }, 'Tiến độ: ' + doneDays + '/' + days.length + ' ngày (' + totalPct + '%)'),
-          makeToggleAllBtn(() => document.querySelector('.ielts-30day-wrap'), '.acc-group')
+          h('span', { class: 'small muted', style: { fontSize: '.74rem' } }, 'Bấm vào từng ngày để mở bài rộng rãi')
         ),
         h('div', { class: 'ielts-progress-bar' },
           h('div', { class: 'ielts-progress-fill', style: { width: totalPct + '%' } })
@@ -4336,6 +4423,9 @@ function renderEnExtraRoadmap() {
 
 function renderRoadmapTabContent(t) {
   const currentLang = ROADMAP_LANG || S.lang || 'en';
+  if (IELTS_ACTIVE_DAY > 0 && (currentLang === 'en' || currentLang === 'all')) {
+    return [renderIeltsFullDayView(IELTS_ACTIVE_DAY)];
+  }
   const paces = [
     { id: 'schedule', name: '📅 Lịch chuẩn (2-2-2-1)', desc: currentLang === 'en' ? 'T2, T5 (2 bài/tuần)' : (currentLang === 'zh' ? 'T3, T6 (2 bài/tuần)' : (currentLang === 'ja' ? 'T4, T7 (2 bài/tuần)' : 'Mỗi tiếng 2 bài/tuần · CN ôn tổng hợp')) },
     { id: 'daily1', name: '⚡ 1 bài/ngày', desc: '7 bài/tuần · Đều đặn mỗi ngày' },
