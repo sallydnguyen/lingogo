@@ -4976,18 +4976,20 @@ function homeView() {
           h('span', { class: 'muted' }, xp + '/' + g + ' XP')
         ),
         h('div', { class: 'bar', role: 'progressbar', 'aria-label': 'Mục tiêu hôm nay', 'aria-valuenow': xp, 'aria-valuemax': g }, gf),
-        h('button', {
-          class: (due > 0 ? 'accent' : 'ghost mini') + ' block',
-          style: due > 0 ? {} : { padding: '6px 12px', fontSize: '.84rem', color: 'var(--muted)', margin: '4px 0' },
-          onclick: () => { REVIEW_SKILL = 'vocab'; go('review'); }
-        }, due > 0
-          ? ('🔄 Ôn tập hôm nay: Còn ' + due + ' từ' + (doneRev > 0 ? ' · Đã học/ôn ' + doneRev + ' mục' : '') + (rawVault > due ? ' (Kho chờ: ' + rawVault + ' từ)' : ''))
-          : (doneRev > 0
-              ? ('✓ Đã học/ôn hôm nay: ' + doneRev + ' mục' + (rawVault > 0 ? ' · Bấm nếu muốn ôn thêm' : ''))
-              : '🔄 Ôn tập từ mới (Chưa có từ đến hạn hôm nay)')),
-        nx ? h('button', { class: (due ? '' : 'primary ') + 'block', onclick: () => lessonView(nx.t, nx.i) },
-          h('span', {}, 'Học tiếp: ', h('b', {}, nx.t.sub || nx.t.title)))
-          : h('p', { class: 'muted center' }, curCat !== 'all' ? 'Bạn đã học hết các bài trong chủ đề này. Hãy chọn chủ đề khác hoặc ôn tập.' : 'Bạn đã học hết lộ trình. Hãy ôn tập và luyện nói để nhớ lâu.')
+        h('div', { class: 'row wrap', style: { gap: '8px', margin: '4px 0' } },
+          h('button', {
+            class: (due > 0 ? 'accent' : 'ghost') + ' block',
+            style: { flex: '1 1 200px', fontWeight: 700, padding: '10px 12px' },
+            onclick: () => { REVIEW_SKILL = 'vocab'; REVIEW_MODE = 'flip'; S.reviewMode = 'flip'; save(); reviewView(due === 0); }
+          }, due > 0
+            ? ('🃏 Lật thẻ Flashcard FSRS (' + due + ' từ đến hạn)')
+            : ('🃏 Lật thẻ Flashcard FSRS' + (doneRev > 0 ? ' (Đã ôn ' + doneRev + ' từ)' : ''))),
+          nx ? h('button', {
+            class: (due ? 'ghost' : 'primary') + ' block',
+            style: { flex: '1 1 200px', padding: '10px 12px' },
+            onclick: () => lessonView(nx.t, nx.i)
+          }, h('span', {}, 'Học tiếp: ', h('b', {}, nx.t.sub || nx.t.title))) : null
+        )
       );
     })(),
     (() => {
@@ -10847,6 +10849,11 @@ function topicCard(t, nx, num) {
   const quickOpen = openQuickQuizTopics.has(ok);
   const body = open && h('div', { class: 'body' },
     (hasGram || hasQuickQuiz) && h('div', { class: 'extras', style: { gap: '6px', marginBottom: '2px' } },
+      ((t.vocab && t.vocab.length) || (t.kanji && t.kanji.length)) && h('button', {
+        class: 'ghost mini',
+        style: { border: '1px solid var(--teal)', background: 'rgba(15,82,87,.08)', color: 'var(--teal)', fontSize: '.82rem', padding: '5px 10px', fontWeight: 700 },
+        onclick: () => startTopicFlashcard(t, null, 'home')
+      }, '🃏 Lật thẻ Flashcard (' + ((t.vocab ? t.vocab.length : 0) + (t.kanji ? t.kanji.length : 0)) + ')'),
       hasGram && h('button', {
         class: 'ghost mini',
         style: { border: '1px solid var(--line)', background: 'var(--sunk)', fontSize: '.82rem', padding: '5px 10px' },
@@ -13103,6 +13110,12 @@ function lessonView(t, i, opts = null) {
         h('span', { class: 'spk', 'aria-hidden': 'true' }, icon(ICON.speaker))))),
     h('div', { class: 'dock stack', style: { gap: '8px' } },
       h('button', { class: 'primary block', onclick: step }, isDone ? ('Học lại bài này · ' + steps.filter((s) => s.type !== 'intro').length + ' câu') : ('Bắt đầu · ' + steps.filter((s) => s.type !== 'intro').length + ' câu')),
+      (t.lessons[i].words && t.lessons[i].words.length > 0) && h('button', {
+        type: 'button',
+        class: 'accent block',
+        style: { fontWeight: 700, padding: '11px 14px' },
+        onclick: () => startTopicFlashcard(t, t.lessons[i].words, 'lesson', i)
+      }, '🃏 Lật thẻ Flashcard bài này (' + t.lessons[i].words.length + ' từ · FSRS)'),
       isDone && h('button', {
         class: 'ghost block mini',
         style: { color: 'var(--muted)', fontSize: '.84rem', padding: '8px 12px' },
@@ -13115,6 +13128,199 @@ function lessonView(t, i, opts = null) {
       }, 'Xóa tiến độ bài này')
     ),
     t.lessons[i].kind !== 'learn' && h('p', { class: 'muted' }, ({ review: (t.lang === 'en' && Array.isArray(t.listening) && t.listening.length) ? 'Ôn lại những từ còn yếu của cả chủ đề, nghe hội thoại dài chọn đáp án và tình huống thực tế.' : 'Ôn lại những từ còn yếu của cả chủ đề, nghe chọn từ, kanji và tình huống.', quiz: 'Chọn cách nói đúng trong các tình huống thực tế.', fill: t.lang === 'en' ? 'Phần 1 chọn từ, Phần 2 tự điền lại vào email, rồi sắp xếp câu ví dụ.' : 'Phần 1 chọn từ, Phần 2 tự điền lại vào đoạn hội thoại, rồi sắp xếp câu ví dụ.', speak: 'Nghe và nói lại các câu trong chủ đề.', kanji: 'Học kanji mới: nghĩa Hán Việt, cách đọc, rồi tập viết từng chữ.' })[t.lessons[i].kind])));
+}
+
+// ===== Lật thẻ Flashcard FSRS trực tiếp cho bất kỳ Chủ đề / Bài học nào (kể cả khi chưa có từ đến hạn) =====
+function startTopicFlashcard(t, customWords, fromView, lessonIdx) {
+  const code = (t && t.lang) || S.lang || 'en';
+  const t0 = todayN();
+  VIEW = 'review';
+  setTabs(false);
+  const words = (customWords && customWords.length) ? customWords : (t.vocab || []);
+  const kanjis = (!customWords && t.kanji) ? t.kanji : [];
+  const queue = [];
+  words.forEach((v) => {
+    if (v && v.w) queue.push({ skill: 'vocab', key: sid(code, 'v:' + v.id), id: 'v:' + v.id, it: { v: v, t: t } });
+  });
+  kanjis.forEach((kj) => {
+    if (kj && kj.k) queue.push({ skill: 'vocab', key: sid(code, 'k:' + kj.k), id: 'k:' + kj.k, it: { k: kj, t: t } });
+  });
+
+  if (!queue.length) {
+    setTabs(true);
+    go('home');
+    return;
+  }
+
+  try { preloadTopicAudio(code, t); } catch (e) {}
+
+  let totalCards = queue.length;
+  let doneCount = 0;
+
+  const exit = () => {
+    stopSay();
+    setTabs(true);
+    if (fromView === 'lesson' && typeof lessonIdx === 'number') lessonView(t, lessonIdx);
+    else if (fromView === 'review') reviewView(false);
+    else go('home');
+  };
+
+  const showCard = () => {
+    stopSay();
+    window.scrollTo(0, 0);
+    const item = queue[0];
+    if (!item) {
+      checkAch();
+      save();
+      mount(h('div', { class: 'stack-lg', style: { gap: '12px' } },
+        h('div', { class: 'row between', style: { alignItems: 'center' } },
+          h('button', { class: 'ghost mini', onclick: exit }, '← Quay lại'),
+          h('span', { class: 'chip good' }, '🃏 Flashcard FSRS')
+        ),
+        h('div', { class: 'panel stack center', style: { padding: '24px', borderRadius: '16px', gap: '10px' } },
+          h('h2', {}, '🎉 Đã lật xong ' + doneCount + ' thẻ Flashcard!'),
+          h('p', { class: 'muted center', style: { margin: 0, lineHeight: 1.5 } },
+            'Chủ đề: ' + (t.sub || t.title) + ' · Lịch ôn tập FSRS (Độ ổn định S & Độ khó D) của từng thẻ đã được cập nhật.'
+          ),
+          h('div', { class: 'row center wrap', style: { gap: '8px', marginTop: '8px' } },
+            h('button', { class: 'accent', onclick: () => startTopicFlashcard(t, customWords, fromView, lessonIdx) }, '🔄 Lật lại bộ thẻ này'),
+            h('button', { class: 'primary', onclick: exit }, '← Quay lại bài học')
+          )
+        )
+      ));
+      return;
+    }
+
+    const k = item.key;
+    const s = S.srs[k];
+    const it = item.it;
+    const fsrsMeta = (s && s.st) ? ('S:' + Math.round(s.st) + 'd · D:' + Math.round(s.d || 5)) : 'Thẻ mới';
+
+    let front, back, sayText;
+    if (it.v) {
+      const v = it.v; sayText = v.w;
+      front = h('div', { class: 'big', lang: LANGS[code].lang }, plain(v.w));
+      back = h('div', { class: 'stack', hidden: true, style: { gap: '8px', marginTop: '8px' } },
+        v.r && (v.r !== v.w ? h('div', { class: code === 'en' ? 'ipa' : 'read', lang: code === 'ja' ? 'ja' : null }, v.r) : null),
+        h('p', { style: { fontSize: '1.25rem', fontWeight: 700, margin: '2px 0' } }, v.m),
+        v.d && code === 'en' && h('p', { class: 'small muted', style: { margin: 0 } }, v.d),
+        code !== 'en' && hvBlock(code, v),
+        v.ex && h('div', {
+          class: 'panel stack',
+          style: { background: 'rgba(15,82,87,.07)', border: '1px solid var(--line)', borderRadius: '12px', padding: '12px 14px', gap: '4px', marginTop: '6px', textAlign: 'left' }
+        },
+          h('div', { class: 'row between', style: { alignItems: 'center', gap: '10px' } },
+            h('div', { class: 'stack', style: { gap: '3px', flex: 1, minWidth: 0 } },
+              h('p', { lang: LANGS[code].lang, style: { fontSize: '1.12rem', fontWeight: 600, margin: 0, lineHeight: 1.45 } }, renderHighlightedEx(v.ex, v.w, LANGS[code].lang)),
+              v.exr && h('p', { class: code === 'en' ? 'ipa' : 'read', lang: code === 'ja' ? 'ja' : null, style: { margin: 0, fontSize: '.96rem', color: 'var(--teal)', fontWeight: 500, textAlign: 'left' } }, v.exr),
+              v.exm && h('p', { class: 'small muted', style: { margin: 0, fontSize: '.92rem', lineHeight: 1.4 } }, v.exm)
+            ),
+            listenBtns(code, v.ex)
+          )
+        )
+      );
+    } else {
+      const kj = it.k; sayText = kj.ex && kj.ex[0] ? plain(kj.ex[0][0]) : kj.k;
+      front = h('div', { class: 'big', lang: 'ja' }, kj.k);
+      back = h('div', { class: 'stack', hidden: true, style: { gap: '8px', marginTop: '8px' } },
+        h('p', { style: { fontSize: '1.3rem', fontWeight: 700, margin: '2px 0' } }, kj.hv + (kj.m ? ' (' + kj.m + ')' : '')),
+        h('p', { class: 'small', lang: 'ja', style: { color: 'var(--teal)', fontWeight: 600 } }, 'On: ' + kj.on + ' · Kun: ' + kj.kun),
+        kj.ex && kj.ex.length && h('div', {
+          class: 'panel stack',
+          style: { background: 'rgba(15,82,87,.07)', border: '1px solid var(--line)', borderRadius: '12px', padding: '12px 14px', gap: '6px', marginTop: '6px', textAlign: 'left' }
+        },
+          h('span', { class: 'label', style: { margin: 0, color: 'var(--teal)', fontWeight: '700', fontSize: '.8rem' } }, '📝 Từ ghép & Ví dụ đặt câu:'),
+          ...kj.ex.slice(0, 3).map((e) => h('div', { class: 'row between', style: { alignItems: 'center', gap: '8px' } },
+            h('div', { class: 'stack', style: { gap: '2px' } },
+              h('p', { class: 'small', lang: 'ja', style: { fontSize: '1rem', margin: 0, fontWeight: 600 } }, ruby(e[0])),
+              h('p', { class: 'small muted', style: { margin: 0 } }, e[1])
+            ),
+            spk('ja', plain(e[0]))
+          ))
+        )
+      );
+    }
+
+    const gradeDefs = [
+      [1, 'Quên', 'var(--bad)', 'rgba(220,38,38,.09)'],
+      [2, 'Khó', 'var(--amber)', 'rgba(180,83,9,.09)'],
+      [3, 'Nhớ', 'var(--teal)', 'rgba(15,82,87,.09)'],
+      [4, 'Dễ', 'var(--good)', 'rgba(35,120,74,.10)']
+    ];
+    const gradeBtns = h('div', { class: 'grades', hidden: true },
+      ...gradeDefs.map(([gVal, gLabel, gColor, gBg]) => {
+        const sim = srsNext(s, gVal);
+        const nextTxt = gVal === 1 ? 'Ôn lại ngay' : ivText(sim);
+        return h('button', {
+          type: 'button',
+          'aria-keyshortcuts': String(gVal),
+          style: {
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            padding: '10px 6px', borderRadius: '12px', border: '1.5px solid ' + gColor,
+            background: gBg, color: 'var(--ink)', cursor: 'pointer', gap: '2px'
+          },
+          onclick: () => {
+            S.srs[k] = srsNext(s, gVal);
+            save();
+            if (gVal >= 2) {
+              markReviewedToday(code, t0);
+              doneCount++;
+              addXp(XP_ITEM, code);
+            }
+            queue.shift();
+            if (gVal === 1) queue.push(item);
+            showCard();
+          }
+        },
+          h('b', { style: { fontSize: '.92rem', color: gColor } }, gLabel),
+          h('small', { style: { fontSize: '.72rem', color: 'var(--muted)' } }, nextTxt)
+        );
+      })
+    );
+
+    const flipBtn = h('button', {
+      type: 'button',
+      class: 'primary block next-btn',
+      style: { fontSize: '1.02rem', fontWeight: 700, padding: '14px 16px', borderRadius: '12px' },
+      onclick: () => {
+        back.hidden = false;
+        flipBtn.hidden = true;
+        gradeBtns.hidden = false;
+        say(code, sayText);
+      }
+    }, '👆 Chạm để lật thẻ & xem đáp án');
+
+    const cardBox = h('div', {
+      class: 'panel card',
+      style: { minHeight: '175px', padding: '16px', gap: '8px', cursor: 'pointer' },
+      onclick: (e) => {
+        if (e.target && e.target.closest && e.target.closest('button')) return;
+        if (back.hidden) flipBtn.click();
+      }
+    },
+      h('p', { class: 'small muted' }, it.v ? 'Nhớ nghĩa & cách đọc, rồi chạm lật thẻ' : 'Nhớ âm Hán Việt & cách đọc, rồi chạm lật thẻ'),
+      front,
+      h('div', { class: 'listen' }, spk(code, sayText, { cls: 'big' })),
+      back
+    );
+
+    mount(h('div', { class: 'stack-lg', style: { gap: '10px' } },
+      h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
+        h('button', { class: 'ghost mini', onclick: exit }, '← Quay lại'),
+        h('span', { class: 'chip accent', style: { fontWeight: 700 } }, '🃏 Lật thẻ Flashcard (FSRS)'),
+        h('span', { class: 'chip' }, 'Còn ' + queue.length + '/' + totalCards)
+      ),
+      h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
+        h('span', { class: 'small muted', style: { fontWeight: 600 } }, t.sub || t.title),
+        h('span', { class: 'chip small', style: { fontSize: '.72rem' } }, fsrsMeta)
+      ),
+      cardBox,
+      flipBtn,
+      gradeBtns
+    ));
+  };
+
+  showCard();
 }
 
 // ===== Ôn tập theo phương pháp Spaced Repetition (FSRS + Lật thẻ 2 mặt / Trắc nghiệm) =====
@@ -13156,7 +13362,7 @@ function reviewView(forceExtra = false) {
 
   const head = (isReviewing = false) => h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
     h('button', { class: 'ghost mini', style: { whiteSpace: 'nowrap', flexShrink: 0, padding: '6px 8px', fontSize: '.84rem' }, onclick: () => go('home') }, '← Về trang Học'),
-    isReviewing ? modeSwitcher() : h('span', { class: 'label', style: { margin: 0, whiteSpace: 'nowrap' } }, 'Ôn tập FSRS'),
+    modeSwitcher(),
     h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', flexShrink: 0 } },
       feedbackBtn({ mode: 'review_vocab' }),
       langSwitch()
@@ -13192,21 +13398,39 @@ function reviewView(forceExtra = false) {
     );
   };
 
+  // Nếu chưa có từ đến hạn mà người dùng bấm vào Lật thẻ Flashcard (forceExtra = true), tự lấy bài học hiện tại để lật thẻ ngay!
+  if (totalVaultDue === 0 && forceExtra) {
+    const d = DATA[code];
+    const nx = d ? nextLesson(d, 'all') : null;
+    const targetTopic = (nx && nx.t) || (d && d.topics && d.topics[0]);
+    if (targetTopic) {
+      return startTopicFlashcard(targetTopic, null, 'home');
+    }
+  }
+
   // Nếu đã đạt định mức ngày mà chưa bấm forceExtra, hiển thị màn hình hoàn thành định mức
   if (totalVaultDue === 0 || (remDailyQuota === 0 && !forceExtra)) {
+    const d = DATA[code];
+    const nx = d ? nextLesson(d, 'all') : null;
+    const fallbackTopic = (nx && nx.t) || (d && d.topics && d.topics[0]);
     mount(h('div', { class: 'stack-lg', style: { gap: '12px' } }, head(),
       h('div', { class: 'panel stack center', style: { padding: '24px', borderRadius: '16px', gap: '10px' } },
         h('h2', {}, totalVaultDue === 0 ? '🎉 Đã ôn sạch kho từ đến hạn!' : '🎉 Đã hoàn thành định mức ôn hôm nay!'),
         h('p', { class: 'muted center', style: { margin: 0, lineHeight: 1.5 } },
           totalVaultDue === 0
-            ? 'Bạn đã hoàn thành toàn bộ các từ vựng đến hạn. Hãy học thêm bài mới để tiếp tục lộ trình!'
+            ? 'Hiện không có thẻ nào quá hạn cần ôn. Bạn có thể bấm nút bên dưới để lật thẻ Flashcard trước cho bài học hiện tại!'
             : ('Hôm nay bạn đã ôn đủ ' + doneBefore + '/' + dailyQuota + ' từ chuẩn khoa học. Còn ' + totalVaultDue + ' từ trong kho được hệ thống tự bảo lưu sang các ngày tới để tránh quá tải.')
         ),
         totalVaultDue > 0 ? h('button', {
           class: 'accent block',
-          style: { marginTop: '6px' },
+          style: { marginTop: '6px', fontWeight: 700 },
           onclick: () => reviewView(true)
-        }, '🔄 Tôi muốn ôn thêm 1 gói ' + Math.min(REVIEW_BATCH_SIZE, totalVaultDue) + ' từ nữa (Tự chọn)') : null,
+        }, '🃏 Lật thẻ thêm 1 gói ' + Math.min(REVIEW_BATCH_SIZE, totalVaultDue) + ' từ nữa') : null,
+        totalVaultDue === 0 && fallbackTopic ? h('button', {
+          class: 'accent block',
+          style: { marginTop: '6px', fontWeight: 700 },
+          onclick: () => startTopicFlashcard(fallbackTopic, null, 'review')
+        }, '🃏 Lật thẻ Flashcard bài: ' + (fallbackTopic.sub || fallbackTopic.title)) : null,
         h('div', { class: 'row center wrap', style: { gap: '8px', marginTop: '8px' } },
           h('button', { class: 'primary', onclick: () => go('home') }, 'Về trang Học'),
           h('button', { class: 'ghost', onclick: () => go('pick') }, 'Về Màn hình chính')

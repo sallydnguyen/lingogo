@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261123-0943",
-  "message": "Nâng cấp thuật toán ôn tập FSRS + chế độ Lật thẻ Flashcard 2 mặt & Đồng hồ đếm ngược trực tiếp khi thi JLPT/HSK"
+  "build": "20261123-0956",
+  "message": "Hiển thị nút Lật thẻ Flashcard FSRS trực tiếp ở trang Học, trong từng Chủ đề và trong từng Bài học"
 }
