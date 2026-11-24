@@ -921,7 +921,7 @@
           "m": "ai",
           "d": "",
           "ex": "谁跟谁比赛？",
-          "exr": "Shuí gēn shuí bǐsài?",
+          "exr": "Shéi gēn shéi bǐsài?",
           "exm": "Ai thi đấu với ai?"
         },
         {
@@ -1106,7 +1106,7 @@
             {
               "s": "玛丽",
               "t": "王兰，他是谁？",
-              "r": "Wáng Lán, tā shì shuí?",
+              "r": "Wáng Lán, tā shì shéi?",
               "m": "Vương Lan, anh ấy là ai vậy?"
             },
             {
@@ -1215,7 +1215,7 @@
           "a": 0,
           "why": "谁 = ai (hỏi người); 什么 = cái gì; 哪儿 = ở đâu.",
           "r": [
-            "Shuí shì nǐ de lǎoshī？",
+            "Shéi shì nǐ de lǎoshī？",
             "Shénme shì nǐ de lǎoshī？",
             "Nǎér shì nǐ de lǎoshī？"
           ]
@@ -1231,8 +1231,8 @@
           "a": 0,
           "why": "哪儿 = ở đâu (hỏi nơi chốn); 谁 hỏi người.",
           "r": [
-            "Nǐ zài nǎér gōngzuò？",
-            "Nǐ zài shuí gōngzuò？",
+            "Nǐ zài nǎr gōngzuò？",
+            "Nǐ zài shéi gōngzuò？",
             "Nǐ zài shénme gōngzuò？"
           ]
         },
@@ -1249,7 +1249,7 @@
           "r": [
             "Nǐ wèishénme bù lái？",
             "Nǐ zěnmeyàng bù lái？",
-            "Nǐ shuí bù lái？"
+            "Nǐ shéi bù lái？"
           ]
         }
       ],
@@ -1261,7 +1261,7 @@
             {
               "s": "玛丽",
               "t": "王兰，他是谁？",
-              "r": "Wáng Lán, tā shì shuí?",
+              "r": "Wáng Lán, tā shì shéi?",
               "m": "Vương Lan, anh ấy là ai vậy?"
             },
             {
@@ -1427,7 +1427,7 @@
       "fill": {
         "title": "Giới thiệu anh trai và hỏi hướng đi",
         "text": "玛丽：王兰，他[[是谁|在哪儿|怎么]]？\n王兰：我介绍一下，[[这是|那是|谁是]]我哥哥。\n王兰：你去[[哪儿|什么|谁]]？\n玛丽：我去北京大学。",
-        "r": "Mǎlì: Wáng Lán, tā shì shuí?\nWáng Lán: Wǒ jièshào yíxià, zhè shì wǒ gēge.\nWáng Lán: Nǐ qù nǎr?\nMǎlì: Wǒ qù Běijīng Dàxué.",
+        "r": "Mǎlì: Wáng Lán, tā shì shéi?\nWáng Lán: Wǒ jièshào yíxià, zhè shì wǒ gēge.\nWáng Lán: Nǐ qù nǎr?\nMǎlì: Wǒ qù Běijīng Dàxué.",
         "trans": "Mary: Vương Lan, anh ấy là ai thế? / Vương Lan: Để mình giới thiệu, đây là anh trai mình. / Vương Lan: Bạn đi đâu vậy? / Mary: Mình đến Đại học Bắc Kinh."
       },
       "gram": [
@@ -1443,7 +1443,7 @@
         {
           "title": "Giới thiệu anh trai và hỏi hướng đi",
           "text": "玛丽：王兰，他[[是谁|在哪儿|怎么]]？\n王兰：我介绍一下，[[这是|那是|谁是]]我哥哥。\n王兰：你去[[哪儿|什么|谁]]？\n玛丽：我去北京大学。",
-          "r": "Mǎlì: Wáng Lán, tā shì shuí?\nWáng Lán: Wǒ jièshào yíxià, zhè shì wǒ gēge.\nWáng Lán: Nǐ qù nǎr?\nMǎlì: Wǒ qù Běijīng Dàxué.",
+          "r": "Mǎlì: Wáng Lán, tā shì shéi?\nWáng Lán: Wǒ jièshào yíxià, zhè shì wǒ gēge.\nWáng Lán: Nǐ qù nǎr?\nMǎlì: Wǒ qù Běijīng Dàxué.",
           "trans": "Mary: Vương Lan, anh ấy là ai thế? / Vương Lan: Để mình giới thiệu, đây là anh trai mình. / Vương Lan: Bạn đi đâu vậy? / Mary: Mình đến Đại học Bắc Kinh."
         },
         {
@@ -5853,7 +5853,7 @@
             {
               "s": "玛丽",
               "t": "王兰，他是谁？",
-              "r": "Wáng Lán, tā shì shuí?",
+              "r": "Wáng Lán, tā shì shéi?",
               "m": "Vương Lan, anh ấy là ai vậy?"
             },
             {
@@ -15582,7 +15582,7 @@
           "m": "trận đấu, cuộc thi",
           "d": "",
           "ex": "谁跟谁比赛？",
-          "exr": "Shuí gēn shuí bǐsài?",
+          "exr": "Shéi gēn shéi bǐsài?",
           "exm": "Ai thi đấu với ai?"
         },
         {
