@@ -11015,9 +11015,15 @@ function grammarTipForWord(code, v) {
   return null;
 }
 
-function itemCard(code, v, tip, onRated) {
-  const k = sid(code, 'v:' + v.id);
-  const s = (S.srs && S.srs[k]) || null;
+function autoFsrsGradeFromSec(sec) {
+  const s = Math.max(0, Number(sec) || 0);
+  if (s <= 4) return { g: 4, label: 'Dễ', cls: 'good' };
+  if (s <= 10) return { g: 3, label: 'Nhớ', cls: 'good' };
+  if (s <= 20) return { g: 2, label: 'Khó', cls: 'warn' };
+  return { g: 1, label: 'Cần ôn kỹ', cls: 'warn' };
+}
+
+function itemCard(code, v, tip) {
   let flipped = false;
 
   const backBox = h('div', { class: 'stack center', hidden: true, style: { width: '100%', gap: '8px', marginTop: '4px' } },
@@ -11061,36 +11067,6 @@ function itemCard(code, v, tip, onRated) {
     )
   );
 
-  const gradeDefs = [
-    [1, 'Quên', 'var(--bad)', 'rgba(220,38,38,.09)'],
-    [2, 'Khó', 'var(--amber)', 'rgba(180,83,9,.09)'],
-    [3, 'Nhớ', 'var(--teal)', 'rgba(15,82,87,.09)'],
-    [4, 'Dễ', 'var(--good)', 'rgba(35,120,74,.10)']
-  ];
-  const gradeBar = h('div', { class: 'grades', hidden: true, style: { width: '100%', marginTop: '6px' } },
-    ...gradeDefs.map(([gVal, gLabel, gColor, gBg]) => {
-      const sim = srsNext(s, gVal);
-      const nextTxt = gVal === 1 ? 'Học lại' : ivText(sim);
-      return h('button', {
-        type: 'button',
-        style: {
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          padding: '8px 4px', borderRadius: '10px', border: '1.5px solid ' + gColor,
-          background: gBg, color: 'var(--ink)', cursor: 'pointer', gap: '2px'
-        },
-        onclick: (e) => {
-          e.stopPropagation();
-          S.srs[k] = srsNext(s, gVal);
-          save();
-          if (typeof onRated === 'function') onRated(gVal);
-        }
-      },
-        h('b', { style: { fontSize: '.88rem', color: gColor } }, gLabel),
-        h('small', { style: { fontSize: '.7rem', color: 'var(--muted)' } }, nextTxt)
-      );
-    })
-  );
-
   const flipPromptBtn = h('button', {
     type: 'button',
     class: 'ghost block',
@@ -11109,10 +11085,9 @@ function itemCard(code, v, tip, onRated) {
     flipped = true;
     backBox.hidden = false;
     flipPromptBtn.hidden = true;
-    gradeBar.hidden = false;
   }
 
-  return h('div', {
+  const cardEl = h('div', {
     class: 'panel stack center',
     style: { cursor: 'pointer' },
     onclick: (e) => {
@@ -11120,13 +11095,15 @@ function itemCard(code, v, tip, onRated) {
       doFlip();
     }
   },
-    h('p', { class: 'label' }, '🃏 Thẻ từ mới · Nghe đọc to & chạm lật thẻ'),
+    h('p', { class: 'label' }, '🃏 Thẻ từ mới · Chạm lật thẻ & bấm Tiếp tục (FSRS tự chấm theo thời gian)'),
     wordBlock(code, v, { hideMeaning: true }),
     listenBtns(code, v.w),
     flipPromptBtn,
-    backBox,
-    gradeBar
+    backBox
   );
+  cardEl._doFlip = doFlip;
+  cardEl._isFlipped = () => flipped;
+  return cardEl;
 }
 function getOrderPinyin(code, ex) {
   if (ex.r) return ex.r;
@@ -13310,42 +13287,30 @@ function startTopicFlashcard(t, customWords, fromView, lessonIdx) {
       );
     }
 
-    const gradeDefs = [
-      [1, 'Quên', 'var(--bad)', 'rgba(220,38,38,.09)'],
-      [2, 'Khó', 'var(--amber)', 'rgba(180,83,9,.09)'],
-      [3, 'Nhớ', 'var(--teal)', 'rgba(15,82,87,.09)'],
-      [4, 'Dễ', 'var(--good)', 'rgba(35,120,74,.10)']
-    ];
-    const gradeBtns = h('div', { class: 'grades', hidden: true },
-      ...gradeDefs.map(([gVal, gLabel, gColor, gBg]) => {
-        const sim = srsNext(s, gVal);
-        const nextTxt = gVal === 1 ? 'Ôn lại ngay' : ivText(sim);
-        return h('button', {
-          type: 'button',
-          'aria-keyshortcuts': String(gVal),
-          style: {
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            padding: '10px 6px', borderRadius: '12px', border: '1.5px solid ' + gColor,
-            background: gBg, color: 'var(--ink)', cursor: 'pointer', gap: '2px'
-          },
-          onclick: () => {
-            S.srs[k] = srsNext(s, gVal);
-            save();
-            if (gVal >= 2) {
-              markReviewedToday(code, t0);
-              doneCount++;
-              addXp(XP_ITEM, code);
-            }
-            queue.shift();
-            if (gVal === 1) queue.push(item);
-            showCard();
-          }
-        },
-          h('b', { style: { fontSize: '.92rem', color: gColor } }, gLabel),
-          h('small', { style: { fontSize: '.72rem', color: 'var(--muted)' } }, nextTxt)
-        );
-      })
-    );
+    const tStart = Date.now();
+    const advanceNextCard = () => {
+      const sec = (Date.now() - tStart) / 1000;
+      const autoG = autoFsrsGradeFromSec(sec);
+      S.srs[k] = srsNext(s, autoG.g);
+      save();
+      if (autoG.g >= 2) {
+        markReviewedToday(code, t0);
+        doneCount++;
+        addXp(XP_ITEM, code);
+      }
+      queue.shift();
+      if (autoG.g === 1) queue.push(item);
+      toast('⚡ Tự động chấm: ' + autoG.label + ' (' + Math.round(sec * 10) / 10 + 's) · Ôn lại sau ' + ivText(S.srs[k]));
+      showCard();
+    };
+
+    const nextCardBtn = h('button', {
+      type: 'button',
+      class: 'primary block next-btn',
+      hidden: true,
+      style: { fontSize: '1.02rem', fontWeight: 700, padding: '14px 16px', borderRadius: '12px' },
+      onclick: advanceNextCard
+    }, 'Từ tiếp theo ➔ (Tự động chấm theo thời gian)');
 
     const flipBtn = h('button', {
       type: 'button',
@@ -13354,7 +13319,7 @@ function startTopicFlashcard(t, customWords, fromView, lessonIdx) {
       onclick: () => {
         back.hidden = false;
         flipBtn.hidden = true;
-        gradeBtns.hidden = false;
+        nextCardBtn.hidden = false;
         say(code, sayText);
       }
     }, '👆 Chạm để lật thẻ & xem đáp án');
@@ -13365,9 +13330,10 @@ function startTopicFlashcard(t, customWords, fromView, lessonIdx) {
       onclick: (e) => {
         if (e.target && e.target.closest && e.target.closest('button')) return;
         if (back.hidden) flipBtn.click();
+        else advanceNextCard();
       }
     },
-      h('p', { class: 'small muted' }, it.v ? 'Nhớ nghĩa & cách đọc, rồi chạm lật thẻ' : 'Nhớ âm Hán Việt & cách đọc, rồi chạm lật thẻ'),
+      h('p', { class: 'small muted' }, it.v ? 'Nhớ nghĩa & cách đọc, chạm lật thẻ rồi chạm tiếp để qua từ khác' : 'Nhớ âm Hán Việt & cách đọc, chạm lật thẻ rồi chạm tiếp để qua từ khác'),
       front,
       h('div', { class: 'listen' }, spk(code, sayText, { cls: 'big' })),
       back
@@ -13376,7 +13342,7 @@ function startTopicFlashcard(t, customWords, fromView, lessonIdx) {
     mount(h('div', { class: 'stack-lg', style: { gap: '10px' } },
       h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
         h('button', { class: 'ghost mini', onclick: exit }, '← Quay lại'),
-        h('span', { class: 'chip accent', style: { fontWeight: 700 } }, '🃏 Lật thẻ Flashcard (FSRS)'),
+        h('span', { class: 'chip accent', style: { fontWeight: 700 } }, '🃏 Lật thẻ Flashcard (Tự chấm FSRS)'),
         h('span', { class: 'chip' }, 'Còn ' + queue.length + '/' + totalCards)
       ),
       h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
@@ -13385,7 +13351,7 @@ function startTopicFlashcard(t, customWords, fromView, lessonIdx) {
       ),
       cardBox,
       flipBtn,
-      gradeBtns
+      nextCardBtn
     ));
   };
 

@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261123-1629",
-  "message": "Đặt phần Lật thẻ Flashcard FSRS gọn trong màn hình Bài học và biến bước học từ mới thành thẻ lật 2 mặt"
+  "build": "20261123-1643",
+  "message": "Flashcard trong bài học tự động đánh giá FSRS dựa vào thời gian chuyển sang từ khác (bỏ 4 nút chấm thủ công)"
 }
