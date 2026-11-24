@@ -8,10 +8,10 @@ updated: 28/10/2026
 
 # Japanese Practice
 
-> 🌐 **Link học trực tiếp:** **[https://nguyendang3103.github.io/lingogo/](https://nguyendang3103.github.io/lingogo/)**
+> 🌐 **Link học trực tiếp:** **[https://sallydnguyen.github.io/lingogo/](https://sallydnguyen.github.io/lingogo/)**
 
 
-- Học trong app Lingogo (https://nguyendang3103.github.io/lingogo/), gộp tiếng Anh, tiếng Trung và tiếng Nhật. Dữ liệu ở `data\ja.json`, âm thanh ở `audio\ja-*.json`.
+- Học trong app Lingogo (https://sallydnguyen.github.io/lingogo/), gộp tiếng Anh, tiếng Trung và tiếng Nhật. Dữ liệu ở `data\ja.json`, âm thanh ở `audio\ja-*.json`.
 - Nội dung trong app: 16 bài (14 bài giáo trình 第1課 đến 第14課 và 2 bài bổ sung N5), 660 từ vựng, 169 chữ Hán (Hán Việt, âm On và Kun, từ ví dụ), ngữ pháp mỗi bài (có furigana), 125 câu mẫu để sắp xếp câu, bảng Hiragana và Katakana 46 chữ, nét viết cho 665 kanji và kana.
 
 ## Mục tiêu khoá

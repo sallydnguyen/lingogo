@@ -17,7 +17,7 @@ if sys.stdout.encoding != 'utf-8':
     except Exception:
         pass
 
-REPO = 'nguyendang3103/lingogo'
+REPO = 'sallydnguyen/lingogo'
 URL = f'https://api.github.com/repos/{REPO}/issues?state=open&sort=created&direction=desc'
 
 def main():

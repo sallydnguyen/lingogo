@@ -8,10 +8,10 @@ updated: 28/10/2026
 
 # Chinese Practice
 
-> 🌐 **Link học trực tiếp:** **[https://nguyendang3103.github.io/lingogo/](https://nguyendang3103.github.io/lingogo/)**
+> 🌐 **Link học trực tiếp:** **[https://sallydnguyen.github.io/lingogo/](https://sallydnguyen.github.io/lingogo/)**
 
 
-- Học trong app Lingogo (https://nguyendang3103.github.io/lingogo/), gộp tiếng Anh, tiếng Trung và tiếng Nhật. Dữ liệu ở `data`, âm thanh ở `audio`.
+- Học trong app Lingogo (https://sallydnguyen.github.io/lingogo/), gộp tiếng Anh, tiếng Trung và tiếng Nhật. Dữ liệu ở `data`, âm thanh ở `audio`.
 - Nội dung trong app: 45 chủ đề, 360 từ (8 từ mỗi chủ đề), 45 điểm ngữ pháp, 475 chữ Hán có nét viết, hội thoại điền từ, âm Hán Việt. Sau mỗi cấp có bài ôn tổng.
 
 ## Mục tiêu khoá

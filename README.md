@@ -1,6 +1,6 @@
 # Lingogo
 
-> 🌐 **Link học trực tuyến chính thức:** **[https://nguyendang3103.github.io/lingogo/](https://nguyendang3103.github.io/lingogo/)**
+> 🌐 **Link học trực tuyến chính thức:** **[https://sallydnguyen.github.io/lingogo/](https://sallydnguyen.github.io/lingogo/)**
 >
 > *(Hỗ trợ đầy đủ âm thanh, nhận diện giọng nói chấm phát âm và tập viết chữ. Mở bằng Safari / Chrome trên điện thoại rồi chọn **"Thêm vào màn hình chính"** để dùng như App).*
 

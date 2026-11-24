@@ -8,10 +8,10 @@ updated: 28/10/2026
 
 # English Practice
 
-> 🌐 **Link học trực tiếp:** **[https://nguyendang3103.github.io/lingogo/](https://nguyendang3103.github.io/lingogo/)**
+> 🌐 **Link học trực tiếp:** **[https://sallydnguyen.github.io/lingogo/](https://sallydnguyen.github.io/lingogo/)**
 
 
-- Học trong app Lingogo (https://nguyendang3103.github.io/lingogo/), gộp tiếng Anh, tiếng Trung và tiếng Nhật. Dữ liệu ở `data`, âm thanh ở `audio`.
+- Học trong app Lingogo (https://sallydnguyen.github.io/lingogo/), gộp tiếng Anh, tiếng Trung và tiếng Nhật. Dữ liệu ở `data`, âm thanh ở `audio`.
 - Nội dung trong app: 32 chủ đề, 640 từ và cụm từ (20 từ mỗi chủ đề), 192 câu quiz, 74 tình huống nói, 154 câu Coach, mỗi chủ đề một email điền từ. Toàn bộ bằng tiếng Anh, thẻ từ có nghĩa tiếng Việt.
 
 ## Mục tiêu khoá
