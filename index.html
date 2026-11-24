@@ -4976,20 +4976,18 @@ function homeView() {
           h('span', { class: 'muted' }, xp + '/' + g + ' XP')
         ),
         h('div', { class: 'bar', role: 'progressbar', 'aria-label': 'Mục tiêu hôm nay', 'aria-valuenow': xp, 'aria-valuemax': g }, gf),
-        h('div', { class: 'row wrap', style: { gap: '8px', margin: '4px 0' } },
-          h('button', {
-            class: (due > 0 ? 'accent' : 'ghost') + ' block',
-            style: { flex: '1 1 200px', fontWeight: 700, padding: '10px 12px' },
-            onclick: () => { REVIEW_SKILL = 'vocab'; REVIEW_MODE = 'flip'; S.reviewMode = 'flip'; save(); reviewView(due === 0); }
-          }, due > 0
-            ? ('🃏 Lật thẻ Flashcard FSRS (' + due + ' từ đến hạn)')
-            : ('🃏 Lật thẻ Flashcard FSRS' + (doneRev > 0 ? ' (Đã ôn ' + doneRev + ' từ)' : ''))),
-          nx ? h('button', {
-            class: (due ? 'ghost' : 'primary') + ' block',
-            style: { flex: '1 1 200px', padding: '10px 12px' },
-            onclick: () => lessonView(nx.t, nx.i)
-          }, h('span', {}, 'Học tiếp: ', h('b', {}, nx.t.sub || nx.t.title))) : null
-        )
+        h('button', {
+          class: (due > 0 ? 'accent' : 'ghost mini') + ' block',
+          style: due > 0 ? {} : { padding: '6px 12px', fontSize: '.84rem', color: 'var(--muted)', margin: '4px 0' },
+          onclick: () => { REVIEW_SKILL = 'vocab'; go('review'); }
+        }, due > 0
+          ? ('🔄 Ôn tập hôm nay: Còn ' + due + ' từ' + (doneRev > 0 ? ' · Đã học/ôn ' + doneRev + ' mục' : '') + (rawVault > due ? ' (Kho chờ: ' + rawVault + ' từ)' : ''))
+          : (doneRev > 0
+              ? ('✓ Đã học/ôn hôm nay: ' + doneRev + ' mục' + (rawVault > 0 ? ' · Bấm nếu muốn ôn thêm' : ''))
+              : '🔄 Ôn tập từ mới (Chưa có từ đến hạn hôm nay)')),
+        nx ? h('button', { class: (due ? '' : 'primary ') + 'block', onclick: () => lessonView(nx.t, nx.i) },
+          h('span', {}, 'Học tiếp: ', h('b', {}, nx.t.sub || nx.t.title)))
+          : h('p', { class: 'muted center' }, curCat !== 'all' ? 'Bạn đã học hết các bài trong chủ đề này. Hãy chọn chủ đề khác hoặc ôn tập.' : 'Bạn đã học hết lộ trình. Hãy ôn tập và luyện nói để nhớ lâu.')
       );
     })(),
     (() => {
@@ -10849,11 +10847,6 @@ function topicCard(t, nx, num) {
   const quickOpen = openQuickQuizTopics.has(ok);
   const body = open && h('div', { class: 'body' },
     (hasGram || hasQuickQuiz) && h('div', { class: 'extras', style: { gap: '6px', marginBottom: '2px' } },
-      ((t.vocab && t.vocab.length) || (t.kanji && t.kanji.length)) && h('button', {
-        class: 'ghost mini',
-        style: { border: '1px solid var(--teal)', background: 'rgba(15,82,87,.08)', color: 'var(--teal)', fontSize: '.82rem', padding: '5px 10px', fontWeight: 700 },
-        onclick: () => startTopicFlashcard(t, null, 'home')
-      }, '🃏 Lật thẻ Flashcard (' + ((t.vocab ? t.vocab.length : 0) + (t.kanji ? t.kanji.length : 0)) + ')'),
       hasGram && h('button', {
         class: 'ghost mini',
         style: { border: '1px solid var(--line)', background: 'var(--sunk)', fontSize: '.82rem', padding: '5px 10px' },
@@ -11022,16 +11015,21 @@ function grammarTipForWord(code, v) {
   return null;
 }
 
-function itemCard(code, v, tip) {
-  return h('div', { class: 'panel stack center' },
-    h('p', { class: 'label' }, 'Từ mới · nghe và đọc to theo'),
-    wordBlock(code, v),
-    listenBtns(code, v.w),
+function itemCard(code, v, tip, onRated) {
+  const k = sid(code, 'v:' + v.id);
+  const s = (S.srs && S.srs[k]) || null;
+  let flipped = false;
+
+  const backBox = h('div', { class: 'stack center', hidden: true, style: { width: '100%', gap: '8px', marginTop: '4px' } },
+    h('p', { style: { fontSize: '1.25rem', margin: '2px 0' } },
+      h('b', {}, v.m),
+      v.d && code === 'en' && h('span', { class: 'small muted', style: { display: 'block', fontWeight: 400, marginTop: '2px' } }, v.d)
+    ),
     code !== 'en' && hvBlock(code, v),
     v.ex && h('div', {
       class: 'panel stack',
       style: {
-        marginTop: '8px',
+        marginTop: '4px',
         padding: '12px 14px',
         background: 'rgba(15,82,87,.07)',
         border: '1px solid var(--line)',
@@ -11061,6 +11059,73 @@ function itemCard(code, v, tip) {
         listenBtns(code, v.ex)
       )
     )
+  );
+
+  const gradeDefs = [
+    [1, 'Quên', 'var(--bad)', 'rgba(220,38,38,.09)'],
+    [2, 'Khó', 'var(--amber)', 'rgba(180,83,9,.09)'],
+    [3, 'Nhớ', 'var(--teal)', 'rgba(15,82,87,.09)'],
+    [4, 'Dễ', 'var(--good)', 'rgba(35,120,74,.10)']
+  ];
+  const gradeBar = h('div', { class: 'grades', hidden: true, style: { width: '100%', marginTop: '6px' } },
+    ...gradeDefs.map(([gVal, gLabel, gColor, gBg]) => {
+      const sim = srsNext(s, gVal);
+      const nextTxt = gVal === 1 ? 'Học lại' : ivText(sim);
+      return h('button', {
+        type: 'button',
+        style: {
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          padding: '8px 4px', borderRadius: '10px', border: '1.5px solid ' + gColor,
+          background: gBg, color: 'var(--ink)', cursor: 'pointer', gap: '2px'
+        },
+        onclick: (e) => {
+          e.stopPropagation();
+          S.srs[k] = srsNext(s, gVal);
+          save();
+          if (typeof onRated === 'function') onRated(gVal);
+        }
+      },
+        h('b', { style: { fontSize: '.88rem', color: gColor } }, gLabel),
+        h('small', { style: { fontSize: '.7rem', color: 'var(--muted)' } }, nextTxt)
+      );
+    })
+  );
+
+  const flipPromptBtn = h('button', {
+    type: 'button',
+    class: 'ghost block',
+    style: {
+      marginTop: '6px', padding: '10px 14px', borderRadius: '10px',
+      border: '1.5px dashed var(--teal)', color: 'var(--teal)', fontWeight: 700, fontSize: '.9rem'
+    },
+    onclick: (e) => {
+      e.stopPropagation();
+      doFlip();
+    }
+  }, '🃏 Chạm để lật thẻ xem nghĩa & ví dụ');
+
+  function doFlip() {
+    if (flipped) return;
+    flipped = true;
+    backBox.hidden = false;
+    flipPromptBtn.hidden = true;
+    gradeBar.hidden = false;
+  }
+
+  return h('div', {
+    class: 'panel stack center',
+    style: { cursor: 'pointer' },
+    onclick: (e) => {
+      if (e.target && e.target.closest && e.target.closest('button')) return;
+      doFlip();
+    }
+  },
+    h('p', { class: 'label' }, '🃏 Thẻ từ mới · Nghe đọc to & chạm lật thẻ'),
+    wordBlock(code, v, { hideMeaning: true }),
+    listenBtns(code, v.w),
+    flipPromptBtn,
+    backBox,
+    gradeBar
   );
 }
 function getOrderPinyin(code, ex) {
@@ -12394,7 +12459,11 @@ function lessonView(t, i, opts = null) {
     };
 
     if (ex.type === 'intro') {
-      body = itemCard(code, ex.v, ex.tip); btn.textContent = 'Tiếp tục'; ready = () => true;
+      body = itemCard(code, ex.v, ex.tip, (gVal) => {
+        if (gVal === 1 && !retried.has(ex.n)) { retried.add(ex.n); queue.push(ex); }
+        submit();
+      });
+      btn.textContent = 'Tiếp tục'; ready = () => true;
       sayAfter(code, ex.v.w, 300);
     } else if (ex.type === 'meaning' || ex.type === 'listen' || ex.type === 'reverse') {
       const isMeaning = ex.type === 'meaning';
@@ -13323,15 +13392,13 @@ function startTopicFlashcard(t, customWords, fromView, lessonIdx) {
   showCard();
 }
 
-// ===== Ôn tập theo phương pháp Spaced Repetition (FSRS + Lật thẻ 2 mặt / Trắc nghiệm) =====
+// ===== Ôn tập theo phương pháp Spaced Repetition (FSRS) =====
 let REVIEW_SKILL = 'vocab'; // Ôn tập ngắt quãng chỉ ôn từ mới theo yêu cầu
-let REVIEW_MODE = 'flip'; // 'flip' (Lật thẻ Flashcard 2 mặt + 4 mức FSRS) | 'mcq' (Trắc nghiệm 4 đáp án)
 
 function reviewView(forceExtra = false) {
   const code = S.lang, t0 = todayN();
   ensureSrsItems(code);
   REVIEW_SKILL = 'vocab';
-  if (S.reviewMode === 'flip' || S.reviewMode === 'mcq') REVIEW_MODE = S.reviewMode;
 
   const allDueItems = srsDueItems(code, 'vocab');
   const totalVaultDue = allDueItems.length;
@@ -13345,24 +13412,9 @@ function reviewView(forceExtra = false) {
     [15, '🔥 15 từ (~6p · Chuyên sâu)']
   ];
 
-  const modeSwitcher = () => h('div', { class: 'row', style: { gap: '6px', flexWrap: 'wrap' } },
-    h('button', {
-      type: 'button',
-      class: 'filter-pill' + (REVIEW_MODE === 'flip' ? ' active' : ''),
-      style: { fontSize: '.76rem', padding: '5px 10px', fontWeight: 700 },
-      onclick: () => { REVIEW_MODE = 'flip'; S.reviewMode = 'flip'; save(); reviewView(forceExtra); }
-    }, '🃏 Lật thẻ Flashcard (FSRS)'),
-    h('button', {
-      type: 'button',
-      class: 'filter-pill' + (REVIEW_MODE === 'mcq' ? ' active' : ''),
-      style: { fontSize: '.76rem', padding: '5px 10px', fontWeight: 700 },
-      onclick: () => { REVIEW_MODE = 'mcq'; S.reviewMode = 'mcq'; save(); reviewView(forceExtra); }
-    }, '🎯 Trắc nghiệm 4 đáp án')
-  );
-
   const head = (isReviewing = false) => h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
     h('button', { class: 'ghost mini', style: { whiteSpace: 'nowrap', flexShrink: 0, padding: '6px 8px', fontSize: '.84rem' }, onclick: () => go('home') }, '← Về trang Học'),
-    modeSwitcher(),
+    isReviewing ? h('span', { class: 'label', style: { margin: 0, whiteSpace: 'nowrap' } }, 'Ôn tập FSRS') : null,
     h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', flexShrink: 0 } },
       feedbackBtn({ mode: 'review_vocab' }),
       langSwitch()
@@ -13388,49 +13440,28 @@ function reviewView(forceExtra = false) {
       )
     );
     return h('div', { class: 'panel stack review-footer', style: { gap: '8px', padding: '14px', borderRadius: '14px' } },
-      h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
-        h('b', { style: { fontSize: '1.02rem', color: 'var(--teal)' } }, 'Ôn tập thông minh FSRS'),
-        h('span', { class: 'chip small', style: { fontSize: '.7rem' } }, REVIEW_MODE === 'flip' ? 'Chế độ: Lật thẻ 2 mặt' : 'Chế độ: Trắc nghiệm')
-      ),
+      h('b', { style: { fontSize: '1.02rem', color: 'var(--teal)' } }, 'Ôn tập thông minh FSRS'),
       h('p', { class: 'small muted', style: { margin: 0, lineHeight: 1.45 } }, 'Thuật toán FSRS tự tính Độ ổn định (S) & Độ khó (D) của từng từ: thẻ khó quay lại sớm, thẻ nhớ chắc được giãn xa hơn.'),
       h('div', { class: 'row wrap', style: { gap: '6px' } }, quotaBadge, vaultBadge),
       sizeSelector
     );
   };
 
-  // Nếu chưa có từ đến hạn mà người dùng bấm vào Lật thẻ Flashcard (forceExtra = true), tự lấy bài học hiện tại để lật thẻ ngay!
-  if (totalVaultDue === 0 && forceExtra) {
-    const d = DATA[code];
-    const nx = d ? nextLesson(d, 'all') : null;
-    const targetTopic = (nx && nx.t) || (d && d.topics && d.topics[0]);
-    if (targetTopic) {
-      return startTopicFlashcard(targetTopic, null, 'home');
-    }
-  }
-
   // Nếu đã đạt định mức ngày mà chưa bấm forceExtra, hiển thị màn hình hoàn thành định mức
   if (totalVaultDue === 0 || (remDailyQuota === 0 && !forceExtra)) {
-    const d = DATA[code];
-    const nx = d ? nextLesson(d, 'all') : null;
-    const fallbackTopic = (nx && nx.t) || (d && d.topics && d.topics[0]);
     mount(h('div', { class: 'stack-lg', style: { gap: '12px' } }, head(),
       h('div', { class: 'panel stack center', style: { padding: '24px', borderRadius: '16px', gap: '10px' } },
         h('h2', {}, totalVaultDue === 0 ? '🎉 Đã ôn sạch kho từ đến hạn!' : '🎉 Đã hoàn thành định mức ôn hôm nay!'),
         h('p', { class: 'muted center', style: { margin: 0, lineHeight: 1.5 } },
           totalVaultDue === 0
-            ? 'Hiện không có thẻ nào quá hạn cần ôn. Bạn có thể bấm nút bên dưới để lật thẻ Flashcard trước cho bài học hiện tại!'
+            ? 'Bạn đã hoàn thành toàn bộ các từ vựng đến hạn. Hãy học thêm bài mới để tiếp tục lộ trình!'
             : ('Hôm nay bạn đã ôn đủ ' + doneBefore + '/' + dailyQuota + ' từ chuẩn khoa học. Còn ' + totalVaultDue + ' từ trong kho được hệ thống tự bảo lưu sang các ngày tới để tránh quá tải.')
         ),
         totalVaultDue > 0 ? h('button', {
           class: 'accent block',
           style: { marginTop: '6px', fontWeight: 700 },
           onclick: () => reviewView(true)
-        }, '🃏 Lật thẻ thêm 1 gói ' + Math.min(REVIEW_BATCH_SIZE, totalVaultDue) + ' từ nữa') : null,
-        totalVaultDue === 0 && fallbackTopic ? h('button', {
-          class: 'accent block',
-          style: { marginTop: '6px', fontWeight: 700 },
-          onclick: () => startTopicFlashcard(fallbackTopic, null, 'review')
-        }, '🃏 Lật thẻ Flashcard bài: ' + (fallbackTopic.sub || fallbackTopic.title)) : null,
+        }, '🔄 Tôi muốn ôn thêm 1 gói ' + Math.min(REVIEW_BATCH_SIZE, totalVaultDue) + ' từ nữa (Tự chọn)') : null,
         h('div', { class: 'row center wrap', style: { gap: '8px', marginTop: '8px' } },
           h('button', { class: 'primary', onclick: () => go('home') }, 'Về trang Học'),
           h('button', { class: 'ghost', onclick: () => go('pick') }, 'Về Màn hình chính')
@@ -13580,81 +13611,6 @@ function reviewView(forceExtra = false) {
           )
         );
       }
-
-      // CHẾ ĐỘ 1: LẬT THẺ FLASHCARD 2 MẶT + 4 NÚT ĐÁNH GIÁ FSRS
-      if (REVIEW_MODE === 'flip') {
-        const gradeDefs = [
-          [1, 'Quên', 'var(--bad)', 'rgba(220,38,38,.09)'],
-          [2, 'Khó', 'var(--amber)', 'rgba(180,83,9,.09)'],
-          [3, 'Nhớ', 'var(--teal)', 'rgba(15,82,87,.09)'],
-          [4, 'Dễ', 'var(--good)', 'rgba(35,120,74,.10)']
-        ];
-        const gradeBtns = h('div', { class: 'grades', hidden: true },
-          ...gradeDefs.map(([gVal, gLabel, gColor, gBg]) => {
-            const sim = srsNext(s, gVal);
-            const nextTxt = gVal === 1 ? 'Ôn lại ngay' : ivText(sim);
-            return h('button', {
-              type: 'button',
-              'aria-keyshortcuts': String(gVal),
-              style: {
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                padding: '10px 6px', borderRadius: '12px', border: '1.5px solid ' + gColor,
-                background: gBg, color: 'var(--ink)', cursor: 'pointer', gap: '2px'
-              },
-              onclick: () => {
-                S.srs[k] = srsNext(s, gVal);
-                save();
-                if (gVal >= 2) {
-                  markReviewedToday(code, t0);
-                  count++;
-                  addXp(XP_ITEM, code);
-                }
-                queue.shift();
-                if (gVal === 1) queue.push(item);
-                show();
-              }
-            },
-              h('b', { style: { fontSize: '.92rem', color: gColor } }, gLabel),
-              h('small', { style: { fontSize: '.72rem', color: 'var(--muted)' } }, nextTxt)
-            );
-          })
-        );
-
-        const flipBtn = h('button', {
-          type: 'button',
-          class: 'primary block next-btn',
-          style: { fontSize: '1.02rem', fontWeight: 700, padding: '14px 16px', borderRadius: '12px' },
-          onclick: () => {
-            back.hidden = false;
-            flipBtn.hidden = true;
-            gradeBtns.hidden = false;
-            say(code, sayText);
-          }
-        }, '👆 Chạm để lật thẻ & xem đáp án');
-
-        const cardBox = h('div', {
-          class: 'panel card',
-          style: { minHeight: '165px', padding: '16px', gap: '8px', cursor: 'pointer' },
-          onclick: (e) => {
-            if (e.target && e.target.closest && e.target.closest('button')) return;
-            if (back.hidden) flipBtn.click();
-          }
-        },
-          h('p', { class: 'small muted' }, it.v ? 'Nhớ nghĩa & cách đọc, rồi chạm lật thẻ' : 'Nhớ âm Hán Việt & cách đọc, rồi chạm lật thẻ'),
-          front,
-          h('div', { class: 'listen' }, spk(code, sayText, { cls: 'big' })),
-          back
-        );
-
-        return mount(h('div', { class: 'stack-lg', style: { gap: '10px' } }, head(true), topBar,
-          cardBox,
-          flipBtn,
-          gradeBtns,
-          reviewFooter()
-        ));
-      }
-
-      // CHẾ ĐỘ 2: TRẮC NGHIỆM 4 ĐÁP ÁN
       const pool = Object.values(cardIndex(code)), t0r = Date.now();
       const answer = it.v ? it.v.m : it.k.hv;
       const others = it.v

@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261123-0956",
-  "message": "Hiển thị nút Lật thẻ Flashcard FSRS trực tiếp ở trang Học, trong từng Chủ đề và trong từng Bài học"
+  "build": "20261123-1629",
+  "message": "Đặt phần Lật thẻ Flashcard FSRS gọn trong màn hình Bài học và biến bước học từ mới thành thẻ lật 2 mặt"
 }
