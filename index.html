@@ -1292,7 +1292,7 @@ input.ielts-inline-input {
    Dữ liệu bài học nằm trong data/<ngôn ngữ>.json (tải khi cần), âm thanh thu sẵn
    trong audio/, nét chữ trong data/strokes-<zh|ja>.json.
    ===================================================================== */
-const APP_BUILD_ID = '20261125-2351';
+const APP_BUILD_ID = '20261126-0013';
 const LANGS = {
   en: { label: 'English', vi: 'Tiếng Anh', short: 'Anh', folder: 'English', tts: 'en-US', rec: 'en-US', lang: 'en', cjk: false },
   zh: { label: '中文', vi: 'Tiếng Trung', short: 'Trung', folder: 'Chinese', tts: 'zh-CN', rec: 'zh-CN', lang: 'zh-Hans', cjk: true },
@@ -5401,28 +5401,88 @@ function crash30DayView(dayNum) {
 }
 
 
-// ===== TỪ ĐIỂN DÒ TỪ TIẾNG ANH =====
+// ===== TỪ ĐIỂN DÒ TỪ TIẾNG ANH (CAMBRIDGE OFFLINE) =====
 let DICT_Q = '';
-let DICT_FILTER = 'all'; // 'all' | 'vocab' | 'phrase'
+let DICT_FILTER = 'all'; // 'all' | 'cambridge' | 'vocab' | 'phrase'
+let EN_DICT_DATA = null;
+let EN_DICT_LOADING = false;
+const EN_DICT_LS_KEY = 'en-dict-cache-v1';
+
+try {
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+} catch (e) {}
+
+function enDictPath() {
+  const fld = langFolder('en');
+  return fld ? fld + '/data/en_dict.json' : 'data/en_dict.json';
+}
+
+function loadEnDict() {
+  if (EN_DICT_DATA) return Promise.resolve(EN_DICT_DATA);
+  try {
+    const cached = localStorage.getItem(EN_DICT_LS_KEY);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (parsed && parsed.items && parsed.items.length) {
+        EN_DICT_DATA = parsed;
+      }
+    }
+  } catch (e) {}
+  if (EN_DICT_LOADING) return Promise.resolve(EN_DICT_DATA);
+  EN_DICT_LOADING = true;
+  return getJSON(enDictPath()).then((res) => {
+    EN_DICT_LOADING = false;
+    if (res && res.items) {
+      EN_DICT_DATA = res;
+      try { localStorage.setItem(EN_DICT_LS_KEY, JSON.stringify(res)); } catch (e) {}
+      if (VIEW === 'dict') dictView();
+    }
+    return EN_DICT_DATA;
+  }).catch(() => {
+    EN_DICT_LOADING = false;
+    return EN_DICT_DATA;
+  });
+}
 
 function dictBtn() {
   if (S.lang !== 'en') return null;
   return h('button', {
     type: 'button',
     class: 'dict-btn',
-    title: 'Từ điển dò từ tiếng Anh',
-    'aria-label': 'Từ điển dò từ tiếng Anh',
+    title: 'Từ điển Cambridge Offline (Tiếng Anh)',
+    'aria-label': 'Từ điển Cambridge Offline (Tiếng Anh)',
     onclick: () => go('dict')
   }, '🔍');
 }
 
 function dictView() {
   setTabs(false);
+  if (!EN_DICT_DATA && !EN_DICT_LOADING) loadEnDict();
+
   const d = DATA.en;
   const qRaw = (DICT_Q || '').trim();
   const q = qRaw.toLowerCase();
+  const isOffline = typeof navigator !== 'undefined' && navigator.onLine === false;
 
   const allItems = [];
+  if (EN_DICT_DATA && EN_DICT_DATA.items) {
+    EN_DICT_DATA.items.forEach((it) => {
+      if (!it || !it.w) return;
+      allItems.push({
+        kind: 'cambridge',
+        w: it.w,
+        pos: it.pos || '',
+        r: it.ipa || '',
+        m: it.m || '',
+        d: '',
+        ex: it.ex || '',
+        exm: it.exm || '',
+        src: 'Cambridge Giao tiếp'
+      });
+    });
+  }
   if (d && d.topics) {
     d.topics.forEach((tp) => {
       (tp.vocab || []).forEach((v) => {
@@ -5430,6 +5490,7 @@ function dictView() {
         allItems.push({
           kind: 'vocab',
           w: plain(v.w),
+          pos: '',
           r: v.r || '',
           m: v.m || '',
           d: v.d || '',
@@ -5447,6 +5508,7 @@ function dictView() {
         allItems.push({
           kind: 'phrase',
           w: plain(ph.t),
+          pos: 'phrase',
           r: '',
           m: ph.m || '',
           d: '',
@@ -5468,11 +5530,15 @@ function dictView() {
   });
 
   if (q) {
-    matches.sort((a, b) => {
-      const aw = a.w.toLowerCase(), bw = b.w.toLowerCase();
+    matches.sort((a, b2) => {
+      const aw = a.w.toLowerCase(), bw = b2.w.toLowerCase();
       const aExact = aw === q ? 0 : (aw.indexOf(q) === 0 ? 1 : 2);
       const bExact = bw === q ? 0 : (bw.indexOf(q) === 0 ? 1 : 2);
       if (aExact !== bExact) return aExact - bExact;
+      if (a.kind !== b2.kind) {
+        if (a.kind === 'cambridge') return -1;
+        if (b2.kind === 'cambridge') return 1;
+      }
       return aw.length - bw.length;
     });
   }
@@ -5485,6 +5551,7 @@ function dictView() {
       h('div', { class: 'stack', style: { gap: '2px', flex: 1, minWidth: 0 } },
         h('div', { class: 'row wrap', style: { gap: '6px', alignItems: 'baseline' } },
           h('b', { lang: 'en', style: { fontSize: '1.08rem', color: 'var(--teal)' } }, it.w),
+          it.pos ? h('span', { class: 'small muted', style: { fontStyle: 'italic' } }, it.pos) : null,
           it.r ? h('span', { class: 'ipa small', style: { color: 'var(--muted)' } }, it.r) : null
         ),
         h('div', { style: { fontWeight: 600, fontSize: '.95rem' } }, it.m),
@@ -5503,56 +5570,52 @@ function dictView() {
       spk('en', it.ex)
     ) : null,
     h('div', { class: 'row between wrap', style: { gap: '6px', alignItems: 'center' } },
-      h('span', { class: 'chip small', style: { fontSize: '.7rem' } }, it.kind === 'phrase' ? '💬 Mẫu câu' : '📚 Từ vựng'),
+      h('span', { class: 'chip small ' + (it.kind === 'cambridge' ? 'good' : ''), style: { fontSize: '.7rem' } },
+        it.kind === 'cambridge' ? '📘 Cambridge' : (it.kind === 'phrase' ? '💬 Mẫu câu' : '📚 Bài học')
+      ),
       h('span', { class: 'small muted', style: { fontSize: '.74rem' } }, it.src)
     )
   ));
 
   const extBox = qRaw ? h('div', { class: 'panel stack', style: { gap: '8px', padding: '12px', background: 'rgba(15,82,87,.04)' } },
     h('div', { class: 'row between wrap', style: { gap: '8px', alignItems: 'center' } },
-      h('span', { class: 'small', style: { fontWeight: 600 } }, 'Tra thêm ngoài kho bài học cho “' + qRaw + '”:'),
+      h('span', { class: 'small', style: { fontWeight: 600 } }, 'Nghe phát âm & tra thêm cho “' + qRaw + '”:'),
       h('button', { type: 'button', class: 'accent mini', onclick: () => say('en', qRaw) }, '🔊 Nghe phát âm')
     ),
-    h('div', { class: 'row wrap', style: { gap: '6px' } },
+    !isOffline ? h('div', { class: 'row wrap', style: { gap: '6px' } },
       h('a', {
         class: 'ghost mini',
         href: 'https://dictionary.cambridge.org/dictionary/english-vietnamese/' + encodeURIComponent(qRaw),
         target: '_blank', rel: 'noopener noreferrer',
         style: { textDecoration: 'none', padding: '5px 10px', borderRadius: '8px', border: '1px solid var(--line)' }
-      }, 'Cambridge ↗'),
-      h('a', {
-        class: 'ghost mini',
-        href: 'https://www.oxfordlearnersdictionaries.com/definition/english/' + encodeURIComponent(qRaw),
-        target: '_blank', rel: 'noopener noreferrer',
-        style: { textDecoration: 'none', padding: '5px 10px', borderRadius: '8px', border: '1px solid var(--line)' }
-      }, 'Oxford ↗'),
+      }, 'Cambridge Online ↗'),
       h('a', {
         class: 'ghost mini',
         href: 'https://translate.google.com/?sl=en&tl=vi&text=' + encodeURIComponent(qRaw),
         target: '_blank', rel: 'noopener noreferrer',
         style: { textDecoration: 'none', padding: '5px 10px', borderRadius: '8px', border: '1px solid var(--line)' }
       }, 'Google Dịch ↗')
-    )
+    ) : h('p', { class: 'small muted', style: { margin: 0 } }, '⚡ Đang ngoại tuyến: bạn vẫn tra từ điển Cambridge Offline và nghe phát âm bình thường.')
   ) : null;
 
   mount(h('div', { class: 'stack-lg', style: { gap: '10px' } },
-    h('div', { class: 'row between', style: { alignItems: 'center' } },
+    h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '6px' } },
       h('button', { type: 'button', class: 'ghost mini', onclick: () => { setTabs(true); go('home'); } }, '← Trang chủ'),
-      h('span', { class: 'chip accent' }, '🔍 Từ điển Tiếng Anh')
+      h('span', { class: 'chip good small' }, isOffline ? '⚡ Đang Offline · Sẵn sàng' : '📘 Cambridge Offline')
     ),
     h('div', { class: 'row', style: { gap: '6px', alignItems: 'center' } },
       h('input', Object.assign({
         type: 'search',
         class: 'en-dict-inp',
         value: DICT_Q,
-        placeholder: '🔍 Nhập từ tiếng Anh hoặc nghĩa tiếng Việt...',
+        placeholder: '🔍 Tra từ giao tiếp (Anh hoặc Việt)...',
         style: { flex: 1, padding: '10px 12px', borderRadius: '12px', border: '1px solid var(--line)', background: 'var(--surface)', color: 'var(--ink)', fontSize: '.96rem' }
       }, searchInputHandlers('en-dict-inp', (v) => { DICT_Q = v; }, dictView))),
       DICT_Q ? h('button', { type: 'button', class: 'ghost mini', onclick: () => { DICT_Q = ''; dictView(); } }, '✕') : null
     ),
     h('div', { class: 'row wrap', style: { gap: '6px', alignItems: 'center', justifyContent: 'space-between' } },
       h('div', { class: 'row wrap', style: { gap: '6px' } },
-        [['all', 'Tất cả'], ['vocab', 'Từ vựng'], ['phrase', 'Mẫu câu 30 ngày']].map(([k, lbl]) => h('button', {
+        [['all', 'Tất cả'], ['cambridge', 'Cambridge'], ['vocab', 'Bài học'], ['phrase', '30 ngày']].map(([k, lbl]) => h('button', {
           type: 'button',
           class: 'mini ' + (DICT_FILTER === k ? 'primary' : 'ghost'),
           onclick: () => { DICT_FILTER = k; dictView(); }
@@ -5560,11 +5623,10 @@ function dictView() {
       ),
       h('span', { class: 'small muted' }, totalMatches + ' mục' + (totalMatches > shown.length ? ' (hiện ' + shown.length + ')' : ''))
     ),
-    shown.length ? h('div', { class: 'stack', style: { gap: '8px' } }, cards) : h('p', { class: 'small muted center', style: { padding: '16px 0' } }, 'Không tìm thấy trong kho bài học.'),
+    shown.length ? h('div', { class: 'stack', style: { gap: '8px' } }, cards) : h('p', { class: 'small muted center', style: { padding: '16px 0' } }, 'Không tìm thấy trong kho offline.'),
     extBox
   ));
 }
-
 function homeView() {
   const d = DATA[S.lang], st = streak(), xp = xpOf(todayN(), S.lang), due = dueIn(S.lang);
   const langCats = CATEGORIES[S.lang];

@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261125-2351",
-  "message": "Thêm tab Từ điển dò từ tiếng Anh (nút kính lúp 🔍 trên trang chủ)"
+  "build": "20261126-0013",
+  "message": "Từ điển Cambridge Offline cho giao tiếp hằng ngày + Service Worker dùng khi mất mạng"
 }
