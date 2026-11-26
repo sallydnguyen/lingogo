@@ -1,0 +1,324 @@
+{
+  "days": [
+    {
+      "n": 16,
+      "title": "Gặp gỡ đối tác lần đầu",
+      "sub": "Chào đón đối tác chuyên nghiệp, trao đổi thông tin ban đầu và tạo thiện cảm.",
+      "dialogue": {
+        "title": "Welcoming a Visiting Partner",
+        "lines": [
+          {"s": "A", "t": "Welcome to Hanoi, Mr. Park. How was your flight?", "m": "Chào mừng ông Park tới Hà Nội. Chuyến bay của ông thế nào ạ?"},
+          {"s": "B", "t": "Thank you, it was smooth and right on time.", "m": "Cảm ơn bạn, chuyến bay êm ái và đúng giờ."},
+          {"s": "A", "t": "I'm glad to hear that. Let me introduce our project lead, Ms. Lan.", "m": "Tôi rất vui khi nghe vậy. Xin giới thiệu trưởng nhóm dự án bên tôi, cô Lan."},
+          {"s": "B", "t": "Pleasure to meet you, Ms. Lan. I've heard great things about your team.", "m": "Rất hân hạnh được gặp cô Lan. Tôi đã nghe nhiều điều tốt đẹp về đội ngũ của các bạn."},
+          {"s": "A", "t": "Thank you! Would you like some tea or coffee before we begin?", "m": "Cảm ơn ông! Ông có muốn dùng trà hay cà phê trước khi mình bắt đầu không?"},
+          {"s": "B", "t": "A cup of green tea would be wonderful, thank you.", "m": "Một tách trà xanh thì tuyệt quá, cảm ơn bạn."}
+        ]
+      },
+      "phrases": [
+        {"t": "It's a pleasure to finally meet you in person.", "m": "Rất hân hạnh cuối cùng cũng được gặp trực tiếp anh/chị."},
+        {"t": "How was your flight over here?", "m": "Chuyến bay tới đây của anh/chị thế nào?"},
+        {"t": "Welcome to our office, please have a seat.", "m": "Chào mừng tới văn phòng chúng tôi, mời anh/chị ngồi."},
+        {"t": "Let me introduce you to our team.", "m": "Để tôi giới thiệu anh/chị với đội ngũ bên tôi."},
+        {"t": "Can I get you something to drink?", "m": "Tôi mời anh/chị chút đồ uống nhé?"},
+        {"t": "We're excited to explore working together.", "m": "Chúng tôi rất hào hứng tìm hiểu cơ hội hợp tác."}
+      ],
+      "roleplay": {
+        "scene": "Bạn đón tiếp một đối tác nước ngoài lần đầu tới thăm công ty của bạn.",
+        "turns": [
+          {"ai": "Hello! Thanks for inviting me to your office today.", "aim": "Xin chào! Cảm ơn đã mời tôi tới văn phòng hôm nay.", "say": "Welcome! It's a pleasure to meet you in person.", "saym": "Chào mừng anh! Rất vui cuối cùng cũng được gặp trực tiếp."},
+          {"ai": "Likewise! You have a very bright and modern workspace.", "aim": "Tôi cũng vậy! Không gian làm việc của các bạn sáng sủa và hiện đại quá.", "say": "Thank you! Can I offer you coffee or water?", "saym": "Cảm ơn anh! Anh dùng cà phê hay nước lọc ạ?"},
+          {"ai": "Water is great, thanks. Is this where we'll be meeting?", "aim": "Nước lọc là được rồi, cảm ơn. Mình sẽ họp ở phòng này ạ?", "say": "Yes, our director will join us in two minutes.", "saym": "Vâng ạ, giám đốc bên em sẽ vào trong hai phút nữa."},
+          {"ai": "Sounds good. I brought our latest catalog to share.", "aim": "Được thôi. Tôi có mang theo bộ tài liệu mới nhất để chia sẻ.", "say": "Awesome, we're really looking forward to seeing it.", "saym": "Tuyệt quá, bên em rất mong được xem tài liệu đó."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói rất vui vì cuối cùng cũng được gặp đối tác ngoài đời.", "en": "It's great to finally meet you in person."},
+        {"vi": "Hỏi thăm chuyến bay của đối tác có thuận lợi không.", "en": "How was your flight over here?"},
+        {"vi": "Mời đối tác dùng trà hoặc cà phê trước buổi họp.", "en": "Would you like some tea or coffee?"},
+        {"vi": "Giới thiệu người đồng nghiệp ngồi cạnh với đối tác.", "en": "Let me introduce you to my colleague, Lan."},
+        {"vi": "Bày tỏ sự hào hứng khi được hợp tác cùng họ.", "en": "We're really excited to work with you."}
+      ]
+    },
+    {
+      "n": 17,
+      "title": "Giới thiệu công ty và sản phẩm chủ lực",
+      "sub": "Trình bày ngắn gọn thế mạnh công ty, sản phẩm và giá trị mang lại cho khách hàng.",
+      "dialogue": {
+        "title": "Pitching Our Core Product",
+        "lines": [
+          {"s": "A", "t": "Could you give me a quick overview of what your company does?", "m": "Bạn giới thiệu sơ qua về lĩnh vực hoạt động của công ty bạn được không?"},
+          {"s": "B", "t": "Sure! We specialize in eco-friendly packaging for food brands.", "m": "Được chứ! Bên tôi chuyên về bao bì thân thiện môi trường cho các thương hiệu thực phẩm."},
+          {"s": "A", "t": "Interesting. What makes your packaging different from standard options?", "m": "Thú vị đấy. Bao bì bên bạn có gì khác so với các loại thông thường?"},
+          {"s": "B", "t": "Our boxes are waterproof and decompose within ninety days.", "m": "Hộp bên tôi chống thấm nước và tự phân hủy trong vòng chín mươi ngày."},
+          {"s": "A", "t": "That's impressive. Who are your main clients right now?", "m": "Ấn tượng thật. Hiện tại khách hàng chính của bên bạn là ai?"},
+          {"s": "B", "t": "We currently supply over fifty coffee chains across the region.", "m": "Hiện tại chúng tôi cung cấp cho hơn năm mươi chuỗi cà phê trong khu vực."}
+        ]
+      },
+      "phrases": [
+        {"t": "We specialize in sustainable packaging solutions.", "m": "Chúng tôi chuyên về các giải pháp bao bì bền vững."},
+        {"t": "Our flagship product helps businesses cut costs.", "m": "Sản phẩm chủ lực giúp doanh nghiệp cắt giảm chi phí."},
+        {"t": "What sets us apart is our fast turnaround time.", "m": "Điểm khác biệt của chúng tôi là thời gian xử lý rất nhanh."},
+        {"t": "We have been in business for over eight years.", "m": "Chúng tôi đã hoạt động trên thị trường hơn tám năm."},
+        {"t": "Our clients include both startups and global brands.", "m": "Khách hàng của chúng tôi gồm cả công ty khởi nghiệp lẫn thương hiệu lớn."},
+        {"t": "Let me walk you through our key features.", "m": "Để tôi điểm qua các tính năng chính cho anh/chị."}
+      ],
+      "roleplay": {
+        "scene": "Đối tác hỏi về công ty và sản phẩm của bạn tại một buổi kết nối giao thương.",
+        "turns": [
+          {"ai": "So tell me, what does your company focus on?", "aim": "Vậy kể tôi nghe xem công ty bạn tập trung vào mảng nào?", "say": "We specialize in cloud software for small retailers.", "saym": "Bên tôi chuyên về phần mềm đám mây cho các nhà bán lẻ nhỏ."},
+          {"ai": "Nice! What's the biggest benefit for your users?", "aim": "Hay đấy! Lợi ích lớn nhất cho người dùng là gì?", "say": "It helps them track inventory and sales in real time.", "saym": "Nó giúp họ theo dõi tồn kho và doanh số theo thời gian thực."},
+          {"ai": "How are you different from other tools on the market?", "aim": "Bên bạn khác gì so với các công cụ khác trên thị trường?", "say": "Our app is much easier to set up and use.", "saym": "Ứng dụng bên tôi dễ cài đặt và sử dụng hơn nhiều."},
+          {"ai": "Sounds promising! Do you offer a free trial?", "aim": "Nghe hứa hẹn đấy! Bên bạn có cho dùng thử miễn phí không?", "say": "Yes, we offer a fourteen-day free trial.", "saym": "Có ạ, bên tôi có gói dùng thử miễn phí mười bốn ngày."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói công ty bạn chuyên về thiết kế nội thất văn phòng.", "en": "We specialize in office interior design."},
+        {"vi": "Giới thiệu điểm mạnh nhất của sản phẩm là độ bền cao.", "en": "What sets us apart is our high durability."},
+        {"vi": "Nói công ty bạn đã hoạt động được hơn mười năm.", "en": "We have been in business for over ten years."},
+        {"vi": "Đề nghị giới thiệu nhanh các tính năng nổi bật.", "en": "Let me walk you through our main features."},
+        {"vi": "Nói sản phẩm giúp khách hàng tiết kiệm thời gian và chi phí.", "en": "It helps customers save both time and money."}
+      ]
+    },
+    {
+      "n": 18,
+      "title": "Hỏi báo giá và điều kiện đặt hàng",
+      "sub": "Yêu cầu bảng báo giá, hỏi số lượng đặt tối thiểu và các chi phí đi kèm.",
+      "dialogue": {
+        "title": "Requesting a Price Quote",
+        "lines": [
+          {"s": "A", "t": "Could you send us a formal quote for five hundred units?", "m": "Bên bạn gửi giúp chúng tôi báo giá chính thức cho năm trăm đơn vị được không?"},
+          {"s": "B", "t": "Certainly. Does that price need to include shipping?", "m": "Chắc chắn rồi. Báo giá đó có cần bao gồm phí vận chuyển không?"},
+          {"s": "A", "t": "Yes, please include delivery to our warehouse in Da Nang.", "m": "Có nhé, nhờ bạn tính luôn phí giao tới kho bên mình ở Đà Nẵng."},
+          {"s": "B", "t": "Got it. Just so you know, our minimum order quantity is two hundred.", "m": "Đã rõ. Để bạn nắm thêm, số lượng đặt tối thiểu bên mình là hai trăm."},
+          {"s": "A", "t": "That's fine. Is there any discount if we order one thousand?", "m": "Không sao đâu. Nếu bên mình đặt một nghìn cái thì có giảm giá không?"},
+          {"s": "B", "t": "Yes, we can offer an eight percent bulk discount.", "m": "Có chứ, bên mình có thể giảm tám phần trăm cho đơn hàng số lượng lớn."}
+        ]
+      },
+      "phrases": [
+        {"t": "Could you send me a price quote?", "m": "Bạn gửi giúp mình bảng báo giá được không?"},
+        {"t": "What is your minimum order quantity?", "m": "Số lượng đặt hàng tối thiểu bên bạn là bao nhiêu?"},
+        {"t": "Does the quote include taxes and shipping?", "m": "Báo giá này đã gồm thuế và phí ship chưa?"},
+        {"t": "Do you offer a bulk discount?", "m": "Bên bạn có giảm giá khi mua số lượng lớn không?"},
+        {"t": "How long is this quote valid for?", "m": "Báo giá này có hiệu lực trong bao lâu?"},
+        {"t": "What's the unit price for this model?", "m": "Đơn giá cho mẫu này là bao nhiêu?"}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang gọi hoặc trao đổi với nhà cung cấp để xin báo giá cho đơn hàng sắp tới.",
+        "turns": [
+          {"ai": "Thanks for reaching out! Which product are you interested in?", "aim": "Cảm ơn đã liên hệ! Bạn đang quan tâm đến sản phẩm nào ạ?", "say": "We'd like a quote for your ceramic mugs.", "saym": "Bên mình muốn xin báo giá mẫu cốc sứ của bạn."},
+          {"ai": "Sure! Roughly how many pieces are you planning to order?", "aim": "Được ạ! Bạn dự định đặt khoảng bao nhiêu chiếc?", "say": "Around three hundred pieces. What's the unit price?", "saym": "Khoảng ba trăm chiếc. Đơn giá là bao nhiêu vậy?"},
+          {"ai": "For three hundred, it's four dollars per mug.", "aim": "Với ba trăm chiếc thì giá là bốn đô một chiếc ạ.", "say": "Does that include custom logo printing?", "saym": "Giá đó đã bao gồm in logo riêng chưa bạn?"},
+          {"ai": "Printing adds fifty cents per piece. Want me to email the full quote?", "aim": "In logo thêm năm mươi xu mỗi chiếc. Để mình gửi email báo giá chi tiết nhé?", "say": "Yes, please send it with shipping costs included.", "saym": "Vâng, nhờ bạn gửi kèm cả chi phí vận chuyển nhé."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Yêu cầu nhà cung cấp gửi bảng báo giá chính thức.", "en": "Could you send us an official price quote?"},
+        {"vi": "Hỏi xem số lượng đặt hàng tối thiểu là bao nhiêu.", "en": "What is your minimum order quantity?"},
+        {"vi": "Hỏi xem giá đã bao gồm chi phí vận chuyển chưa.", "en": "Does this price include shipping fees?"},
+        {"vi": "Hỏi xem có mức chiết khấu cho đơn hàng lớn không.", "en": "Do you offer discounts for bulk orders?"},
+        {"vi": "Hỏi xem bảng báo giá này có hiệu lực tới bao giờ.", "en": "How long is this quote valid for?"}
+      ]
+    },
+    {
+      "n": 19,
+      "title": "Đàm phán giá và điều khoản hợp tác",
+      "sub": "Thương lượng linh hoạt, đưa ra đề nghị đôi bên cùng có lợi (win-win).",
+      "dialogue": {
+        "title": "Negotiating Better Terms",
+        "lines": [
+          {"s": "A", "t": "We really like your quality, but the price is slightly above our budget.", "m": "Bên tôi rất thích chất lượng của bạn, nhưng giá hơi vượt ngân sách một chút."},
+          {"s": "B", "t": "I understand. What price range were you hoping for?", "m": "Tôi hiểu. Bên bạn đang kỳ vọng mức giá khoảng nào?"},
+          {"s": "A", "t": "If we commit to a one-year contract, could you come down ten percent?", "m": "Nếu bên tôi cam kết hợp đồng một năm, bạn giảm mười phần trăm được không?"},
+          {"s": "B", "t": "Ten percent is tough, but I can meet you halfway at five percent.", "m": "Mười phần trăm thì hơi khó, nhưng tôi có thể nhượng bộ ở mức năm phần trăm."},
+          {"s": "A", "t": "What if we also pay fifty percent upfront?", "m": "Nếu bên tôi thanh toán trước năm mươi phần trăm thì sao?"},
+          {"s": "B", "t": "In that case, we can do seven percent off. Do we have a deal?", "m": "Nếu vậy thì bên tôi giảm được bảy phần trăm. Chốt nhé?"}
+        ]
+      },
+      "phrases": [
+        {"t": "That's a bit above our current budget.", "m": "Mức đó hơi cao hơn ngân sách hiện tại của bên tôi."},
+        {"t": "Is there any wiggle room on the price?", "m": "Giá này còn có thể thương lượng thêm không?"},
+        {"t": "How about we meet in the middle?", "m": "Hay là hai bên gặp nhau ở mức giữa nhé?"},
+        {"t": "If we increase the volume, can you lower the rate?", "m": "Nếu tăng số lượng, bạn có giảm đơn giá được không?"},
+        {"t": "We're looking for a long-term partnership.", "m": "Chúng tôi đang hướng tới sự hợp tác lâu dài."},
+        {"t": "It sounds like we have a deal.", "m": "Nghe có vẻ chúng ta đã chốt được thỏa thuận rồi đấy."}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang đàm phán mức phí dịch vụ với một đối tác cung cấp giải pháp.",
+        "turns": [
+          {"ai": "Our standard package is two thousand dollars per month.", "aim": "Gói tiêu chuẩn bên tôi là hai nghìn đô mỗi tháng.", "say": "That's slightly above our budget right now.", "saym": "Mức đó hơi vượt ngân sách hiện tại của bên mình."},
+          {"ai": "I see. Are you looking to sign a monthly or annual plan?", "aim": "Tôi hiểu. Bạn định ký gói theo tháng hay theo năm?", "say": "We'd prefer an annual contract for a better rate.", "saym": "Bên mình muốn ký hợp đồng năm để có giá tốt hơn."},
+          {"ai": "For an annual plan, we can drop the price to seventeen hundred.", "aim": "Nếu ký theo năm, bên tôi có thể giảm xuống còn một nghìn bảy trăm.", "say": "Could we meet in the middle at sixteen hundred?", "saym": "Hai bên chốt ở mức giữa là một nghìn sáu trăm được không?"},
+          {"ai": "Sixteen hundred works if you sign by Friday. Deal?", "aim": "Một nghìn sáu trăm cũng được nếu bạn ký trước thứ Sáu. Chốt nhé?", "say": "Deal! Send over the contract today.", "saym": "Chốt luôn! Hôm nay gửi hợp đồng qua nhé."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói khéo rằng mức giá đó hơi vượt ngân sách của bạn.", "en": "That price is slightly above our budget."},
+        {"vi": "Hỏi xem đối phương có thể linh hoạt giảm giá thêm không.", "en": "Is there any room to negotiate the price?"},
+        {"vi": "Đề nghị hai bên nhượng bộ gặp nhau ở mức giữa.", "en": "Let's meet halfway on this."},
+        {"vi": "Nói nếu ký hợp đồng dài hạn thì bên bạn cần ưu đãi hơn.", "en": "We expect a better rate for an annual contract."},
+        {"vi": "Xác nhận hai bên đã đồng ý chốt thỏa thuận.", "en": "Great, it looks like we have a deal."}
+      ]
+    },
+    {
+      "n": 20,
+      "title": "Giao hàng, thanh toán và thời gian bàn giao",
+      "sub": "Thống nhất phương thức thanh toán, tiến độ giao hàng và thủ tục chứng từ.",
+      "dialogue": {
+        "title": "Confirming Delivery and Payment",
+        "lines": [
+          {"s": "A", "t": "What's your standard lead time once we place an order?", "m": "Thời gian chuẩn bị hàng thông thường sau khi đặt đơn là bao lâu?"},
+          {"s": "B", "t": "It usually takes ten business days to produce and ship.", "m": "Thường mất mười ngày làm việc để sản xuất và gửi hàng."},
+          {"s": "A", "t": "Okay, and what are your payment terms?", "m": "Được rồi, thế điều khoản thanh toán bên bạn là gì?"},
+          {"s": "B", "t": "We ask for a thirty percent deposit, and the rest upon delivery.", "m": "Bên mình yêu cầu đặt cọc ba mươi phần trăm, phần còn lại trả khi nhận hàng."},
+          {"s": "A", "t": "Can we settle the payment via bank transfer?", "m": "Bên mình thanh toán bằng chuyển khoản ngân hàng được không?"},
+          {"s": "B", "t": "Yes, bank transfer is preferred. We'll send the tracking number once shipped.", "m": "Được chứ, ưu tiên chuyển khoản ạ. Gửi hàng xong bên mình sẽ báo mã vận đơn."}
+        ]
+      },
+      "phrases": [
+        {"t": "What is the estimated lead time?", "m": "Thời gian giao hàng dự kiến là bao lâu?"},
+        {"t": "What payment methods do you accept?", "m": "Bên bạn chấp nhận những hình thức thanh toán nào?"},
+        {"t": "We require a thirty percent deposit upfront.", "m": "Chúng tôi yêu cầu đặt cọc trước ba mươi phần trăm."},
+        {"t": "The balance is due within thirty days.", "m": "Số tiền còn lại thanh toán trong vòng ba mươi ngày."},
+        {"t": "Please share the tracking number once it ships.", "m": "Khi nào hàng đi nhớ gửi mình mã vận đơn nhé."},
+        {"t": "Will the shipment arrive before the tenth?", "m": "Lô hàng có kịp tới trước ngày mùng mười không?"}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang chốt đơn hàng với nhà cung cấp và cần xác nhận kỹ lịch giao hàng và thanh toán.",
+        "turns": [
+          {"ai": "Your order is ready to process! How would you like to pay?", "aim": "Đơn hàng của bạn đã sẵn sàng xử lý! Bạn muốn thanh toán bằng cách nào?", "say": "We prefer paying by bank transfer.", "saym": "Bên mình ưu tiên thanh toán qua chuyển khoản ngân hàng."},
+          {"ai": "Great, our bank details are on the invoice. When do you need delivery?", "aim": "Tuyệt, thông tin tài khoản có trên hóa đơn rồi. Khi nào bạn cần nhận hàng?", "say": "We need it delivered by next Wednesday.", "saym": "Bên mình cần nhận hàng trước thứ Tư tuần tới."},
+          {"ai": "Next Wednesday is doable if we get the deposit today.", "aim": "Thứ Tư tuần tới kịp đấy nếu hôm nay bên mình nhận được tiền cọc.", "say": "We'll transfer the deposit this afternoon.", "saym": "Chiều nay bên mình sẽ chuyển tiền cọc ngay."},
+          {"ai": "Awesome, I'll send the tracking link as soon as it leaves our warehouse.", "aim": "Tuyệt vời, hàng vừa rời kho mình sẽ gửi link theo dõi đơn ngay.", "say": "Thanks! Please email us the invoice too.", "saym": "Cảm ơn! Nhớ gửi email hóa đơn cho bên mình nữa nhé."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Hỏi mất bao lâu thì hàng sẽ được giao tới nơi.", "en": "How long will it take to deliver the order?"},
+        {"vi": "Hỏi xem điều khoản thanh toán cụ thể ra sao.", "en": "What are your standard payment terms?"},
+        {"vi": "Nói bên bạn muốn thanh toán bằng chuyển khoản.", "en": "Can we pay via bank transfer?"},
+        {"vi": "Yêu cầu gửi mã vận đơn ngay khi hàng xuất kho.", "en": "Please send us the tracking number once shipped."},
+        {"vi": "Xác nhận bạn đã chuyển khoản xong phần đặt cọc.", "en": "We have just transferred the deposit."}
+      ]
+    },
+    {
+      "n": 21,
+      "title": "Xử lý khiếu nại và sự cố đơn hàng",
+      "sub": "Phản ánh lỗi giao hàng lịch sự nhưng kiên quyết, hoặc xin lỗi và khắc phục cho khách.",
+      "dialogue": {
+        "title": "Resolving a Damaged Shipment",
+        "lines": [
+          {"s": "A", "t": "Hi, I'm calling about order number four-five-eight. We have an issue.", "m": "Chào bạn, tôi gọi về đơn hàng số 458. Bên tôi đang gặp một sự cố."},
+          {"s": "B", "t": "I'm sorry to hear that. What seems to be the problem?", "m": "Rất tiếc khi nghe vậy. Cụ thể đang có vấn đề gì thế ạ?"},
+          {"s": "A", "t": "Two boxes arrived damaged, and twenty items are missing.", "m": "Hai thùng hàng bị móp hỏng khi tới nơi, và thiếu mất hai mươi sản phẩm."},
+          {"s": "B", "t": "I sincerely apologize for the inconvenience. Could you send me a few photos?", "m": "Tôi thành thật xin lỗi vì sự bất tiện này. Bạn gửi giúp tôi vài tấm ảnh được không?"},
+          {"s": "A", "t": "Already sent to your email. How soon can you replace them?", "m": "Tôi gửi qua email bạn rồi đấy. Bao lâu thì bên bạn bù hàng được?"},
+          {"s": "B", "t": "We'll ship the replacements via express delivery tomorrow morning.", "m": "Sáng mai bên tôi sẽ gửi hỏa tốc hàng thay thế ngay."}
+        ]
+      },
+      "phrases": [
+        {"t": "There seems to be a mistake with our order.", "m": "Hình như đơn hàng của bên tôi đang có nhầm lẫn."},
+        {"t": "Several items arrived damaged.", "m": "Một số sản phẩm bị hư hỏng khi giao tới."},
+        {"t": "I sincerely apologize for the inconvenience.", "m": "Tôi thành thật xin lỗi vì sự bất tiện này."},
+        {"t": "Let me look into this right away.", "m": "Để tôi kiểm tra ngay việc này."},
+        {"t": "How would you like us to resolve this?", "m": "Anh/chị muốn chúng tôi xử lý việc này thế nào?"},
+        {"t": "We'll send a replacement free of charge.", "m": "Chúng tôi sẽ gửi hàng thay thế hoàn toàn miễn phí."}
+      ],
+      "roleplay": {
+        "scene": "Bạn nhận được lô hàng từ đối tác nhưng bị giao nhầm mẫu, bạn gọi để yêu cầu giải quyết.",
+        "turns": [
+          {"ai": "Customer support, how can I help you today?", "aim": "Bộ phận hỗ trợ khách hàng xin nghe, tôi giúp gì được cho bạn?", "say": "Hi, there's an issue with our latest delivery.", "saym": "Chào bạn, lô hàng mới nhất của bên mình đang có vấn đề."},
+          {"ai": "Oh no, I apologize. Could you tell me what happened?", "aim": "Ồ không, tôi xin lỗi. Bạn kể giúp tôi chuyện gì đã xảy ra?", "say": "We received the wrong color for fifty shirts.", "saym": "Bên mình nhận nhầm màu cho năm mươi chiếc áo."},
+          {"ai": "I'm very sorry about that mix-up. Let me check our stock right now.", "aim": "Tôi rất xin lỗi về sự nhầm lẫn đó. Để tôi kiểm tra kho ngay.", "say": "How fast can you send the correct ones?", "saym": "Bao nhanh thì bên bạn gửi đúng mẫu qua được?"},
+          {"ai": "We'll dispatch the right color today at no extra cost.", "aim": "Hôm nay bên tôi sẽ gửi đúng màu mà không tính thêm phí gì cả.", "say": "Thank you for handling this so quickly.", "saym": "Cảm ơn bạn đã xử lý nhanh gọn như vậy."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Thông báo có sự cố với đơn hàng vừa nhận được.", "en": "There is an issue with our recent order."},
+        {"vi": "Nói rằng một vài sản phẩm bị giao thiếu.", "en": "Several items are missing from the box."},
+        {"vi": "Xin lỗi khách hàng một cách chân thành vì sự cố.", "en": "I sincerely apologize for the inconvenience."},
+        {"vi": "Hứa sẽ kiểm tra nguyên nhân và phản hồi ngay.", "en": "Let me look into this right away."},
+        {"vi": "Đề nghị đổi trả hoặc hoàn tiền cho phần hàng lỗi.", "en": "Could we get a replacement or a refund?"}
+      ]
+    },
+    {
+      "n": 22,
+      "title": "Hẹn lịch gặp, xác nhận và theo dõi sau họp",
+      "sub": "Đặt lịch họp qua nhiều múi giờ, xác nhận lại thời gian và gửi tóm tắt sau buổi gặp.",
+      "dialogue": {
+        "title": "Scheduling a Follow-up Call",
+        "lines": [
+          {"s": "A", "t": "Thank you for your time today. Should we set up a follow-up call?", "m": "Cảm ơn thời gian của bạn hôm nay. Mình hẹn lịch gọi tiếp theo nhé?"},
+          {"s": "B", "t": "Yes, let's check in next week to review the contract.", "m": "Vâng, tuần tới mình trao đổi lại để rà soát hợp đồng nhé."},
+          {"s": "A", "t": "Are you free on Tuesday morning, around ten AM your time?", "m": "Sáng thứ Ba khoảng mười giờ sáng theo giờ bên bạn có rảnh không?"},
+          {"s": "B", "t": "Ten AM works great for me. Could you send a calendar invite?", "m": "Mười giờ sáng rất hợp với tôi. Bạn gửi giúp tôi lời mời lịch họp nhé?"},
+          {"s": "A", "t": "Will do! I'll also email you a quick summary of today's meeting.", "m": "Chắc chắn rồi! Tôi cũng sẽ gửi email tóm tắt nhanh buổi họp hôm nay."},
+          {"s": "B", "t": "Perfect. Have a great rest of your day!", "m": "Tuyệt vời. Chúc bạn phần còn lại của ngày thật tốt lành!"}
+        ]
+      },
+      "phrases": [
+        {"t": "Let's schedule a follow-up meeting next week.", "m": "Tuần tới mình đặt lịch họp tiếp theo nhé."},
+        {"t": "Are you available on Tuesday at ten AM?", "m": "Thứ Ba lúc mười giờ sáng bạn có rảnh không?"},
+        {"t": "I'll send over a calendar invite shortly.", "m": "Tôi sẽ gửi lời mời lịch họp ngay sau đây."},
+        {"t": "Just confirming our meeting for tomorrow morning.", "m": "Tôi nhắn xác nhận lại cuộc họp sáng mai của chúng ta."},
+        {"t": "I'll follow up with a summary email.", "m": "Tôi sẽ gửi tiếp một email tóm tắt nội dung."},
+        {"t": "Looking forward to speaking with you again.", "m": "Rất mong được trao đổi lại với anh/chị."}
+      ],
+      "roleplay": {
+        "scene": "Kết thúc buổi trao đổi trực tuyến với khách hàng, bạn chủ động chốt lịch họp tiếp theo.",
+        "turns": [
+          {"ai": "Thanks for walking me through the proposal today!", "aim": "Cảm ơn bạn hôm nay đã trình bày rõ bản đề xuất cho tôi!", "say": "My pleasure! Shall we schedule a follow-up call?", "saym": "Rất hân hạnh! Mình hẹn lịch gọi trao đổi tiếp nhé?"},
+          {"ai": "Yes, let's talk again once I review this with my boss.", "aim": "Được, khi nào tôi xem lại với sếp xong mình trao đổi tiếp nhé.", "say": "Does Thursday afternoon work for you?", "saym": "Chiều thứ Năm có tiện cho anh không ạ?"},
+          {"ai": "Thursday at three PM is open on my calendar.", "aim": "Ba giờ chiều thứ Năm lịch tôi đang trống đấy.", "say": "Great, I'll send you a calendar invite now.", "saym": "Tuyệt, giờ em gửi lời mời lịch họp cho anh nhé."},
+          {"ai": "Sounds good, talk to you on Thursday!", "aim": "Được rồi, hẹn nói chuyện với bạn vào thứ Năm nhé!", "say": "Thanks, I'll email the meeting notes too.", "saym": "Cảm ơn anh, em sẽ gửi thêm ghi chú buổi họp qua email."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Đề nghị hẹn một cuộc gọi tiếp theo vào tuần sau.", "en": "Let's set up a follow-up call next week."},
+        {"vi": "Hỏi xem thứ Tư lúc hai giờ chiều họ có rảnh không.", "en": "Are you free on Wednesday at two PM?"},
+        {"vi": "Nói bạn sẽ gửi lời mời họp qua lịch ngay.", "en": "I'll send you a calendar invite right away."},
+        {"vi": "Hứa sẽ gửi email tóm tắt những gì hai bên đã bàn.", "en": "I'll send a summary of what we discussed."},
+        {"vi": "Xác nhận lại lịch hẹn ngày mai lúc chín giờ.", "en": "Just confirming our call for nine AM tomorrow."}
+      ]
+    },
+    {
+      "n": 23,
+      "title": "Tiếp khách và ăn tối cùng đối tác",
+      "sub": "Giao tiếp lịch thiệp trên bàn tiệc, giới thiệu món ăn và nâng ly chúc mừng.",
+      "dialogue": {
+        "title": "Hosting a Business Dinner",
+        "lines": [
+          {"s": "A", "t": "Thank you for joining us tonight. Have you tried Vietnamese food before?", "m": "Cảm ơn anh đã dùng bữa tối nay cùng tụi em. Anh từng ăn đồ Việt chưa?"},
+          {"s": "B", "t": "Only a few times, so I'd love your recommendations!", "m": "Mới vài lần thôi, nên tôi rất muốn nghe bạn gợi ý món!"},
+          {"s": "A", "t": "You have to try the grilled pork and spring rolls. Do you have any allergies?", "m": "Anh nhất định phải thử bún chả và nem rán. Anh có bị dị ứng món gì không?"},
+          {"s": "B", "t": "No allergies at all, I'm open to trying anything.", "m": "Không dị ứng gì cả, món gì tôi cũng sẵn sàng thử."},
+          {"s": "A", "t": "Wonderful! Let's raise a glass to a successful partnership.", "m": "Tuyệt vời! Mình cùng nâng ly chúc cho sự hợp tác thành công nhé."},
+          {"s": "B", "t": "Cheers! Here's to working together.", "m": "Chúc mừng! Chúc cho sự hợp tác của hai bên."}
+        ]
+      },
+      "phrases": [
+        {"t": "Thank you for making time to join us tonight.", "m": "Cảm ơn anh/chị đã dành thời gian dùng bữa tối nay."},
+        {"t": "Do you have any dietary restrictions?", "m": "Anh/chị có kiêng món ăn nào không?"},
+        {"t": "Let me recommend one of our local specialties.", "m": "Để tôi giới thiệu một món đặc sản địa phương nhé."},
+        {"t": "Please help yourself to anything on the table.", "m": "Mời anh/chị cứ tự nhiên gắp món trên bàn nhé."},
+        {"t": "Let's raise a glass to our partnership.", "m": "Nâng ly chúc mừng sự hợp tác của chúng ta."},
+        {"t": "Please allow us to take care of the bill.", "m": "Xin phép để bên tôi thanh toán hóa đơn này."}
+      ],
+      "roleplay": {
+        "scene": "Bạn là chủ nhà mời đối tác ăn tối tại một nhà hàng địa phương.",
+        "turns": [
+          {"ai": "This restaurant has a wonderful atmosphere!", "aim": "Nhà hàng này không gian tuyệt vời quá!", "say": "I'm glad you like it! Have you ordered yet?", "saym": "Rất vui vì anh thích! Anh đã chọn được món chưa?"},
+          {"ai": "Not yet, everything looks delicious. What do you suggest?", "aim": "Chưa đâu, món nào nhìn cũng ngon. Bạn gợi ý món gì?", "say": "You should try the seafood hotpot. Any allergies?", "saym": "Anh nên thử lẩu hải sản. Anh có dị ứng gì không?"},
+          {"ai": "No allergies, seafood sounds great!", "aim": "Không dị ứng gì, hải sản nghe tuyệt đấy!", "say": "Awesome, let's raise a glass to our project!", "saym": "Tuyệt quá, nâng ly chúc cho dự án của chúng ta nhé!"},
+          {"ai": "Cheers! Oh, let me help split the bill at the end.", "aim": "Chúc mừng! À, lát nữa để tôi chia tiền hóa đơn nhé.", "say": "No worries, it's on us tonight as your host.", "saym": "Không cần đâu anh, tối nay bên em mời với tư cách chủ nhà."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Hỏi xem đối tác có kiêng ăn hoặc dị ứng món gì không.", "en": "Do you have any food allergies or restrictions?"},
+        {"vi": "Gợi ý một món đặc sản địa phương cho khách.", "en": "I highly recommend trying this local dish."},
+        {"vi": "Mời đối tác cứ tự nhiên dùng bữa đừng khách sáo.", "en": "Please help yourself and enjoy the meal."},
+        {"vi": "Nâng ly chúc mừng mối quan hệ hợp tác tốt đẹp.", "en": "Cheers to a great partnership!"},
+        {"vi": "Nói lịch sự rằng tối nay công ty bạn sẽ mời bữa ăn này.", "en": "Please let us take care of the bill tonight."}
+      ]
+    }
+  ]
+}

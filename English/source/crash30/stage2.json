@@ -1,0 +1,324 @@
+{
+  "days": [
+    {
+      "n": 8,
+      "title": "Họp nhóm và nêu ý kiến ngắn gọn",
+      "sub": "Mở đầu cuộc họp, trình bày quan điểm rõ ràng và đồng tình hoặc phản biện lịch sự.",
+      "dialogue": {
+        "title": "Weekly Team Sync",
+        "lines": [
+          {"s": "A", "t": "Thanks everyone for joining on time. Let's get started.", "m": "Cảm ơn mọi người đã vào họp đúng giờ. Mình bắt đầu nhé."},
+          {"s": "B", "t": "Sure. First on the agenda is next week's product launch.", "m": "Vâng. Mục đầu tiên trong chương trình là lễ ra mắt sản phẩm tuần tới."},
+          {"s": "A", "t": "From my perspective, we should push the launch by two days.", "m": "Theo góc nhìn của mình, chúng ta nên lùi ngày ra mắt lại hai ngày."},
+          {"s": "B", "t": "Why do you think we need extra time?", "m": "Sao bạn nghĩ chúng ta cần thêm thời gian?"},
+          {"s": "A", "t": "The testing team found two bugs that need to be fixed first.", "m": "Đội kiểm thử phát hiện hai lỗi cần sửa trước đã."},
+          {"s": "B", "t": "That makes sense. Let's adjust the schedule and inform the client.", "m": "Hợp lý đấy. Vậy mình điều chỉnh lịch rồi báo cho khách hàng nhé."}
+        ]
+      },
+      "phrases": [
+        {"t": "Let's get started, everyone.", "m": "Mọi người ơi, mình bắt đầu họp nhé."},
+        {"t": "From my perspective, we need more time.", "m": "Theo quan điểm của mình, chúng ta cần thêm thời gian."},
+        {"t": "I see your point, but let's check the budget.", "m": "Mình hiểu ý bạn, nhưng hãy kiểm tra lại ngân sách đã."},
+        {"t": "That makes a lot of sense.", "m": "Điều đó rất hợp lý đấy."},
+        {"t": "Could we move on to the next item?", "m": "Mình chuyển sang mục tiếp theo được không?"},
+        {"t": "Let's wrap up and review our action items.", "m": "Mình chốt lại và rà soát các đầu việc cần làm nhé."}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang họp nhóm hàng tuần và cần đề xuất điều chỉnh kế hoạch thiết kế.",
+        "turns": [
+          {"ai": "Welcome to the meeting. How are things looking on your end?", "aim": "Chào mừng vào họp. Phía bạn tiến độ đang thế nào rồi?", "say": "Pretty good, though I have one concern to share.", "saym": "Khá ổn, tuy nhiên mình có một băn khoăn muốn chia sẻ."},
+          {"ai": "Go ahead, we'd love to hear your thoughts.", "aim": "Cứ nói đi, tụi mình rất muốn nghe ý kiến của bạn.", "say": "I think we need another day to test the app.", "saym": "Mình nghĩ chúng ta cần thêm một ngày để kiểm thử ứng dụng."},
+          {"ai": "Okay, if we delay by one day, can we still meet Friday's deadline?", "aim": "Được, nếu lùi một ngày thì thứ Sáu vẫn kịp hạn chứ?", "say": "Yes, as long as we start testing this afternoon.", "saym": "Kịp chứ, miễn là chiều nay mình bắt đầu kiểm thử luôn."},
+          {"ai": "Sounds like a solid plan. Let's do that.", "aim": "Nghe kế hoạch chắc chắn đấy. Làm vậy đi.", "say": "Great, I'll update the team right away.", "saym": "Tuyệt, mình sẽ cập nhật cho cả nhóm ngay."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói với cả nhóm rằng hãy bắt đầu cuộc họp ngay thôi.", "en": "Let's get the meeting started."},
+        {"vi": "Đưa ra quan điểm rằng chúng ta nên giữ nguyên kế hoạch.", "en": "In my opinion, we should stick to the plan."},
+        {"vi": "Nói rằng bạn hiểu ý đồng nghiệp nhưng có chút lo ngại.", "en": "I see your point, but I have one concern."},
+        {"vi": "Đề nghị chuyển sang nội dung tiếp theo trong danh sách.", "en": "Let's move on to the next topic."},
+        {"vi": "Đề xuất tổng kết lại những việc cần làm sau cuộc họp.", "en": "Let's summarize our action items."}
+      ]
+    },
+    {
+      "n": 9,
+      "title": "Gọi điện và trao đổi công việc qua thoại",
+      "sub": "Bắt máy chuyên nghiệp, kết nối đúng người và để lại lời nhắn ngắn gọn.",
+      "dialogue": {
+        "title": "Calling About an Invoice",
+        "lines": [
+          {"s": "A", "t": "Good morning, Minh speaking. How can I help you?", "m": "Chào buổi sáng, Minh đang nghe máy. Tôi có thể giúp gì cho bạn?"},
+          {"s": "B", "t": "Hi Minh, this is Anna from Bright Media. Do you have a quick second?", "m": "Chào Minh, mình là Anna từ Bright Media. Bạn có rảnh một chút không?"},
+          {"s": "A", "t": "Yes, of course, Anna. What can I do for you?", "m": "Có chứ, Anna. Mình giúp được gì cho bạn?"},
+          {"s": "B", "t": "I'm calling to check if you received our updated invoice.", "m": "Mình gọi để kiểm tra xem bên bạn đã nhận được hóa đơn cập nhật chưa."},
+          {"s": "A", "t": "Let me pull it up in my inbox. Hold on a moment, please.", "m": "Để mình mở hộp thư kiểm tra nhé. Chờ mình một lát."},
+          {"s": "B", "t": "No rush, take your time.", "m": "Không vội đâu, bạn cứ từ từ."}
+        ]
+      },
+      "phrases": [
+        {"t": "Good morning, Minh speaking.", "m": "Chào buổi sáng, Minh đang nghe máy."},
+        {"t": "I'm calling to follow up on my email.", "m": "Tôi gọi để hỏi thăm tiếp về email hôm trước."},
+        {"t": "Hold on a second, let me check.", "m": "Chờ một chút nhé, để tôi kiểm tra."},
+        {"t": "Could you put me through to the finance team?", "m": "Bạn chuyển máy giúp tôi tới phòng tài chính được không?"},
+        {"t": "Can I leave a quick message for her?", "m": "Tôi để lại lời nhắn ngắn cho cô ấy được không?"},
+        {"t": "I'll call you right back in ten minutes.", "m": "Mười phút nữa tôi sẽ gọi lại ngay cho bạn."}
+      ],
+      "roleplay": {
+        "scene": "Bạn gọi điện cho bộ phận nhân sự của một công ty đối tác để hỏi về lịch phỏng vấn.",
+        "turns": [
+          {"ai": "Hello, Nova Tech reception. How may I direct your call?", "aim": "Xin chào, lễ tân Nova Tech nghe. Tôi có thể chuyển máy tới đâu ạ?", "say": "Could you put me through to HR, please?", "saym": "Làm ơn chuyển máy giúp tôi tới phòng nhân sự nhé?"},
+          {"ai": "Sure, one moment. Actually, Ms. Lane is in a meeting right now.", "aim": "Vâng, chờ chút ạ. À, cô Lane hiện đang họp rồi.", "say": "No problem. Could I leave a message for her?", "saym": "Không sao ạ. Tôi để lại lời nhắn cho cô ấy được không?"},
+          {"ai": "Of course. What would you like me to pass along?", "aim": "Tất nhiên rồi. Bạn muốn tôi nhắn lại nội dung gì ạ?", "say": "Please ask her to call me back this afternoon.", "saym": "Nhờ bạn nhắn cô ấy gọi lại cho tôi chiều nay nhé."},
+          {"ai": "Will do. Could I have your name and phone number?", "aim": "Tôi sẽ nhắn lại. Cho tôi xin tên và số điện thoại của bạn nhé?", "say": "Sure, my name is Minh and I'll email my number.", "saym": "Vâng, tôi tên Minh và tôi sẽ gửi số qua email."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Giới thiệu tên bạn khi bắt máy điện thoại công ty.", "en": "Hello, this is Minh speaking."},
+        {"vi": "Nói lý do bạn gọi là để hỏi về bản báo cáo tuần.", "en": "I'm calling to check on the weekly report."},
+        {"vi": "Xin người đầu dây bên kia chờ một lát để bạn tìm file.", "en": "Please hold on a moment while I check."},
+        {"vi": "Hỏi xin được chuyển máy đến phòng kỹ thuật.", "en": "Could you transfer me to the tech team?"},
+        {"vi": "Hứa sẽ gọi lại cho họ vào lúc ba giờ chiều.", "en": "I'll call you back at three PM."}
+      ]
+    },
+    {
+      "n": 10,
+      "title": "Báo cáo tiến độ và vướng mắc",
+      "sub": "Cập nhật nhanh việc đang làm, phần đã xong và vấn đề cần hỗ trợ.",
+      "dialogue": {
+        "title": "Daily Stand-up Update",
+        "lines": [
+          {"s": "A", "t": "Hey Linh, where are we at with the client presentation?", "m": "Này Linh, bài thuyết trình cho khách hàng làm đến đâu rồi?"},
+          {"s": "B", "t": "I'm about eighty percent done. The charts are all ready.", "m": "Mình làm xong khoảng tám mươi phần trăm rồi. Biểu đồ đã sẵn sàng hết."},
+          {"s": "A", "t": "Awesome. What's left to finish?", "m": "Tuyệt. Còn phần nào chưa xong không?"},
+          {"s": "B", "t": "I'm just waiting on the final sales numbers from finance.", "m": "Mình chỉ đang đợi số liệu doanh thu cuối cùng từ phòng tài chính."},
+          {"s": "A", "t": "Are you still on track to send it by four?", "m": "Bạn vẫn kịp gửi trước bốn giờ chứ?"},
+          {"s": "B", "t": "Yes, as long as I get those numbers within the hour.", "m": "Kịp chứ, miễn là trong một tiếng nữa mình nhận được số liệu."}
+        ]
+      },
+      "phrases": [
+        {"t": "I'm currently working on the monthly report.", "m": "Hiện tại mình đang làm báo cáo tháng."},
+        {"t": "We are right on schedule.", "m": "Chúng ta đang bám sát đúng tiến độ."},
+        {"t": "We ran into a small delay.", "m": "Tụi mình gặp một chút chậm trễ nhỏ."},
+        {"t": "I'm waiting on feedback from the client.", "m": "Mình đang chờ phản hồi từ khách hàng."},
+        {"t": "Everything is on track for Friday.", "m": "Mọi thứ đều đúng lộ trình cho thứ Sáu."},
+        {"t": "I should have it wrapped up by noon.", "m": "Mình sẽ hoàn thành xong trước buổi trưa."}
+      ],
+      "roleplay": {
+        "scene": "Quản lý hỏi thăm tiến độ dự án của bạn trong buổi kiểm tra nhanh cuối ngày.",
+        "turns": [
+          {"ai": "Hi! Can you give me a quick update on the website redesign?", "aim": "Chào bạn! Cập nhật nhanh giúp mình tiến độ thiết kế lại web nhé?", "say": "Sure, we've finished the homepage and menu.", "saym": "Được ạ, tụi mình đã làm xong trang chủ và thanh menu."},
+          {"ai": "Nice progress! Have you run into any blockers?", "aim": "Tiến độ tốt đấy! Bạn có gặp trở ngại nào không?", "say": "We're still waiting on the new product photos.", "saym": "Tụi mình vẫn đang chờ ảnh sản phẩm mới."},
+          {"ai": "Got it. Do you think we'll hit Monday's deadline?", "aim": "Mình hiểu rồi. Bạn nghĩ mình có kịp hạn thứ Hai không?", "say": "Yes, we're still on track for Monday.", "saym": "Có ạ, tụi mình vẫn đúng tiến độ cho thứ Hai."},
+          {"ai": "Great, ping me if the photos don't arrive by tomorrow morning.", "aim": "Tuyệt, nếu sáng mai chưa có ảnh thì nhắn mình nhé.", "say": "Will do, thanks for checking in!", "saym": "Vâng ạ, cảm ơn anh đã hỏi thăm!"}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói rằng bạn đang thực hiện phần thiết kế trang chủ.", "en": "I'm currently working on the homepage design."},
+        {"vi": "Báo cáo rằng dự án đang đi đúng tiến độ.", "en": "Everything is right on schedule."},
+        {"vi": "Nói rằng bạn đang chờ sự phê duyệt của sếp.", "en": "I'm waiting for approval from my manager."},
+        {"vi": "Thông báo nhóm bạn vừa gặp một trở ngại kỹ thuật nhỏ.", "en": "We ran into a minor technical issue."},
+        {"vi": "Cam kết sẽ hoàn thành công việc trước năm giờ chiều.", "en": "I'll finish it before five PM."}
+      ]
+    },
+    {
+      "n": 11,
+      "title": "Xin nghỉ phép và dời lịch họp",
+      "sub": "Xin phép nghỉ ốm/việc riêng và chủ động đề xuất giờ họp mới.",
+      "dialogue": {
+        "title": "Rescheduling a One-on-One",
+        "lines": [
+          {"s": "A", "t": "Hi David, do you have a minute? Something urgent came up.", "m": "Chào David, anh có rảnh một phút không? Em có việc gấp phát sinh."},
+          {"s": "B", "t": "Sure, is everything alright?", "m": "Được chứ, mọi chuyện ổn cả chứ?"},
+          {"s": "A", "t": "Yes, I just need to take my mom to a doctor's appointment tomorrow morning.", "m": "Vâng, sáng mai em cần đưa mẹ đi khám bác sĩ."},
+          {"s": "B", "t": "Of course, family comes first. Do you need the whole day off?", "m": "Tất nhiên rồi, gia đình là trên hết. Em có cần nghỉ cả ngày không?"},
+          {"s": "A", "t": "Just the morning. Could we push our meeting to two PM?", "m": "Chỉ buổi sáng thôi ạ. Mình dời cuộc họp sang hai giờ chiều được không anh?"},
+          {"s": "B", "t": "Two PM works for me. Take care of your mom!", "m": "Hai giờ chiều anh rảnh. Em lo cho bác nhé!"}
+        ]
+      },
+      "phrases": [
+        {"t": "Something urgent just came up.", "m": "Có việc gấp vừa phát sinh."},
+        {"t": "Could I take tomorrow morning off?", "m": "Cho mình xin nghỉ sáng mai được không?"},
+        {"t": "Would it be possible to reschedule our call?", "m": "Mình có thể dời lịch cuộc gọi được không?"},
+        {"t": "I'm not feeling well today, so I'll work from home.", "m": "Hôm nay mình không khỏe nên mình sẽ làm việc tại nhà."},
+        {"t": "Let me know what time works best for you.", "m": "Cho mình biết khung giờ nào tiện nhất cho bạn nhé."},
+        {"t": "Sorry for the short notice.", "m": "Xin lỗi vì báo gấp như vậy."}
+      ],
+      "roleplay": {
+        "scene": "Bạn bị cảm nhẹ và muốn nhắn quản lý xin làm việc tại nhà, đồng thời dời buổi họp chiều.",
+        "turns": [
+          {"ai": "Morning! You sounded a bit congested earlier. Feeling okay?", "aim": "Chào buổi sáng! Lúc nãy nghe giọng bạn hơi nghẹt mũi. Bạn ổn chứ?", "say": "Actually, I'm feeling under the weather today.", "saym": "Thực ra hôm nay mình thấy hơi mệt trong người."},
+          {"ai": "Oh no, sorry to hear that. Do you want to rest today?", "aim": "Ồ, tiếc quá. Hôm nay bạn muốn nghỉ ngơi không?", "say": "Can I work from home today instead?", "saym": "Hôm nay mình làm việc tại nhà thay vì lên văn phòng được không?"},
+          {"ai": "Sure, please rest up. What about our three PM review?", "aim": "Được chứ, bạn cứ nghỉ đi. Thế buổi duyệt bài lúc ba giờ chiều thì sao?", "say": "Could we move it to tomorrow morning?", "saym": "Mình dời sang sáng mai được không ạ?"},
+          {"ai": "Tomorrow at ten works. Get some rest!", "aim": "Mười giờ sáng mai nhé. Nghỉ ngơi đi nha!", "say": "Thanks for understanding, sorry for the short notice.", "saym": "Cảm ơn anh đã thông cảm, xin lỗi vì báo gấp ạ."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Xin lỗi đồng nghiệp vì đã báo đổi lịch sát giờ.", "en": "Sorry for the short notice."},
+        {"vi": "Hỏi xem có thể dời cuộc họp sang ngày thứ Năm không.", "en": "Can we reschedule our meeting to Thursday?"},
+        {"vi": "Nói rằng hôm nay bạn hơi mệt và xin làm việc ở nhà.", "en": "I'm not feeling well, so I'll work remotely."},
+        {"vi": "Giải thích rằng có việc gia đình đột xuất vừa xảy ra.", "en": "An urgent family matter just came up."},
+        {"vi": "Hỏi đối phương xem khung giờ nào phù hợp nhất với họ.", "en": "What time works best for you?"}
+      ]
+    },
+    {
+      "n": 12,
+      "title": "Nhờ đồng nghiệp hỗ trợ và phối hợp",
+      "sub": "Nhờ xem lại tài liệu, chia sẻ quyền truy cập hoặc hỗ trợ kịp thời.",
+      "dialogue": {
+        "title": "Reviewing a Draft Proposal",
+        "lines": [
+          {"s": "A", "t": "Hey Tom, are you swamped right now?", "m": "Này Tom, bây giờ bạn có đang ngập đầu việc không?"},
+          {"s": "B", "t": "Not too bad, just finishing up some emails. What's up?", "m": "Cũng không quá bận, chỉ đang trả lời nốt vài email. Có chuyện gì thế?"},
+          {"s": "A", "t": "Could you take a quick look at my draft proposal?", "m": "Bạn xem lướt giúp mình bản đề xuất nháp này được không?"},
+          {"s": "B", "t": "Sure! Do you want me to check the numbers or just the wording?", "m": "Được chứ! Bạn muốn mình kiểm tra số liệu hay chỉ xem câu chữ thôi?"},
+          {"s": "A", "t": "Mostly the wording, to make sure it sounds clear and polite.", "m": "Chủ yếu là câu chữ thôi, để chắc chắn nghe rõ ràng và lịch sự."},
+          {"s": "B", "t": "Send me the link and I'll leave comments before lunch.", "m": "Gửi mình đường link đi, mình sẽ góp ý trước giờ ăn trưa."}
+        ]
+      },
+      "phrases": [
+        {"t": "Are you swamped at the moment?", "m": "Lúc này bạn có đang quá tải việc không?"},
+        {"t": "Could you take a quick look at this file?", "m": "Bạn xem nhanh giúp mình file này được không?"},
+        {"t": "Could you grant me access to the folder?", "m": "Bạn cấp quyền truy cập thư mục đó cho mình được không?"},
+        {"t": "Let me know if you need backup on that task.", "m": "Cứ bảo mình nếu bạn cần người hỗ trợ đầu việc đó nhé."},
+        {"t": "I'll loop you in on the email thread.", "m": "Mình sẽ thêm bạn vào chuỗi email này."},
+        {"t": "Thanks for covering for me earlier.", "m": "Cảm ơn bạn lúc nãy đã xử lý giúp phần của mình."}
+      ],
+      "roleplay": {
+        "scene": "Bạn cần đồng nghiệp kiểm tra giúp bài thuyết trình tiếng Anh trước khi gửi cho khách.",
+        "turns": [
+          {"ai": "Hey, I just wrapped up my morning tasks. Need anything?", "aim": "Này, mình vừa xong việc buổi sáng. Bạn cần gì không?", "say": "Actually, could you review my slides quickly?", "saym": "Thực ra bạn xem giúp mình bộ slide một chút được không?"},
+          {"ai": "Happy to! How many slides are there?", "aim": "Sẵn lòng thôi! Có bao nhiêu trang slide vậy?", "say": "Only eight slides, it won't take long.", "saym": "Chỉ có tám trang thôi, không mất nhiều thời gian đâu."},
+          {"ai": "Sure, can you share the document with me?", "aim": "Được, bạn chia sẻ tài liệu đó với mình được không?", "say": "I just sent you the link with edit access.", "saym": "Mình vừa gửi link kèm quyền chỉnh sửa cho bạn rồi."},
+          {"ai": "Got it! I'll check it right now and let you know.", "aim": "Nhận được rồi! Mình xem ngay bây giờ rồi báo bạn nhé.", "say": "Thanks a ton, I really owe you one!", "saym": "Cảm ơn nhiều lắm, mình nợ bạn một lần nhé!"}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nhờ đồng nghiệp xem qua giúp bản báo cáo của bạn.", "en": "Could you take a quick look at my report?"},
+        {"vi": "Hỏi xin quyền truy cập vào bảng tính dùng chung.", "en": "Could you give me access to the shared sheet?"},
+        {"vi": "Nói bạn sẽ thêm họ vào chuỗi email trao đổi.", "en": "I'll loop you in on the email thread."},
+        {"vi": "Hỏi xem đồng nghiệp có đang bận ngập đầu không.", "en": "Are you super busy right now?"},
+        {"vi": "Nói bạn sẵn sàng hỗ trợ nếu họ cần giúp.", "en": "Let me know if you need a hand."}
+      ]
+    },
+    {
+      "n": 13,
+      "title": "Trao đổi về hạn chót (Deadline) và ưu tiên",
+      "sub": "Thương lượng thời hạn hợp lý và sắp xếp thứ tự ưu tiên công việc.",
+      "dialogue": {
+        "title": "Prioritizing Urgent Tasks",
+        "lines": [
+          {"s": "A", "t": "Hey, we just got an urgent request from the marketing team.", "m": "Này, tụi mình vừa nhận được một yêu cầu gấp từ phòng marketing."},
+          {"s": "B", "t": "What's the deadline on that?", "m": "Hạn chót của việc đó là khi nào vậy?"},
+          {"s": "A", "t": "They're hoping to have it by end of day tomorrow.", "m": "Họ hy vọng có được trước cuối ngày mai."},
+          {"s": "B", "t": "Hmm, I'm still finishing the budget sheet. Which one is top priority?", "m": "Ừm, mình vẫn đang làm nốt bảng ngân sách. Việc nào ưu tiên hàng đầu?"},
+          {"s": "A", "t": "Put the budget on hold and focus on marketing first.", "m": "Tạm gác bảng ngân sách lại và tập trung cho marketing trước đi."},
+          {"s": "B", "t": "Got it. In that case, I can deliver it by three PM tomorrow.", "m": "Rõ rồi. Vậy thì mình có thể bàn giao trước ba giờ chiều mai."}
+        ]
+      },
+      "phrases": [
+        {"t": "When is the hard deadline for this?", "m": "Hạn chót cứng cho việc này là khi nào?"},
+        {"t": "Which task should I prioritize first?", "m": "Mình nên ưu tiên đầu việc nào trước?"},
+        {"t": "Let's put that task on hold for now.", "m": "Tạm thời mình gác việc đó lại đã."},
+        {"t": "Can we push the deadline back to Friday?", "m": "Mình có thể dời hạn chót sang thứ Sáu được không?"},
+        {"t": "I'll get it done by end of day.", "m": "Mình sẽ làm xong trước cuối ngày."},
+        {"t": "That's a bit tight, but I'll make it work.", "m": "Thời gian hơi gấp nhưng mình sẽ cố xoay xở."}
+      ],
+      "roleplay": {
+        "scene": "Sếp giao thêm một việc mới trong khi bạn đang có nhiều việc khác, bạn cần hỏi rõ mức độ ưu tiên.",
+        "turns": [
+          {"ai": "Hi! Can you prepare a summary of last month's sales?", "aim": "Chào bạn! Bạn chuẩn bị giúp mình bản tóm tắt doanh số tháng trước nhé?", "say": "Sure, when do you need it by?", "saym": "Vâng ạ, khi nào anh cần bản đó ạ?"},
+          {"ai": "Ideally by five PM today, if possible.", "aim": "Lý tưởng nhất là trước năm giờ chiều nay, nếu được.", "say": "That's tight since I'm finishing the client deck.", "saym": "Hơi gấp vì em đang làm nốt bộ tài liệu cho khách."},
+          {"ai": "Oh, right. Let's prioritize the client deck today and do sales tomorrow morning.", "aim": "Ồ đúng rồi. Hôm nay ưu tiên tài liệu khách hàng, sáng mai làm doanh số nhé.", "say": "Sounds good! I'll send the summary by ten AM tomorrow.", "saym": "Vâng ạ! Sáng mai trước mười giờ em sẽ gửi bản tóm tắt."},
+          {"ai": "Perfect, thank you for managing that.", "aim": "Chuẩn rồi, cảm ơn bạn đã sắp xếp nhé.", "say": "No problem, I'm on it right now.", "saym": "Không có gì ạ, em làm ngay đây."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Hỏi xem hạn chót của nhiệm vụ này là khi nào.", "en": "What's the deadline for this task?"},
+        {"vi": "Hỏi xem việc nào cần được ưu tiên làm trước.", "en": "Which one should I prioritize first?"},
+        {"vi": "Nói lịch hơi gấp nhưng bạn sẽ cố gắng thu xếp.", "en": "That's a bit tight, but I'll manage."},
+        {"vi": "Đề nghị lùi hạn chót sang sáng thứ Hai.", "en": "Could we move the deadline to Monday morning?"},
+        {"vi": "Cam kết gửi kết quả trước cuối ngày hôm nay.", "en": "I'll send it over by end of day."}
+      ]
+    },
+    {
+      "n": 14,
+      "title": "Đưa và nhận phản hồi (Feedback) chuyên nghiệp",
+      "sub": "Góp ý mang tính xây dựng và tiếp thu nhận xét một cách cầu thị.",
+      "dialogue": {
+        "title": "Giving Constructive Feedback",
+        "lines": [
+          {"s": "A", "t": "Thanks for sharing the video script. Overall, I really like the tone.", "m": "Cảm ơn bạn đã gửi kịch bản video. Nhìn chung mình rất thích giọng văn."},
+          {"s": "B", "t": "Glad to hear that! Is there anything you'd change?", "m": "Nghe vậy mừng quá! Có chỗ nào bạn muốn sửa không?"},
+          {"s": "A", "t": "The intro feels a bit long. Maybe we could trim it down.", "m": "Phần mở đầu hơi dài một chút. Có lẽ mình nên cắt gọn lại."},
+          {"s": "B", "t": "Good catch. How many seconds should the intro be?", "m": "Phát hiện hay đấy. Phần mở đầu nên dài khoảng mấy giây?"},
+          {"s": "A", "t": "Aim for around fifteen seconds so viewers stay hooked.", "m": "Khoảng mười lăm giây thôi để người xem không bị chán."},
+          {"s": "B", "t": "Makes total sense. I'll revise it and send a new version.", "m": "Hoàn toàn hợp lý. Mình sẽ sửa lại và gửi bản mới."}
+        ]
+      },
+      "phrases": [
+        {"t": "Overall, you did a great job on this.", "m": "Nhìn chung bạn làm phần này rất tốt."},
+        {"t": "One small suggestion would be to shorten the intro.", "m": "Một gợi ý nhỏ là nên rút ngắn phần mở đầu lại."},
+        {"t": "Thanks for the honest feedback, I appreciate it.", "m": "Cảm ơn những góp ý thẳng thắn, mình rất trân trọng."},
+        {"t": "That's a good catch, I'll fix it right away.", "m": "Phát hiện chuẩn đấy, mình sẽ sửa ngay."},
+        {"t": "How could I improve this section?", "m": "Mình có thể cải thiện phần này bằng cách nào?"},
+        {"t": "Let me revise it and get back to you.", "m": "Để mình chỉnh sửa lại rồi gửi lại bạn nhé."}
+      ],
+      "roleplay": {
+        "scene": "Đồng nghiệp vừa góp ý cho bài viết/thiết kế của bạn và bạn phản hồi lại một cách tích cực.",
+        "turns": [
+          {"ai": "Hey, I finished reading your article. The examples are super clear!", "aim": "Này, mình đọc xong bài viết của bạn rồi. Các ví dụ cực kỳ rõ ràng!", "say": "Thanks! Is there anything I should improve?", "saym": "Cảm ơn nhé! Có điểm nào mình nên cải thiện không?"},
+          {"ai": "Just one thing: the conclusion feels a little rushed.", "aim": "Chỉ một chỗ thôi: phần kết luận cảm giác hơi vội một chút.", "say": "Good point. Should I add a summary paragraph?", "saym": "Ý hay đấy. Mình có nên thêm một đoạn tóm tắt không?"},
+          {"ai": "Yes, two or three sentences wrapping up the main tips would help.", "aim": "Có, thêm hai ba câu chốt lại các mẹo chính sẽ hay hơn nhiều.", "say": "Got it, thanks for the helpful feedback!", "saym": "Mình hiểu rồi, cảm ơn góp ý hữu ích của bạn!"},
+          {"ai": "Anytime! Let me know once you've updated it.", "aim": "Không có gì! Sửa xong thì nhắn mình nhé.", "say": "Sure, I'll update it this afternoon.", "saym": "Được, chiều nay mình sẽ cập nhật lại."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Khen ngợi tổng thể bài làm của đồng nghiệp trước khi góp ý.", "en": "Overall, you did a really solid job."},
+        {"vi": "Gợi ý nhẹ nhàng rằng nên làm phần tiêu đề nổi bật hơn.", "en": "Maybe we could make the title stand out more."},
+        {"vi": "Cảm ơn người khác vì đã góp ý chân thành.", "en": "Thanks for the helpful feedback."},
+        {"vi": "Công nhận lỗi nhỏ họ chỉ ra và nói sẽ sửa ngay.", "en": "Good catch, I'll fix that right away."},
+        {"vi": "Hỏi xem bạn có thể cải thiện điều gì cho lần tới.", "en": "What could I do better next time?"}
+      ]
+    },
+    {
+      "n": 15,
+      "title": "Trò chuyện thân mật với đồng nghiệp (Small Talk)",
+      "sub": "Bắt chuyện thoải mái ở pantry, giờ nghỉ trưa và hỏi thăm cuối tuần.",
+      "dialogue": {
+        "title": "Coffee Break Chat",
+        "lines": [
+          {"s": "A", "t": "Hey Maya, grabbing a coffee? How's your week going so far?", "m": "Này Maya, đi lấy cà phê à? Tuần này của bạn tới giờ thế nào?"},
+          {"s": "B", "t": "Pretty busy, honestly! But at least it's almost Friday.", "m": "Thật lòng là khá bận! Nhưng ít ra cũng sắp tới thứ Sáu rồi."},
+          {"s": "A", "t": "Tell me about it. Do you have any fun plans for the weekend?", "m": "Công nhận luôn. Cuối tuần bạn có kế hoạch gì vui không?"},
+          {"s": "B", "t": "I'm thinking of going hiking if the weather stays nice.", "m": "Mình đang tính đi leo núi nếu thời tiết vẫn đẹp."},
+          {"s": "A", "t": "Oh, nice! Which trail do you usually go to?", "m": "Ồ hay quá! Bạn hay đi cung đường nào thế?"},
+          {"s": "B", "t": "Green Valley. You should join us sometime if you're free!", "m": "Thung lũng Xanh. Hôm nào rảnh bạn đi cùng tụi mình cho vui!"}
+        ]
+      },
+      "phrases": [
+        {"t": "How's your week going so far?", "m": "Tuần này của bạn tới giờ thế nào rồi?"},
+        {"t": "Thank goodness it's almost the weekend.", "m": "May quá cuối tuần sắp tới rồi."},
+        {"t": "Got any fun plans for the weekend?", "m": "Cuối tuần có kế hoạch gì vui không?"},
+        {"t": "How was your lunch break?", "m": "Giờ nghỉ trưa của bạn thế nào?"},
+        {"t": "Did you catch the game last night?", "m": "Tối qua bạn có xem trận đấu không?"},
+        {"t": "Catch you later, have a good evening!", "m": "Gặp lại sau nhé, tối vui vẻ nha!"}
+      ],
+      "roleplay": {
+        "scene": "Bạn gặp đồng nghiệp ở khu vực pha cà phê sáng thứ Hai và trò chuyện hỏi thăm cuối tuần.",
+        "turns": [
+          {"ai": "Morning! How was your weekend?", "aim": "Chào buổi sáng! Cuối tuần của bạn thế nào?", "say": "It was relaxing, I mostly stayed home and cooked.", "saym": "Thư giãn lắm, chủ yếu mình ở nhà nấu ăn."},
+          {"ai": "That sounds lovely. Did you try any new recipes?", "aim": "Nghe thích thật. Bạn có thử công thức món mới nào không?", "say": "Yes, I tried making homemade noodle soup.", "saym": "Có, mình thử tự nấu phở tại nhà."},
+          {"ai": "Yum! Are you ready for a busy week ahead?", "aim": "Ngon quá! Bạn đã sẵn sàng cho một tuần bận rộn phía trước chưa?", "say": "As ready as I'll ever be! How about you?", "saym": "Sẵn sàng hết mức rồi! Còn bạn thì sao?"},
+          {"ai": "Same here, just need another cup of coffee first!", "aim": "Mình cũng vậy, chỉ cần thêm một ly cà phê nữa thôi!", "say": "Haha, same! Have a productive morning.", "saym": "Haha, giống mình! Chúc buổi sáng làm việc hiệu quả nhé."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Hỏi thăm đồng nghiệp xem tuần này công việc của họ thế nào.", "en": "How's your week going so far?"},
+        {"vi": "Hỏi xem cuối tuần họ có dự định gì thú vị không.", "en": "Do you have any plans for the weekend?"},
+        {"vi": "Kể rằng cuối tuần vừa rồi bạn chỉ ở nhà nghỉ ngơi.", "en": "I just stayed home and relaxed over the weekend."},
+        {"vi": "Chúc đồng nghiệp một buổi tối vui vẻ khi tan làm.", "en": "Have a great evening, see you tomorrow!"},
+        {"vi": "Nói rằng bạn đang cần một ly cà phê để tỉnh táo.", "en": "I really need a cup of coffee right now."}
+      ]
+    }
+  ]
+}

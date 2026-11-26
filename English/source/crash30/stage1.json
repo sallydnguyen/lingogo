@@ -1,0 +1,285 @@
+{
+  "days": [
+    {
+      "n": 1,
+      "title": "Chào hỏi và làm quen tự nhiên",
+      "sub": "Bắt chuyện, giới thiệu bản thân và hỏi thăm đối phương một cách tự nhiên.",
+      "dialogue": {
+        "title": "Meeting Someone New at a Workshop",
+        "lines": [
+          {"s": "A", "t": "Hi there, mind if I grab this seat?", "m": "Chào bạn, mình ngồi ghế này được không?"},
+          {"s": "B", "t": "Not at all, please go ahead.", "m": "Không sao đâu, bạn cứ ngồi tự nhiên nhé."},
+          {"s": "A", "t": "Thanks! I'm Minh. Is this your first time at this workshop?", "m": "Cảm ơn bạn! Mình là Minh. Đây là lần đầu bạn dự hội thảo này à?"},
+          {"s": "B", "t": "Nice to meet you, Minh. I'm Sarah. Actually, I came last year too.", "m": "Rất vui được gặp bạn, Minh. Mình là Sarah. Thực ra năm ngoái mình cũng có đến."},
+          {"s": "A", "t": "Oh nice! What do you do for a living, Sarah?", "m": "Ồ hay quá! Bạn làm nghề gì vậy, Sarah?"},
+          {"s": "B", "t": "I work as a product designer at a small tech studio.", "m": "Mình làm thiết kế sản phẩm ở một studio công nghệ nhỏ."},
+          {"s": "A", "t": "That sounds really interesting. How long have you been in that role?", "m": "Nghe thú vị thật đấy. Bạn làm vị trí đó bao lâu rồi?"}
+        ]
+      },
+      "phrases": [
+        {"t": "Mind if I grab this seat?", "m": "Mình ngồi chỗ này được không?"},
+        {"t": "Not at all, please go ahead.", "m": "Không phiền đâu, bạn cứ tự nhiên."},
+        {"t": "Is this your first time here?", "m": "Đây là lần đầu bạn đến đây à?"},
+        {"t": "What do you do for a living?", "m": "Bạn làm nghề gì vậy?"},
+        {"t": "That sounds really interesting.", "m": "Nghe thật sự thú vị đấy."},
+        {"t": "It was great chatting with you.", "m": "Nói chuyện với bạn rất vui."}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang dự một buổi giao lưu nghề nghiệp và muốn bắt chuyện với người ngồi cạnh (đối tác tên Alex).",
+        "turns": [
+          {"ai": "Hi! Are you waiting for the talk to start too?", "aim": "Chào bạn! Bạn cũng đang chờ buổi nói chuyện bắt đầu à?", "say": "Yes, I am. Mind if I sit here?", "saym": "Đúng rồi. Mình ngồi đây được không?"},
+          {"ai": "Sure, go right ahead! I'm Alex, by the way.", "aim": "Được chứ, cứ tự nhiên! Nhân tiện, mình là Alex.", "say": "Nice to meet you, Alex. I'm Minh.", "saym": "Rất vui được gặp bạn, Alex. Mình là Minh."},
+          {"ai": "Nice to meet you too. What kind of work do you do?", "aim": "Mình cũng rất vui được gặp bạn. Bạn làm công việc gì thế?", "say": "I work in marketing for a local company.", "saym": "Mình làm bên marketing cho một công ty địa phương."},
+          {"ai": "Oh cool! Have you been enjoying the event so far?", "aim": "Ồ tuyệt! Bạn thấy sự kiện từ nãy giờ thế nào?", "say": "Yes, I've already learned a lot today.", "saym": "Rất hay, hôm nay mình đã học được nhiều điều rồi."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Hỏi xem bạn có thể ngồi vào chỗ trống bên cạnh không.", "en": "Mind if I take this seat?"},
+        {"vi": "Trả lời lịch sự rằng không phiền chút nào.", "en": "Not at all, please go ahead."},
+        {"vi": "Hỏi đối phương làm nghề gì để kiếm sống.", "en": "What do you do for a living?"},
+        {"vi": "Nói rằng bạn rất vui khi được gặp họ.", "en": "It's really nice to meet you."},
+        {"vi": "Chào tạm biệt và nói cuộc trò chuyện rất vui.", "en": "It was great chatting with you."}
+      ]
+    },
+    {
+      "n": 2,
+      "title": "Hỏi đường và chỉ dẫn nhanh",
+      "sub": "Hỏi đường lịch sự khi bị lạc và xác nhận lại hướng đi chính xác.",
+      "dialogue": {
+        "title": "Finding the Nearest Train Station",
+        "lines": [
+          {"s": "A", "t": "Excuse me, could you tell me how to get to Central Station?", "m": "Xin lỗi, bạn có thể chỉ mình đường tới Ga Trung tâm được không?"},
+          {"s": "B", "t": "Sure. Walk straight down this street for two blocks.", "m": "Được chứ. Bạn đi thẳng con phố này khoảng hai dãy nhà."},
+          {"s": "A", "t": "Got it. Do I turn left or right after that?", "m": "Mình hiểu rồi. Sau đó mình rẽ trái hay rẽ phải?"},
+          {"s": "B", "t": "Turn right at the traffic lights, right next to the pharmacy.", "m": "Rẽ phải ở chỗ đèn giao thông, ngay cạnh hiệu thuốc nhé."},
+          {"s": "A", "t": "How long does it take on foot from here?", "m": "Đi bộ từ đây mất khoảng bao lâu vậy?"},
+          {"s": "B", "t": "Only about five minutes. You can't miss the big glass entrance.", "m": "Chỉ khoảng năm phút thôi. Bạn sẽ thấy ngay lối vào bằng kính rất lớn."}
+        ]
+      },
+      "phrases": [
+        {"t": "Could you tell me how to get to the station?", "m": "Bạn chỉ giúp mình đường ra nhà ga được không?"},
+        {"t": "Walk straight down this street for two blocks.", "m": "Đi thẳng con phố này khoảng hai dãy nhà."},
+        {"t": "Turn right at the traffic lights.", "m": "Rẽ phải ở chỗ đèn giao thông."},
+        {"t": "How long does it take on foot?", "m": "Đi bộ mất bao lâu?"},
+        {"t": "Is it within walking distance?", "m": "Chỗ đó có đi bộ tới được không?"},
+        {"t": "You can't miss it.", "m": "Bạn không thể nào lạc được đâu."}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang đứng ở trung tâm thành phố và cần hỏi một người dân địa phương đường tới bảo tàng gần nhất.",
+        "turns": [
+          {"ai": "Hi, you look a bit lost. Can I help you?", "aim": "Chào bạn, trông bạn có vẻ đang lạc đường. Mình giúp gì được không?", "say": "Yes, I'm looking for the city museum.", "saym": "Vâng, mình đang tìm bảo tàng thành phố."},
+          {"ai": "Oh, it's pretty close. Just go straight ahead and cross the bridge.", "aim": "Ồ, nó khá gần. Bạn cứ đi thẳng rồi qua cây cầu.", "say": "Should I turn left after the bridge?", "saym": "Qua cầu xong mình có cần rẽ trái không?"},
+          {"ai": "Yes, turn left and you'll see a large park on your right.", "aim": "Đúng rồi, rẽ trái và bạn sẽ thấy một công viên lớn bên tay phải.", "say": "How many minutes does it take to walk there?", "saym": "Đi bộ tới đó mất khoảng mấy phút?"},
+          {"ai": "About seven minutes. Enjoy your visit!", "aim": "Khoảng bảy phút thôi. Chúc bạn tham quan vui vẻ!", "say": "Thank you so much for your help!", "saym": "Cảm ơn bạn rất nhiều vì đã giúp đỡ!"}
+        ]
+      },
+      "reflex": [
+        {"vi": "Hỏi xem quán cà phê gần nhất ở đâu.", "en": "Excuse me, where is the nearest coffee shop?"},
+        {"vi": "Hỏi xem chỗ đó có thể đi bộ tới được không.", "en": "Is it within walking distance from here?"},
+        {"vi": "Hỏi xem đi bộ mất khoảng bao nhiêu phút.", "en": "How long does it take to walk there?"},
+        {"vi": "Xác nhận lại xem bạn cần rẽ trái hay rẽ phải.", "en": "Do I turn left or right at the corner?"},
+        {"vi": "Nói rằng bạn đang bị lạc và cần tìm đường về khách sạn.", "en": "I'm a bit lost and looking for my hotel."}
+      ]
+    },
+    {
+      "n": 3,
+      "title": "Nhờ giúp đỡ và đáp lại khéo léo",
+      "sub": "Đưa ra lời nhờ vả lịch sự và phản hồi tự nhiên khi giúp hoặc từ chối.",
+      "dialogue": {
+        "title": "Asking a Neighbor for a Quick Favor",
+        "lines": [
+          {"s": "A", "t": "Hey Sam, do you have a minute? I could really use a hand.", "m": "Này Sam, bạn có rảnh một phút không? Mình đang cần giúp một tay."},
+          {"s": "B", "t": "Sure, what's going on?", "m": "Được chứ, có chuyện gì thế?"},
+          {"s": "A", "t": "Would you mind holding the elevator while I grab my boxes?", "m": "Bạn giữ giúp mình thang máy trong lúc mình lấy mấy cái hộp được không?"},
+          {"s": "B", "t": "No problem at all. Let me help you carry one of them.", "m": "Không vấn đề gì. Để mình phụ bạn bê bớt một hộp nhé."},
+          {"s": "A", "t": "That's so kind of you. They're heavier than I expected.", "m": "Bạn tốt quá. Chúng nặng hơn mình tưởng đấy."},
+          {"s": "B", "t": "Anytime! Just let me know which floor you're going to.", "m": "Không có gì! Cứ bảo mình bạn lên tầng mấy nhé."}
+        ]
+      },
+      "phrases": [
+        {"t": "I could really use a hand.", "m": "Mình thật sự đang cần người phụ một tay."},
+        {"t": "Would you mind helping me with this?", "m": "Bạn phiền giúp mình việc này một chút được không?"},
+        {"t": "Could you do me a quick favor?", "m": "Bạn giúp mình một việc nhỏ được không?"},
+        {"t": "No problem at all, happy to help.", "m": "Không vấn đề gì, rất sẵn lòng giúp bạn."},
+        {"t": "I'd love to, but my hands are full right now.", "m": "Mình rất muốn giúp nhưng hiện tại mình đang bận tay quá."},
+        {"t": "I really appreciate your help.", "m": "Mình thật sự rất cảm kích sự giúp đỡ của bạn."}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang mang nhiều đồ và muốn nhờ đồng nghiệp mở cửa giúp hoặc hỗ trợ kiểm tra nhanh một tài liệu.",
+        "turns": [
+          {"ai": "Hey, you look busy over there. Everything okay?", "aim": "Này, trông bạn có vẻ bận rộn bên đó. Mọi thứ ổn chứ?", "say": "Actually, could you do me a quick favor?", "saym": "Thực ra bạn giúp mình một việc nhỏ được không?"},
+          {"ai": "Of course! What do you need?", "aim": "Tất nhiên rồi! Bạn cần gì thế?", "say": "Would you mind holding the door for me?", "saym": "Bạn giữ cửa giúp mình một chút được không?"},
+          {"ai": "Sure, I've got it. Do you need me to carry anything else?", "aim": "Được chứ, mình giữ rồi. Bạn có cần mình xách phụ gì nữa không?", "say": "That's okay, I can handle the rest.", "saym": "Không sao đâu, phần còn lại mình tự mang được."},
+          {"ai": "Alright, just let me know if you need anything later.", "aim": "Được rồi, lát nữa cần gì cứ bảo mình nhé.", "say": "Thanks a lot, I really appreciate it.", "saym": "Cảm ơn nhiều nhé, mình rất cảm kích."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Hỏi xem ai đó có thể giúp bạn một việc nhỏ không.", "en": "Could you do me a quick favor?"},
+        {"vi": "Nhờ người đối diện chụp giúp bạn một tấm ảnh.", "en": "Would you mind taking a photo for us?"},
+        {"vi": "Nói rằng bạn đang cần người phụ một tay ngay bây giờ.", "en": "I could really use a hand right now."},
+        {"vi": "Từ chối khéo vì hiện giờ bạn đang bận.", "en": "Sorry, I'm tied up at the moment."},
+        {"vi": "Cảm ơn chân thành và nói bạn rất trân trọng điều đó.", "en": "Thank you, I really appreciate your help."}
+      ]
+    },
+    {
+      "n": 4,
+      "title": "Đồng ý, từ chối và đề xuất nhẹ nhàng",
+      "sub": "Biểu đạt sự tán thành, từ chối khéo léo và gợi ý phương án thay thế.",
+      "dialogue": {
+        "title": "Choosing a Place for Dinner",
+        "lines": [
+          {"s": "A", "t": "Shall we try that new Thai restaurant tonight?", "m": "Tối nay tụi mình thử quán Thái mới mở kia nhé?"},
+          {"s": "B", "t": "I'd love to, but I'm not really in the mood for spicy food.", "m": "Mình thích lắm, nhưng hôm nay mình không hợp ăn đồ cay."},
+          {"s": "A", "t": "Fair enough. How about Italian instead?", "m": "Hợp lý thôi. Thế đổi sang đồ Ý thì sao?"},
+          {"s": "B", "t": "That sounds great! There's a cozy pasta place near the river.", "m": "Nghe tuyệt đấy! Có một quán mì Ý ấm cúng gần bờ sông."},
+          {"s": "A", "t": "I'm totally down for that. Should we book a table?", "m": "Mình hoàn toàn đồng ý. Mình có cần đặt bàn trước không?"},
+          {"s": "B", "t": "Good idea. Let's reserve one for seven o'clock.", "m": "Ý hay đấy. Đặt bàn lúc bảy giờ nhé."}
+        ]
+      },
+      "phrases": [
+        {"t": "I'm totally down for that.", "m": "Mình hoàn toàn hưởng ứng ý đó."},
+        {"t": "I'd love to, but I have other plans.", "m": "Mình rất muốn nhưng mình có kế hoạch khác rồi."},
+        {"t": "I'm not really in the mood for that.", "m": "Mình không có hứng thú với món đó lắm."},
+        {"t": "How about trying another place instead?", "m": "Hay là mình thử chỗ khác thay thế nhé?"},
+        {"t": "That works for me.", "m": "Lịch đó hợp với mình đấy."},
+        {"t": "Maybe we can do that next time.", "m": "Có lẽ tụi mình để dịp khác nhé."}
+      ],
+      "roleplay": {
+        "scene": "Bạn bè rủ đi xem phim tối nay nhưng bạn muốn từ chối khéo hoặc đề xuất đổi sang ngày mai.",
+        "turns": [
+          {"ai": "Hey, do you want to catch a movie after work tonight?", "aim": "Này, tối nay tan làm đi xem phim không?", "say": "I'd love to, but I'm too tired tonight.", "saym": "Mình muốn lắm, nhưng tối nay mình hơi mệt."},
+          {"ai": "No worries! Would tomorrow evening work better for you?", "aim": "Không sao đâu! Tối mai có tiện cho bạn hơn không?", "say": "Yes, tomorrow evening works great for me.", "saym": "Có, tối mai rất hợp với mình."},
+          {"ai": "Awesome. Should we grab dinner before the movie?", "aim": "Tuyệt vời. Mình ăn tối trước khi xem phim nhé?", "say": "Sure, how about meeting at six?", "saym": "Được chứ, hẹn gặp lúc sáu giờ nhé?"},
+          {"ai": "Six is perfect. See you tomorrow then!", "aim": "Sáu giờ chuẩn luôn. Vậy hẹn gặp bạn ngày mai nhé!", "say": "Sounds good, see you tomorrow!", "saym": "Nghe ổn đấy, hẹn mai gặp!"}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói rằng lịch hẹn đó hoàn toàn phù hợp với bạn.", "en": "That time works really well for me."},
+        {"vi": "Từ chối khéo một lời mời đi chơi vì bạn đang bận.", "en": "I'd love to, but I'm busy tonight."},
+        {"vi": "Đề xuất chuyển buổi hẹn sang cuối tuần thay vì hôm nay.", "en": "How about meeting this weekend instead?"},
+        {"vi": "Nói rằng bạn không có tâm trạng ăn đồ ngọt lúc này.", "en": "I'm not really in the mood for sweets."},
+        {"vi": "Đồng ý nhiệt tình với ý kiến của người kia.", "en": "Sounds great, I'm totally in!"}
+      ]
+    },
+    {
+      "n": 5,
+      "title": "Xin nói lại và làm rõ thông tin",
+      "sub": "Phản xạ nhanh khi nghe chưa rõ, cần người nói chậm lại hoặc giải thích thêm.",
+      "dialogue": {
+        "title": "Clarifying Details Over a Noisy Call",
+        "lines": [
+          {"s": "A", "t": "Sorry, the connection is breaking up. Could you repeat that?", "m": "Xin lỗi, sóng hơi bị gián đoạn. Bạn nhắc lại được không?"},
+          {"s": "B", "t": "Sure! I said the training room has moved to floor four.", "m": "Được chứ! Mình nói là phòng đào tạo đã chuyển lên tầng bốn."},
+          {"s": "A", "t": "Got it. Did you say room four-oh-two or four-two-oh?", "m": "Mình nghe rồi. Bạn nói phòng 402 hay 420 vậy?"},
+          {"s": "B", "t": "Four-oh-two, right across from the main elevator.", "m": "402 nhé, ngay đối diện thang máy chính."},
+          {"s": "A", "t": "Thanks! Also, what do you mean by bringing our ID badge?", "m": "Cảm ơn! À, ý bạn mang thẻ nhân viên là sao thế?"},
+          {"s": "B", "t": "You'll need it to scan through the security gate downstairs.", "m": "Bạn sẽ cần nó để quẹt qua cổng an ninh ở tầng dưới."}
+        ]
+      },
+      "phrases": [
+        {"t": "Sorry, could you say that again?", "m": "Xin lỗi, bạn nói lại câu đó được không?"},
+        {"t": "Could you speak a bit more slowly, please?", "m": "Bạn nói chậm hơn một chút được không?"},
+        {"t": "I didn't quite catch the last part.", "m": "Mình chưa nghe rõ đoạn cuối lắm."},
+        {"t": "What do you mean by that?", "m": "Ý bạn nói vậy là sao?"},
+        {"t": "Just to make sure, we meet at nine, right?", "m": "Để chắc chắn thôi, mình gặp lúc 9 giờ đúng không?"},
+        {"t": "Could you spell that name for me?", "m": "Bạn đánh vần tên đó giúp mình được không?"}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang nghe điện thoại từ lễ tân nhưng âm thanh hơi nhỏ và nhanh, bạn cần hỏi lại cho chắc chắn.",
+        "turns": [
+          {"ai": "Hello, your appointment with Dr. Carter has been moved to Thursday.", "aim": "Xin chào, lịch hẹn của bạn với bác sĩ Carter đã chuyển sang thứ Năm.", "say": "Sorry, could you speak a bit more slowly?", "saym": "Xin lỗi, bạn nói chậm lại một chút được không?"},
+          {"ai": "Of course. Your appointment is now on Thursday at ten-thirty.", "aim": "Tất nhiên rồi. Lịch hẹn của bạn giờ là thứ Năm lúc mười giờ rưỡi.", "say": "Got it. Just to confirm, ten-thirty in the morning?", "saym": "Mình rõ rồi. Xác nhận lại là 10 giờ 30 sáng đúng không?"},
+          {"ai": "Yes, ten-thirty AM at our Westside clinic.", "aim": "Đúng rồi, 10 giờ 30 sáng tại phòng khám Westside của chúng tôi.", "say": "Could you spell the clinic's name for me?", "saym": "Bạn đánh vần giúp mình tên phòng khám được không?"},
+          {"ai": "Sure, that's W-E-S-T-S-I-D-E.", "aim": "Được chứ, là W-E-S-T-S-I-D-E.", "say": "Thank you, everything is clear now.", "saym": "Cảm ơn bạn, giờ mình rõ hết rồi."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Xin lỗi và nhờ người đối diện nói chậm lại một chút.", "en": "Sorry, could you speak a bit slower?"},
+        {"vi": "Nói rằng bạn chưa kịp nghe rõ phần cuối câu.", "en": "I didn't quite catch the last part."},
+        {"vi": "Hỏi lại xem ý họ muốn nói là gì.", "en": "What exactly do you mean by that?"},
+        {"vi": "Kiểm tra lại thông tin để chắc chắn bạn hiểu đúng.", "en": "Just to make sure, did you say Tuesday?"},
+        {"vi": "Nhờ người kia đánh vần tên họ hoặc địa chỉ.", "en": "Could you spell that out for me, please?"}
+      ]
+    },
+    {
+      "n": 6,
+      "title": "Nói về thói quen và lịch sinh hoạt",
+      "sub": "Kể trôi chảy về lịch trình hàng ngày, sở thích và tần suất làm việc gì đó.",
+      "dialogue": {
+        "title": "Sharing Daily Routines",
+        "lines": [
+          {"s": "A", "t": "You always look so energetic in the morning. What's your secret?", "m": "Buổi sáng nào trông bạn cũng tràn đầy năng lượng. Bí quyết là gì thế?"},
+          {"s": "B", "t": "Well, I usually go for a quick jog before breakfast.", "m": "À, mình thường chạy bộ một chút trước khi ăn sáng."},
+          {"s": "A", "t": "Really? How early do you have to wake up for that?", "m": "Thật á? Vậy bạn phải dậy sớm lúc mấy giờ?"},
+          {"s": "B", "t": "Around six, though I sometimes hit snooze on rainy days.", "m": "Khoảng sáu giờ, dù mấy hôm trời mưa thỉnh thoảng mình cũng bấm ngủ tiếp."},
+          {"s": "A", "t": "I wish I were a morning person. I'm way more productive at night.", "m": "Ước gì mình cũng dậy sớm được. Ban đêm mình làm việc hiệu quả hơn nhiều."},
+          {"s": "B", "t": "Everyone has their own rhythm. What matters is getting enough sleep.", "m": "Mỗi người có nhịp sinh học riêng mà. Quan trọng là ngủ đủ giấc."}
+        ]
+      },
+      "phrases": [
+        {"t": "I usually start my day with coffee.", "m": "Mình thường bắt đầu ngày mới bằng một ly cà phê."},
+        {"t": "I try to work out three times a week.", "m": "Mình cố gắng tập thể dục ba lần một tuần."},
+        {"t": "I'm more of a night owl.", "m": "Mình thuộc tuýp người thức khuya."},
+        {"t": "On weekends, I like to catch up on sleep.", "m": "Cuối tuần mình thích ngủ bù."},
+        {"t": "It's become part of my daily routine.", "m": "Nó đã trở thành thói quen hàng ngày của mình."},
+        {"t": "I rarely eat out during the week.", "m": "Trong tuần mình hiếm khi đi ăn ngoài."}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang trò chuyện với một người bạn mới quen về thói quen sinh hoạt và cách thư giãn sau giờ làm.",
+        "turns": [
+          {"ai": "So, what does a typical weekday look like for you?", "aim": "Vậy một ngày trong tuần bình thường của bạn diễn ra thế nào?", "say": "I usually wake up at seven and commute to work.", "saym": "Mình thường dậy lúc bảy giờ rồi đi làm."},
+          {"ai": "Do you cook dinner when you get home?", "aim": "Về nhà bạn có tự nấu bữa tối không?", "say": "Most days I cook, though I sometimes order takeout.", "saym": "Đa số ngày mình tự nấu, thỉnh thoảng mới đặt đồ ăn."},
+          {"ai": "Nice! How do you usually unwind before bed?", "aim": "Tuyệt! Trước khi đi ngủ bạn hay thư giãn bằng cách nào?", "say": "I like reading a book or listening to podcasts.", "saym": "Mình thích đọc sách hoặc nghe podcast."},
+          {"ai": "That sounds very relaxing. How often do you exercise?", "aim": "Nghe thư giãn thật. Bạn có hay tập thể dục không?", "say": "I try to go swimming twice a week.", "saym": "Mình cố gắng đi bơi hai lần một tuần."}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói rằng bạn thường dậy lúc sáu rưỡi sáng.", "en": "I usually wake up at six-thirty."},
+        {"vi": "Nói bạn cố gắng tập thể dục ba lần một tuần.", "en": "I try to work out three times a week."},
+        {"vi": "Nói bạn thuộc tuýp cú đêm hơn là người dậy sớm.", "en": "I'm more of a night owl than a morning person."},
+        {"vi": "Kể rằng cuối tuần bạn thích gặp gỡ bạn bè hoặc nghỉ ngơi.", "en": "On weekends, I like hanging out with friends."},
+        {"vi": "Hỏi đối phương thường làm gì để thư giãn sau giờ làm.", "en": "How do you usually unwind after work?"}
+      ]
+    },
+    {
+      "n": 7,
+      "title": "Mua sắm nhanh và hỏi giá cả",
+      "sub": "Hỏi giá, kích cỡ, thử đồ và thanh toán nhanh gọn ở cửa hàng.",
+      "dialogue": {
+        "title": "Buying a Gift at a Local Shop",
+        "lines": [
+          {"s": "A", "t": "Hi, I'm looking for a casual jacket. Do you have this in medium?", "m": "Chào bạn, mình đang tìm một chiếc áo khoác mặc thường ngày. Mẫu này có cỡ M không?"},
+          {"s": "B", "t": "Let me check for you. Yes, we have one left in navy blue.", "m": "Để mình kiểm tra giúp bạn. Có đấy, tụi mình còn một chiếc màu xanh than."},
+          {"s": "A", "t": "Great, can I try it on? Where are the fitting rooms?", "m": "Tuyệt, mình mặc thử được không? Phòng thử đồ ở đâu vậy?"},
+          {"s": "B", "t": "Right over there in the back corner.", "m": "Ngay đằng kia ở góc phía sau ạ."},
+          {"s": "A", "t": "It fits well! Is it on sale by any chance?", "m": "Mặc vừa lắm! Nhân tiện áo này có đang giảm giá không bạn?"},
+          {"s": "B", "t": "Yes, it's twenty percent off today. You can pay by card or cash.", "m": "Có ạ, hôm nay đang giảm hai mươi phần trăm. Bạn có thể trả bằng thẻ hoặc tiền mặt."}
+        ]
+      },
+      "phrases": [
+        {"t": "I'm just browsing, thanks.", "m": "Mình chỉ xem qua thôi, cảm ơn nhé."},
+        {"t": "Do you have this in a medium size?", "m": "Mẫu này có cỡ vừa không bạn?"},
+        {"t": "Where can I try this on?", "m": "Mình có thể thử cái này ở đâu?"},
+        {"t": "How much does this come to?", "m": "Cái này tổng cộng bao nhiêu tiền vậy?"},
+        {"t": "Can I pay by card or contactless?", "m": "Mình trả bằng thẻ hoặc chạm được không?"},
+        {"t": "Could I get a receipt, please?", "m": "Cho mình xin hóa đơn nhé?"}
+      ],
+      "roleplay": {
+        "scene": "Bạn đang mua một đôi giày thể thao trong cửa hàng và trao đổi với nhân viên bán hàng.",
+        "turns": [
+          {"ai": "Hello! Let me know if you need help finding anything.", "aim": "Xin chào! Nếu bạn cần tìm gì thì cứ bảo mình nhé.", "say": "Thanks! Do you have these shoes in size forty?", "saym": "Cảm ơn! Đôi giày này có cỡ 40 không bạn?"},
+          {"ai": "Sure, let me grab a pair for you. Here you go!", "aim": "Được chứ, để mình lấy một đôi cho bạn. Của bạn đây!", "say": "They feel comfortable. How much are they?", "saym": "Đi êm đấy. Đôi này giá bao nhiêu vậy?"},
+          {"ai": "They're sixty dollars, and there's a ten percent discount today.", "aim": "Giá sáu mươi đô, hôm nay còn được giảm thêm mười phần trăm.", "say": "Great, I'll take them. Can I pay by card?", "saym": "Tuyệt, mình lấy đôi này. Trả bằng thẻ được không?"},
+          {"ai": "Of course, just tap your card right here.", "aim": "Tất nhiên rồi, bạn cứ chạm thẻ ngay đây nhé.", "say": "Thanks! Could I get a receipt as well?", "saym": "Cảm ơn! Cho mình xin thêm hóa đơn nhé?"}
+        ]
+      },
+      "reflex": [
+        {"vi": "Nói với nhân viên rằng bạn chỉ đang xem qua thôi.", "en": "I'm just looking around, thank you."},
+        {"vi": "Hỏi xem chiếc áo này có cỡ lớn hơn không.", "en": "Do you have this shirt in a larger size?"},
+        {"vi": "Hỏi xem phòng thử đồ nằm ở phía nào.", "en": "Where are the fitting rooms, please?"},
+        {"vi": "Nói rằng bạn sẽ mua món đồ này.", "en": "I'll take this one, please."},
+        {"vi": "Hỏi xem cửa hàng có chấp nhận thanh toán bằng thẻ không.", "en": "Do you take credit cards here?"}
+      ]
+    }
+  ]
+}
