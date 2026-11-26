@@ -459,10 +459,14 @@ span.spk { width: 34px; height: 34px; min-height: 34px; }
 .c30-timer { font-variant-numeric: tabular-nums; font-weight: 700; font-size: .88rem; padding: 3px 10px; border-radius: 999px; background: rgba(180,83,9,.12); color: var(--amber); }
 
 /* Flashcard */
-.flip-out { animation: flipOut .16s ease-in forwards; }
-.flip-in { animation: flipIn .2s ease-out; }
-@keyframes flipOut { from { transform: perspective(900px) rotateY(0); } to { transform: perspective(900px) rotateY(90deg); } }
-@keyframes flipIn { from { transform: perspective(900px) rotateY(-90deg); } to { transform: perspective(900px) rotateY(0); } }
+/* Lật thẻ 3D: luôn chạy (kể cả khi máy bật Giảm chuyển động) vì đây là phản hồi chính khi chạm thẻ */
+.flip-out { -webkit-animation: flipOut .26s ease-in forwards !important; animation: flipOut .26s ease-in forwards !important; }
+.flip-in { -webkit-animation: flipIn .32s ease-out !important; animation: flipIn .32s ease-out !important; }
+.is-flipped { background: linear-gradient(135deg, rgba(15,82,87,.10), rgba(15,82,87,.03)) !important; border-color: rgba(15,82,87,.35) !important; }
+@-webkit-keyframes flipOut { from { -webkit-transform: perspective(700px) rotateY(0); } to { -webkit-transform: perspective(700px) rotateY(90deg); } }
+@keyframes flipOut { from { transform: perspective(700px) rotateY(0); } to { transform: perspective(700px) rotateY(90deg); } }
+@-webkit-keyframes flipIn { from { -webkit-transform: perspective(700px) rotateY(-90deg); } to { -webkit-transform: perspective(700px) rotateY(0); } }
+@keyframes flipIn { from { transform: perspective(700px) rotateY(-90deg); } to { transform: perspective(700px) rotateY(0); } }
 .card:not(.stack):not(.guide-accordion-item) { min-height: 180px; display: flex; flex-direction: column; justify-content: center; gap: 10px; text-align: center; }
 .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .grades button { flex-direction: column; gap: 0; padding: 8px 4px; font-size: .9rem; }
@@ -1282,7 +1286,7 @@ input.ielts-inline-input {
    Dữ liệu bài học nằm trong data/<ngôn ngữ>.json (tải khi cần), âm thanh thu sẵn
    trong audio/, nét chữ trong data/strokes-<zh|ja>.json.
    ===================================================================== */
-const APP_BUILD_ID = '20261125-2037';
+const APP_BUILD_ID = '20261125-2336';
 const LANGS = {
   en: { label: 'English', vi: 'Tiếng Anh', short: 'Anh', folder: 'English', tts: 'en-US', rec: 'en-US', lang: 'en', cjk: false },
   zh: { label: '中文', vi: 'Tiếng Trung', short: 'Trung', folder: 'Chinese', tts: 'zh-CN', rec: 'zh-CN', lang: 'zh-Hans', cjk: true },
@@ -11502,14 +11506,15 @@ function autoFsrsGradeFromSec(sec) {
 }
 
 function flipCard(el, swap) {
-  if (!el || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) { swap(); return; }
+  if (!el) { swap(); return; }
   el.classList.add('flip-out');
   setTimeout(() => {
     swap();
+    el.classList.add('is-flipped');
     el.classList.remove('flip-out');
     el.classList.add('flip-in');
-    setTimeout(() => el.classList.remove('flip-in'), 220);
-  }, 160);
+    setTimeout(() => el.classList.remove('flip-in'), 340);
+  }, 260);
 }
 function itemCard(code, v, tip, onAdvance) {
   let flipped = false;
