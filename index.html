@@ -1286,7 +1286,7 @@ input.ielts-inline-input {
    Dữ liệu bài học nằm trong data/<ngôn ngữ>.json (tải khi cần), âm thanh thu sẵn
    trong audio/, nét chữ trong data/strokes-<zh|ja>.json.
    ===================================================================== */
-const APP_BUILD_ID = '20261125-2336';
+const APP_BUILD_ID = '20261125-2345';
 const LANGS = {
   en: { label: 'English', vi: 'Tiếng Anh', short: 'Anh', folder: 'English', tts: 'en-US', rec: 'en-US', lang: 'en', cjk: false },
   zh: { label: '中文', vi: 'Tiếng Trung', short: 'Trung', folder: 'Chinese', tts: 'zh-CN', rec: 'zh-CN', lang: 'zh-Hans', cjk: true },
@@ -4391,8 +4391,71 @@ function renderIeltsFullDayView(dayNum) {
   );
 }
 
+function c30FilterDays(mode, btn) {
+  const wrap = btn.closest('.panel') ? btn.closest('.panel').parentNode : document;
+  Array.prototype.forEach.call(wrap.querySelectorAll('.c30-road-row'), (r) => {
+    const done = r.getAttribute('data-done') === '1';
+    r.style.display = (mode === 'all' || (mode === 'done' && done) || (mode === 'todo' && !done)) ? '' : 'none';
+  });
+  Array.prototype.forEach.call(btn.parentNode.querySelectorAll('button'), (b) => b.classList.toggle('active', b === btn));
+}
+function renderCrash30Roadmap() {
+  const c30 = DATA.en && DATA.en.crash30;
+  if (!c30 || !c30.days || !c30.days.length) return null;
+  const prog = S.en_crash30 || {};
+  const total = c30.days.length, doneN = crash30DoneCount(c30);
+  const pct = Math.round((doneN / total) * 100);
+  const nextN = crash30NextDay(c30);
+  const openDay = (n) => { CRASH30_TAB = 'dialogue'; loadLang('en').then(() => crash30DayView(n)); };
+  const rows = c30.days.map((day) => {
+    const pr = prog[day.n], isDone = !!(pr && pr.done);
+    const row = h('button', {
+      type: 'button',
+      class: 'c30-road-row panel row between',
+      style: { width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: '12px', background: 'var(--surface)', border: '1px solid var(--line)', cursor: 'pointer', alignItems: 'center', gap: '10px', color: 'var(--ink)' },
+      onclick: () => openDay(day.n)
+    },
+      h('div', { class: 'row', style: { gap: '10px', alignItems: 'center', minWidth: 0, flex: 1 } },
+        h('span', { style: { fontSize: '1.15rem', flexShrink: 0 } }, isDone ? '✅' : '💬'),
+        h('div', { class: 'stack', style: { gap: '2px', minWidth: 0 } },
+          h('b', { style: { fontSize: '.88rem', lineHeight: 1.3 } }, 'Ngày ' + day.n + ': ' + day.title),
+          h('span', { class: 'small muted', style: { fontSize: '.76rem' } }, (c30.stages.find((s) => s.id === day.stage) || {}).name + ' · Hội thoại · Mẫu câu · Đóng vai · Phản xạ')
+        )
+      ),
+      h('div', { class: 'row', style: { gap: '6px', alignItems: 'center', flexShrink: 0 } },
+        h('span', { class: 'chip' + (isDone ? ' good' : (day.n === nextN ? ' accent' : '')), style: { fontSize: '.72rem' } }, isDone ? 'Đã xong' : (day.n === nextN ? 'Tiếp theo' : 'Chưa học')),
+        h('span', { style: { fontSize: '1rem', color: 'var(--muted)', fontWeight: 700 } }, '›')
+      )
+    );
+    row.setAttribute('data-done', isDone ? '1' : '0');
+    return row;
+  });
+  return accordionItem({
+    id: 'c30_road_card',
+    cls: 'acc-card', iconEl: '💬', title: 'Chặng · 30 ngày Giao tiếp cấp tốc (B1)',
+    subtitle: doneN + '/' + total + ' ngày · hội thoại, mẫu câu, đóng vai, phản xạ nhanh',
+    chips: [h('span', { class: 'chip' + (doneN === total ? ' good' : '') }, doneN + '/' + total)],
+    body: [
+      h('div', { class: 'panel stack', style: { padding: '10px 12px', borderRadius: '10px', background: 'var(--sunk)', gap: '8px' } },
+        h('div', { class: 'row between wrap', style: { alignItems: 'center', gap: '8px' } },
+          h('b', { class: 'small', style: { color: 'var(--teal)' } }, 'Tiến độ: ' + doneN + '/' + total + ' ngày (' + pct + '%)'),
+          h('button', { type: 'button', class: 'primary mini', onclick: () => openDay(doneN >= total ? 1 : nextN) }, doneN >= total ? '🔄 Ôn lại' : ('▶ Học Ngày ' + nextN))
+        ),
+        h('div', { class: 'ielts-progress-bar' }, h('div', { class: 'ielts-progress-fill', style: { width: pct + '%' } })),
+        h('div', { class: 'ielts-filter-bar' },
+          h('button', { type: 'button', class: 'ielts-filter-btn active', onclick: (e) => c30FilterDays('all', e.currentTarget) }, 'Tất cả (' + total + ')'),
+          h('button', { type: 'button', class: 'ielts-filter-btn', onclick: (e) => c30FilterDays('todo', e.currentTarget) }, 'Chưa xong (' + (total - doneN) + ')'),
+          h('button', { type: 'button', class: 'ielts-filter-btn', onclick: (e) => c30FilterDays('done', e.currentTarget) }, 'Đã xong (' + doneN + ')')
+        )
+      ),
+      h('div', { class: 'stack', style: { gap: '8px' } }, rows)
+    ]
+  });
+}
 function renderEnExtraRoadmap() {
   const out = [];
+  const c30Card = renderCrash30Roadmap();
+  if (c30Card) out.push(c30Card);
   const days = (window.IELTS_30DAY_CHALLENGE || []);
   S.l30 = S.l30 || {};
   const doneDays = days.filter((d) => S.l30[d.day]).length;
