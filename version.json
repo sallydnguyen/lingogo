@@ -1,5 +1,5 @@
 {
   "version": "4.00",
-  "build": "20261126-0013",
-  "message": "Từ điển Cambridge Offline cho giao tiếp hằng ngày + Service Worker dùng khi mất mạng"
+  "build": "20261126-1605",
+  "message": "Sửa lỗi thi vượt cấp HSK và thiết kế lại giao diện phòng thi từng câu"
 }
